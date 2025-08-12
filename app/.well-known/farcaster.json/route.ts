@@ -11,6 +11,9 @@ function withValidProperties(
   );
 }
 
+// example usage in env: NEXT_PUBLIC_APP_TAGS="tag1,tag2,tag3"
+const tags = process.env.NEXT_PUBLIC_APP_TAGS?.split(",") || [];
+
 export async function GET() {
   const URL = process.env.NEXT_PUBLIC_URL;
 
@@ -32,13 +35,13 @@ export async function GET() {
       homeUrl: URL,
       webhookUrl: `${URL}/api/webhook`,
       primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: [],
+      tags,
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
       ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
       ogDescription: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
       ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE,
     }),
-    noindex: true,
+    noindex: process.env.NEXT_PUBLIC_NOINDEX === "true",
   });
 }
