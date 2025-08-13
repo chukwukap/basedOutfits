@@ -16,7 +16,7 @@ import {
 import { Badge } from "@/app/_components/ui/badge";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { Plus, Lock, Globe, ArrowLeft } from "lucide-react";
-import { CreateLookbookModal } from "@/app/_components/create-lookbook-modal";
+import { CreateLookbookModal } from "@/app/lookbooks/_components/create-lookbook-modal";
 import { PaymentMethodSelector } from "@/app/_components/payment-method-selector";
 import { PaymentReceipt } from "@/app/_components/payment-receipt";
 import Image from "next/image";

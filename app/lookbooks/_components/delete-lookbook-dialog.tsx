@@ -45,8 +45,8 @@ export function DeleteLookbookDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Lookbook</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete "{lookbook.name}"? This lookbook
-            contains {lookbook.lookCount}{" "}
+            Are you sure you want to delete &quot;{lookbook.name}&quot;? This
+            lookbook contains {lookbook.lookCount}{" "}
             {lookbook.lookCount === 1 ? "look" : "looks"}.
             <br />
             <br />

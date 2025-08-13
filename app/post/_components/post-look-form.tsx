@@ -11,9 +11,11 @@ import { Card } from "@/app/_components/ui/card";
 import { Badge } from "@/app/_components/ui/badge";
 import { Upload, X, Camera, MapPin, Tag, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LookFetchPayload } from "@/lib/types";
+import Image from "next/image";
 
 interface PostLookFormProps {
-  onSuccess: (lookData: any) => void;
+  onSuccess: (lookData: LookFetchPayload) => void;
 }
 
 interface ImageFile {
@@ -191,22 +193,26 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     // Simulate posting process
     await new Promise((resolve) => setTimeout(resolve, 2500));
 
-    const lookData = {
+    const lookData: LookFetchPayload = {
       id: Math.random().toString(36).substr(2, 9),
-      title: title.trim(),
+      caption: title.trim(),
       description: description.trim(),
-      images: images.map((img) => img.preview),
+      imageUrls: images.map((img) => img.preview),
       tags,
       brands,
       location: location.trim(),
       author: {
         name: "You",
-        avatar: "/diverse-group-profile.png",
+        avatarUrl: "/diverse-group-profile.png",
         fid: "user123",
+        isFollowing: false,
       },
       tips: 0,
       collections: 0,
-      createdAt: "now",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isPublic: true,
+      authorId: "user123",
     };
 
     onSuccess(lookData);
@@ -244,9 +250,11 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
               <div className="grid grid-cols-2 gap-3 mb-4">
                 {images.map((image, index) => (
                   <div key={image.id} className="relative aspect-square group">
-                    <img
+                    <Image
                       src={image.preview || "/placeholder.svg"}
                       alt={`Upload ${index + 1}`}
+                      width={100}
+                      height={100}
                       className="w-full h-full object-cover rounded-lg"
                     />
                     {image.uploading && (

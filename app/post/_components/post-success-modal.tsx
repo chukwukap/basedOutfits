@@ -67,7 +67,7 @@ export function PostSuccessModal({
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
             <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted">
               <Image
-                src={look.imageUrl || "/placeholder.svg"}
+                src={look.imageUrls[0] || "/placeholder.svg"}
                 width={48}
                 height={48}
                 alt={look.caption || "Look image"}

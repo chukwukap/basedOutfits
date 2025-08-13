@@ -34,7 +34,7 @@ export type UserProfile = {
   })[];
 };
 
-export type UserLookbook = Lookbook & {
+export type LookbookResponse = Lookbook & {
   lookCount: number;
   isFollowing: boolean;
   followers: number;

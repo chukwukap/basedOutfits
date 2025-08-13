@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { LookbooksHeader } from "@/app/_components/lookbooks-header";
-import { LookbookCard } from "@/app/_components/lookbook-card";
-import { CreateLookbookFab } from "@/app/_components/create-lookbook-fab";
-import { CreateLookbookModal } from "@/app/_components/create-lookbook-modal";
-import { EditLookbookModal } from "@/app/_components/edit-lookbook-modal";
-import { DeleteLookbookDialog } from "@/app/_components/delete-lookbook-dialog";
+import { LookbooksHeader } from "./[id]/_components/lookbooks-header";
+import { LookbookCard } from "./[id]/_components/lookbook-card";
+import { CreateLookbookFab } from "./_components/create-lookbook-fab";
+import { CreateLookbookModal } from "./_components/create-lookbook-modal";
+import { EditLookbookModal } from "./_components/edit-lookbook-modal";
+import { DeleteLookbookDialog } from "./_components/delete-lookbook-dialog";
+import { LookbookResponse } from "@/lib/types";
 
 // Mock lookbooks data
-const mockLookbooks = [
+const mockLookbooks: LookbookResponse[] = [
   {
     id: "1",
     name: "Summer Vibes",
@@ -18,8 +19,11 @@ const mockLookbooks = [
     coverImage: "/summer-fashion-outfit.png",
     lookCount: 12,
     isPublic: true,
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-20",
+    ownerId: "1",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isFollowing: false,
+    followers: 0,
   },
   {
     id: "2",
@@ -28,8 +32,11 @@ const mockLookbooks = [
     coverImage: "/business-casual-outfit.png",
     lookCount: 8,
     isPublic: false,
-    createdAt: "2024-01-10",
-    updatedAt: "2024-01-18",
+    ownerId: "2",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isFollowing: false,
+    followers: 0,
   },
   {
     id: "3",
@@ -38,8 +45,11 @@ const mockLookbooks = [
     coverImage: "/elegant-evening-dress.png",
     lookCount: 5,
     isPublic: true,
-    createdAt: "2024-01-08",
-    updatedAt: "2024-01-16",
+    ownerId: "3",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isFollowing: false,
+    followers: 0,
   },
   {
     id: "4",
@@ -48,8 +58,11 @@ const mockLookbooks = [
     coverImage: "/street-style-outfit.png",
     lookCount: 15,
     isPublic: true,
-    createdAt: "2024-01-05",
-    updatedAt: "2024-01-14",
+    ownerId: "4",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isFollowing: false,
+    followers: 0,
   },
   {
     id: "5",
@@ -58,8 +71,11 @@ const mockLookbooks = [
     coverImage: "/fashionable-summer-outfit.png",
     lookCount: 7,
     isPublic: false,
-    createdAt: "2024-01-03",
-    updatedAt: "2024-01-12",
+    ownerId: "5",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    isFollowing: false,
+    followers: 0,
   },
 ];
 
@@ -70,32 +86,33 @@ export default function LookbooksPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [selectedLookbook, setSelectedLookbook] = useState<any>(null);
+  const [selectedLookbook, setSelectedLookbook] =
+    useState<LookbookResponse | null>(null);
   const [lookbooks, setLookbooks] = useState(mockLookbooks);
 
-  const handleLookbookClick = (lookbook: any) => {
+  const handleLookbookClick = (lookbook: LookbookResponse) => {
     // Navigate to lookbook details page
     window.location.href = `/lookbooks/${lookbook.id}`;
   };
 
-  const handleCreateLookbook = (newLookbook: any) => {
+  const handleCreateLookbook = (newLookbook: LookbookResponse) => {
     const lookbook = {
       ...newLookbook,
       id: Date.now().toString(),
       lookCount: 0,
-      createdAt: new Date().toISOString().split("T")[0],
-      updatedAt: new Date().toISOString().split("T")[0],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     setLookbooks([lookbook, ...lookbooks]);
     setShowCreateModal(false);
   };
 
-  const handleEditLookbook = (lookbook: any) => {
+  const handleEditLookbook = (lookbook: LookbookResponse) => {
     setSelectedLookbook(lookbook);
     setShowEditModal(true);
   };
 
-  const handleSaveEdit = (updatedLookbook: any) => {
+  const handleSaveEdit = (updatedLookbook: LookbookResponse) => {
     setLookbooks(
       lookbooks.map((lb) =>
         lb.id === updatedLookbook.id
@@ -110,7 +127,7 @@ export default function LookbooksPage() {
     setSelectedLookbook(null);
   };
 
-  const handleDeleteLookbook = (lookbook: any) => {
+  const handleDeleteLookbook = (lookbook: LookbookResponse) => {
     setSelectedLookbook(lookbook);
     setShowDeleteDialog(true);
   };
@@ -120,7 +137,7 @@ export default function LookbooksPage() {
     setSelectedLookbook(null);
   };
 
-  const handleTogglePrivacy = (lookbook: any) => {
+  const handleTogglePrivacy = (lookbook: LookbookResponse) => {
     setLookbooks(
       lookbooks.map((lb) =>
         lb.id === lookbook.id
@@ -134,7 +151,7 @@ export default function LookbooksPage() {
     );
   };
 
-  const handleShareLookbook = async (lookbook: any) => {
+  const handleShareLookbook = async (lookbook: LookbookResponse) => {
     const shareUrl = `${window.location.origin}/lookbooks/${lookbook.id}`;
     if (navigator.share) {
       try {
@@ -152,13 +169,13 @@ export default function LookbooksPage() {
     }
   };
 
-  const handleDuplicateLookbook = (lookbook: any) => {
+  const handleDuplicateLookbook = (lookbook: LookbookResponse) => {
     const duplicated = {
       ...lookbook,
       id: Date.now().toString(),
       name: `${lookbook.name} (Copy)`,
-      createdAt: new Date().toISOString().split("T")[0],
-      updatedAt: new Date().toISOString().split("T")[0],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     setLookbooks([duplicated, ...lookbooks]);
   };
@@ -169,7 +186,9 @@ export default function LookbooksPage() {
       if (searchQuery) {
         return (
           lookbook.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          lookbook.description.toLowerCase().includes(searchQuery.toLowerCase())
+          lookbook.description
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase())
         );
       }
       if (selectedFilter === "public") return lookbook.isPublic;

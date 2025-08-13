@@ -46,7 +46,7 @@ export function LookbooksHeader({
     { value: "size", label: "Most Looks" },
   ];
 
-  const activeFilter = filters.find((f) => f.value === selectedFilter);
+  // const activeFilter = filters.find((f) => f.value === selectedFilter);
   const activeSortOption = sortOptions.find((s) => s.value === sortBy);
 
   return (

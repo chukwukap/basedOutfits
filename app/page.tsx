@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { BottomNav } from "./_components/bottom-nav";
-import { LookCard } from "./_components/look-card";
-import { LookCardSkeleton } from "./_components/look-card-skeleton";
+import { LookCard } from "./look/_components/look-card";
+import { LookCardSkeleton } from "./look/_components/look-card-skeleton";
 import { TipModal } from "./_components/tip-modal";
 import { CollectModal } from "./_components/collect-modal";
 import { OnboardingTutorial } from "./_components/onboarding-tutorial";
 import { TrendingTags } from "./_components/trending-tags";
-import { DiscoverCreators } from "./_components/discover-creators";
+import { DiscoverCreators } from "./discover/_components/discover-creators";
 import { RefreshCw, Users, Globe } from "lucide-react";
 import { Button } from "./_components/ui/button";
 import { LookFetchPayload } from "@/lib/types";
@@ -19,7 +19,7 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Summer Vibes",
     description:
       "Perfect outfit for a sunny day in the city. Love mixing casual pieces with statement accessories!",
-    imageUrl: "/fashionable-summer-outfit.png",
+    imageUrls: ["/fashionable-summer-outfit.png"],
     author: {
       name: "Sarah Chen",
       avatarUrl: "/diverse-group-profile.png",
@@ -33,11 +33,7 @@ const mockLooks: LookFetchPayload[] = [
     location: "New York",
     createdAt: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours ago
     isPublic: true,
-    audioUrl: null,
-    videoUrl: null,
-    linkUrl: null,
     authorId: "1",
-    price: 100,
     updatedAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
   },
   {
@@ -45,7 +41,7 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Evening Elegance",
     description:
       "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful.",
-    imageUrl: "/elegant-evening-dress.png",
+    imageUrls: ["/elegant-evening-dress.png"],
     author: {
       name: "Alex Rivera",
       avatarUrl: "/diverse-group-profile.png",
@@ -59,11 +55,7 @@ const mockLooks: LookFetchPayload[] = [
     location: "Paris",
     createdAt: new Date(Date.now() + 4 * 60 * 60 * 1000), // 4 hours ago
     isPublic: true,
-    audioUrl: null,
-    videoUrl: null,
-    linkUrl: null,
     authorId: "2",
-    price: 100,
     updatedAt: new Date(Date.now() + 4 * 60 * 60 * 1000),
   },
   {
@@ -71,7 +63,7 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Street Style Maven",
     description:
       "Channeling my inner street style photographer today. Bold colors and patterns are my thing!",
-    imageUrl: "/street-style-outfit.png",
+    imageUrls: ["/street-style-outfit.png"],
     author: {
       name: "Jordan Kim",
       avatarUrl: "/diverse-group-profile.png",
@@ -85,11 +77,7 @@ const mockLooks: LookFetchPayload[] = [
     location: "Tokyo",
     createdAt: new Date(Date.now() + 6 * 60 * 60 * 1000), // 6 hours ago
     isPublic: true,
-    audioUrl: null,
-    videoUrl: null,
-    linkUrl: null,
     authorId: "3",
-    price: 100,
     updatedAt: new Date(Date.now() + 6 * 60 * 60 * 1000),
   },
   {
@@ -97,7 +85,7 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Business Casual Chic",
     description:
       "Work from home but make it fashion. Comfortable yet professional for video calls.",
-    imageUrl: "/business-casual-outfit.png",
+    imageUrls: ["/business-casual-outfit.png"],
     author: {
       name: "Taylor Swift",
       avatarUrl: "/diverse-group-profile.png",
@@ -111,11 +99,7 @@ const mockLooks: LookFetchPayload[] = [
     location: "San Francisco",
     createdAt: new Date(Date.now() + 8 * 60 * 60 * 1000), // 8 hours ago
     isPublic: true,
-    audioUrl: null,
-    videoUrl: null,
-    linkUrl: null,
     authorId: "4",
-    price: 100,
     updatedAt: new Date(Date.now() + 8 * 60 * 60 * 1000),
   },
   {
@@ -123,7 +107,7 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Cozy Weekend Vibes",
     description:
       "Perfect lazy Sunday outfit. Comfort is key but still want to look put together.",
-    imageUrl: "/summer-fashion-outfit.png",
+    imageUrls: ["/summer-fashion-outfit.png"],
     author: {
       name: "Maya Patel",
       avatarUrl: "/diverse-group-profile.png",
@@ -137,11 +121,7 @@ const mockLooks: LookFetchPayload[] = [
     location: "Los Angeles",
     createdAt: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hours ago
     isPublic: true,
-    audioUrl: null,
-    videoUrl: null,
-    linkUrl: null,
     authorId: "5",
-    price: 100,
     updatedAt: new Date(Date.now() + 12 * 60 * 60 * 1000),
   },
 ];
@@ -238,6 +218,7 @@ export default function HomePage() {
   };
 
   const handleTipComplete = (amount: number) => {
+    console.log("handleTipComplete", amount);
     if (selectedLook) {
       // Update tip count optimistically
       setLooks((prev) =>

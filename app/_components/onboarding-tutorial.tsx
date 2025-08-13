@@ -13,6 +13,7 @@ import {
   Heart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface OnboardingTutorialProps {
   onComplete: () => void;
@@ -152,14 +153,14 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
           className="flex h-full transition-transform duration-300 ease-out"
           style={{ transform: `translateX(-${currentStep * 100}%)` }}
         >
-          {tutorialSteps.map((step, index) => {
+          {tutorialSteps.map((step) => {
             const StepIcon = step.icon;
             return (
               <div key={step.id} className="w-full flex-shrink-0 flex flex-col">
                 {/* Hero Image */}
                 <div className="relative h-64 bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
                   <div className="relative w-48 h-48 rounded-2xl overflow-hidden shadow-2xl">
-                    <img
+                    <Image
                       src={step.mockImage || "/placeholder.svg"}
                       alt={step.title}
                       className="w-full h-full object-cover"

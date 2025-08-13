@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { DiscoverHeader } from "@/app/_components/discover-header";
+import { DiscoverHeader } from "@/app/discover/_components/discover-header";
 import { TrendingLookbooks } from "@/app/_components/trending-lookbooks";
 import { FeaturedCreators } from "@/app/_components/featured-creators";
 

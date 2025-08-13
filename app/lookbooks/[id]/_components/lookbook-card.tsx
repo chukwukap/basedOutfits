@@ -3,23 +3,13 @@
 import { Card } from "@/app/_components/ui/card";
 import { Badge } from "@/app/_components/ui/badge";
 import { Lock, Globe, Calendar } from "lucide-react";
-import { LookbookOptionsMenu } from "@/app/_components/lookbook-options-menu";
+import { LookbookOptionsMenu } from "@/app/lookbooks/[id]/_components/lookbook-options-menu";
 import Image from "next/image";
 import { useState } from "react";
-
-interface Lookbook {
-  id: string;
-  name: string;
-  description: string;
-  coverImage: string;
-  lookCount: number;
-  isPublic: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { LookbookResponse } from "@/lib/types";
 
 interface LookbookCardProps {
-  lookbook: Lookbook;
+  lookbook: LookbookResponse;
   onClick: () => void;
   onEdit: () => void;
   onDelete: () => void;

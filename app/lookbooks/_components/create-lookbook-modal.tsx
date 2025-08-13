@@ -13,11 +13,12 @@ import { Textarea } from "@/app/_components/ui/textarea";
 import { Label } from "@/app/_components/ui/label";
 import { Switch } from "@/app/_components/ui/switch";
 import { Upload, ImageIcon } from "lucide-react";
+import { LookbookResponse } from "@/lib/types";
 
 interface CreateLookbookModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (lookbook: any) => void;
+  onSave: (lookbook: LookbookResponse) => void;
 }
 
 export function CreateLookbookModal({

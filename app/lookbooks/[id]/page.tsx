@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { LookbookDetailsHeader } from "@/app/_components/lookbook-details-header";
-import { LookbookLooksGrid } from "@/app/_components/lookbook-looks-grid";
-import { EditLookbookModal } from "@/app/_components/edit-lookbook-modal";
-import { DeleteLookbookDialog } from "@/app/_components/delete-lookbook-dialog";
+import { LookbookDetailsHeader } from "@/app/lookbooks/[id]/_components/lookbook-details-header";
+import { LookbookLooksGrid } from "@/app/lookbooks/[id]/_components/lookbook-looks-grid";
+import { EditLookbookModal } from "@/app/lookbooks/_components/edit-lookbook-modal";
+import { DeleteLookbookDialog } from "@/app/lookbooks/_components/delete-lookbook-dialog";
 import { TipModal } from "@/app/_components/tip-modal";
 import { CollectModal } from "@/app/_components/collect-modal";
 

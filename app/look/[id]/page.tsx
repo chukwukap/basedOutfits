@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { LookDetailView } from "@/app/_components/look-detail-view";
+import { LookDetailView } from "../_components/look-detail-view";
 import { TipModal } from "@/app/_components/tip-modal";
 import { CollectModal } from "@/app/_components/collect-modal";
-import { CommentsSection } from "@/app/_components/comments-section";
+import { CommentsSection } from "./_components/comments-section";
 import { ArrowLeft, Share2, DollarSign, Heart } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
-import { Look } from "@prisma/client";
+import { Look } from "@/lib/generated/prisma";
 
 // Mock look data - in real app this would come from API
 const mockLookData = {
@@ -69,9 +69,9 @@ const mockLookData = {
 export default function LookDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [look, setLook] = useState<any>(null);
+  const [look, setLook] = useState<Look | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedLook, setSelectedLook] = useState<any>(null);
+  const [selectedLook, setSelectedLook] = useState<Look | null>(null);
   const [showTipModal, setShowTipModal] = useState(false);
   const [showCollectModal, setShowCollectModal] = useState(false);
 
@@ -104,8 +104,9 @@ export default function LookDetailPage() {
   };
 
   const handleTipComplete = (amount: number) => {
+    console.log("handleTipComplete", amount);
     if (look) {
-      setLook({ ...look, tips: look.tips + 1 });
+      setLook({ ...look, tips: (look.tips || 0) + 1 });
     }
     setShowTipModal(false);
     setSelectedLook(null);
@@ -113,7 +114,7 @@ export default function LookDetailPage() {
 
   const handleCollectComplete = () => {
     if (look) {
-      setLook({ ...look, collections: look.collections + 1 });
+      setLook({ ...look, collections: (look.collections || 0) + 1 });
     }
     setShowCollectModal(false);
     setSelectedLook(null);

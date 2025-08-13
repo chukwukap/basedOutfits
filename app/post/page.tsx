@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { PostLookForm } from "@/app/post/_components/post-look-form";
-import { PostSuccessModal } from "@/app/post/_components/post-success-modal";
+import { PostLookForm } from "./_components/post-look-form";
+import { PostSuccessModal } from "./_components/post-success-modal";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { useRouter } from "next/navigation";

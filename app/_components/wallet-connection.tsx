@@ -33,7 +33,7 @@ export function WalletConnection({
         onConnectionChange(true, savedAddress);
       }
     } catch (err) {
-      console.log("No existing wallet connection");
+      console.log("No existing wallet connection", err);
     }
   };
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { CommentCard } from "./comment-card";
 import { CommentInput } from "./comment-input";
-import { Button } from "./ui/button";
+import { Button } from "@/app/_components/ui/button";
 import { MessageCircle } from "lucide-react";
 
 interface Comment {
