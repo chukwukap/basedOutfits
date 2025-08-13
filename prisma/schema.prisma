@@ -1,0 +1,158 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String
+  name         String?
+  bio          String?
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  looks         Look[]
+  lookbooks     Lookbook[]
+  followers     Follow[]       @relation("followers")
+  following     Follow[]       @relation("following")
+  likes         Like[]
+  comments      Comment[]
+  saves         LookbookItem[]
+  tipsSent      Tip[]          @relation("tipsSent")
+  tipsReceived  Tip[]          @relation("tipsReceived")
+  notifications Notification[]
+
+  @@index([username])
+}
+
+model Look {
+  id        String   @id @default(cuid())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  caption   String?
+  mediaUrl  String
+  tags      String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  likes    Like[]
+  comments Comment[]
+  saves    LookbookItem[]
+  tips     Tip[]
+
+  @@index([authorId])
+}
+
+model Lookbook {
+  id          String   @id @default(cuid())
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  name        String
+  description String?
+  coverImage  String?
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items LookbookItem[]
+
+  @@index([ownerId])
+}
+
+model LookbookItem {
+  id         String   @id @default(cuid())
+  lookId     String
+  look       Look     @relation(fields: [lookId], references: [id])
+  lookbookId String
+  lookbook   Lookbook @relation(fields: [lookbookId], references: [id])
+  addedById  String
+  addedBy    User     @relation(fields: [addedById], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@unique([lookId, lookbookId]) // prevent duplicates
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  follower    User     @relation("following", fields: [followerId], references: [id])
+  followingId String
+  following   User     @relation("followers", fields: [followingId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  lookId    String
+  look      Look     @relation(fields: [lookId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, lookId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  lookId    String
+  look      Look     @relation(fields: [lookId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([lookId])
+}
+
+model Tip {
+  id         String   @id @default(cuid())
+  senderId   String
+  sender     User     @relation("tipsSent", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User     @relation("tipsReceived", fields: [receiverId], references: [id])
+  lookId     String?
+  look       Look?    @relation(fields: [lookId], references: [id])
+  amount     Float
+  currency   String // e.g., "USDC"
+  txHash     String?
+  createdAt  DateTime @default(now())
+
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String // "like", "comment", "follow", "tip", "lookbook_add"
+  entityId  String? // ID of the related Look, Lookbook, or User
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model FeedFilter {
+  id        String   @id @default(cuid())
+  name      String
+  query     String? // optional search query or tag filter
+  createdAt DateTime @default(now())
+}

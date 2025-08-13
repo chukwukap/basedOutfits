@@ -78,7 +78,6 @@
 >      - The tags should auto-scroll slowly (like TikTok trending topics).
 >      - Tapping a tag filters the feed to only show looks with that tag.
 >    - **Right:** Small toggle button to switch between “All Looks” and “Following” feed.
->
 > 2. **Feed Behavior**
 >    - Default: Mixed global feed sorted by Trending + Recent.
 >    - When a tag is selected, filter to only posts with that tag.
@@ -114,16 +113,13 @@
 >    - When the user scrolls **down** in the feed:
 >      - Gradually slide the top header bar upward until mostly hidden (keep \~5–10px visible for context).
 >      - Gradually slide the bottom navigation bar downward until mostly hidden.
->
 >    - When the user scrolls **up**:
 >      - Smoothly reveal both the header and bottom nav fully again.
->
 >    - Use easing animations for a natural feel (no snapping).
 >
 > 2. **Mobile Optimization**
 >    - Ensure animations are smooth and do not cause layout shift.
 >    - Prioritize scroll performance — target 60fps.
->
 > 3. **Behavior Notes:**
 >    - The “Trending Tags” chips in the top header should also scroll away with the header.
 >    - The hide/show should be subtle and not disruptive.
@@ -138,5 +134,60 @@
 >
 > - Can be implemented with scroll listeners + CSS transforms (translateY).
 > - Avoid repaint-heavy operations — use `transform` rather than `top`/`bottom` CSS changes for performance.
+
+---
+
+---
+
+**Prompt for v0:**
+
+> **Feature:** Add the "Lookbook" feature to the app, replacing any mentions of "Board" and "Collect."
+>
+> **Purpose:** Users can create and manage multiple Lookbooks to organize outfits and styles they like. Each Lookbook is a themed folder that stores saved looks from other users or their own posts.
+>
+> **Requirements:**
+>
+> 1. **Lookbook List Page**
+>    - Accessible from bottom navigation ("Lookbooks" icon).
+>    - Displays a list/grid of the user’s Lookbooks.
+>    - Each Lookbook card shows:
+>      - Lookbook name
+>      - Thumbnail (latest look added)
+>      - Number of looks inside
+>
+>    - Floating "Create New Lookbook" button (FAB) at bottom right.
+>
+> 2. **Create/Edit Lookbook Modal**
+>    - Fields: Lookbook name, optional description.
+>    - Option to upload/select a cover image.
+>    - “Save” button to confirm.
+>
+> 3. **Lookbook Details Page**
+>    - Header with Lookbook title, cover image, and description.
+>    - Grid display of saved looks (cards same as home feed but smaller).
+>    - Option to rename or delete Lookbook.
+>
+> 4. **Add to Lookbook Flow**
+>    - From any look in the feed or details page, an "Add" button should appear.
+>    - Clicking "Add" opens a bottom sheet with:
+>      - List of existing Lookbooks (with “+ Create New Lookbook” at top).
+>      - Tap to select Lookbook → look is added instantly with a success toast.
+>
+> 5. **Mobile-Optimized UI/UX**
+>    - Smooth animations for adding and removing looks.
+>    - Responsive grid layouts that adapt to device width.
+>    - Tap targets large enough for thumbs.
+>    - Infinite scroll on Lookbook details page.
+>
+> 6. **Social Integration**
+>    - Users can view others’ public Lookbooks from their profile.
+>    - Public Lookbooks have a "Follow" option to get updates when new looks are added.
+>
+> 7. **Polish & Branding**
+>    - Replace all "Collect" and "Board" references with "Add" and "Lookbook."
+>    - Maintain the app’s current color scheme and typography.
+>    - Add subtle micro-interactions (button presses, hover states, animations).
+>
+> **Goal:** The Lookbook feature should feel like a natural extension of the home feed, easy to access, and encourage users to organize and revisit looks. It should be smooth, stylish, and highly mobile-friendly.
 
 ---
