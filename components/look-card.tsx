@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { Heart, DollarSign, Share2, MapPin, Clock } from "lucide-react"
+import { Heart, DollarSign, Share2, MapPin, Clock, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -38,7 +38,7 @@ interface LookCardProps {
 export function LookCard({ look, onTip, onCollect }: LookCardProps) {
   const [imageLoading, setImageLoading] = useState(true)
   const [tipping, setTipping] = useState(false)
-  const [collecting, setCollecting] = useState(false)
+  const [adding, setAdding] = useState(false) // Renamed from collecting to adding
   const router = useRouter()
 
   const handleCardClick = () => {
@@ -53,12 +53,13 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
     setTimeout(() => setTipping(false), 1000)
   }
 
-  const handleCollect = async (e: React.MouseEvent) => {
+  const handleAdd = async (e: React.MouseEvent) => {
+    // Renamed from handleCollect to handleAdd
     e.stopPropagation()
-    setCollecting(true)
-    onCollect()
+    setAdding(true) // Updated state variable
+    onCollect() // Keep the same callback for now, will update the prop name later
     // Reset after a delay to show feedback
-    setTimeout(() => setCollecting(false), 1000)
+    setTimeout(() => setAdding(false), 1000) // Updated state variable
   }
 
   const handleShare = async (e: React.MouseEvent) => {
@@ -163,7 +164,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
           </span>
           <span className="flex items-center gap-1">
             <Heart className="w-3 h-3" />
-            {look.collections} collected
+            {look.collections} added // Changed from "collected" to "added"
           </span>
         </div>
 
@@ -179,9 +180,11 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
             <DollarSign className="w-4 h-4 mr-2" />
             {tipping ? "Tipping..." : "Tip"}
           </Button>
-          <Button variant="default" size="sm" onClick={handleCollect} disabled={collecting} className="flex-1">
-            <Heart className="w-4 h-4 mr-2" />
-            {collecting ? "Collecting..." : "Collect"}
+          <Button variant="default" size="sm" onClick={handleAdd} disabled={adding} className="flex-1">
+            {" "}
+            {/* Updated handler and state */}
+            <Plus className="w-4 h-4 mr-2" /> {/* Changed icon from Heart to Plus */}
+            {adding ? "Adding..." : "Add"} {/* Changed text from Collect to Add */}
           </Button>
           <Button variant="ghost" size="sm" onClick={handleShare} className="px-3">
             <Share2 className="w-4 h-4" />

@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, Plus, Archive } from "lucide-react"
+import { Home, Plus, BookOpen, Compass } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -21,16 +21,22 @@ export function BottomNav({ scrollDirection = "up", isScrolled = false }: Bottom
       active: pathname === "/",
     },
     {
+      href: "/discover",
+      icon: Compass,
+      label: "Discover",
+      active: pathname === "/discover",
+    },
+    {
       href: "/post",
       icon: Plus,
       label: "Post",
       active: pathname === "/post",
     },
     {
-      href: "/closet",
-      icon: Archive,
-      label: "Closet",
-      active: pathname === "/closet",
+      href: "/lookbooks",
+      icon: BookOpen,
+      label: "Lookbooks",
+      active: pathname === "/lookbooks",
     },
   ]
 
