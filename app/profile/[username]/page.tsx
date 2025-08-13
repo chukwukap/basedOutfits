@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useParams } from "next/navigation"
-import { BottomNav } from "@/components/bottom-nav"
-import { UserProfileHeader } from "@/components/user-profile-header"
-import { UserLookbooksGrid } from "@/components/user-lookbooks-grid"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { BottomNav } from "@/app/_components/bottom-nav";
+import { UserProfileHeader } from "@/app/_components/user-profile-header";
+import { UserLookbooksGrid } from "@/app/_components/user-lookbooks-grid";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/app/_components/ui/button";
 
 // Mock user profiles data
 const mockUserProfiles = {
@@ -91,27 +91,28 @@ const mockUserProfiles = {
       },
     ],
   },
-}
+};
 
 export default function UserProfilePage() {
-  const params = useParams()
-  const username = params.username as string
+  const params = useParams();
+  const username = params.username as string;
 
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Simulate loading
     setTimeout(() => {
-      const foundUser = mockUserProfiles[username as keyof typeof mockUserProfiles]
-      setUser(foundUser || null)
-      setLoading(false)
-    }, 500)
-  }, [username])
+      const foundUser =
+        mockUserProfiles[username as keyof typeof mockUserProfiles];
+      setUser(foundUser || null);
+      setLoading(false);
+    }, 500);
+  }, [username]);
 
   const handleBack = () => {
-    window.history.back()
-  }
+    window.history.back();
+  };
 
   const handleFollowUser = () => {
     if (user) {
@@ -119,9 +120,9 @@ export default function UserProfilePage() {
         ...user,
         isFollowing: !user.isFollowing,
         followers: user.isFollowing ? user.followers - 1 : user.followers + 1,
-      })
+      });
     }
-  }
+  };
 
   const handleFollowLookbook = (lookbookId: string) => {
     if (user) {
@@ -136,13 +137,13 @@ export default function UserProfilePage() {
               }
             : lb,
         ),
-      })
+      });
     }
-  }
+  };
 
   const handleLookbookClick = (lookbook: any) => {
-    window.location.href = `/lookbooks/${lookbook.id}`
-  }
+    window.location.href = `/lookbooks/${lookbook.id}`;
+  };
 
   if (loading) {
     return (
@@ -161,7 +162,7 @@ export default function UserProfilePage() {
         </div>
         <BottomNav />
       </div>
-    )
+    );
   }
 
   if (!user) {
@@ -169,12 +170,14 @@ export default function UserProfilePage() {
       <div className="min-h-screen bg-background pb-20 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-2">User Not Found</h2>
-          <p className="text-muted-foreground mb-4">This user doesn't exist or their profile is private.</p>
+          <p className="text-muted-foreground mb-4">
+            This user doesn't exist or their profile is private.
+          </p>
           <Button onClick={handleBack}>Go Back</Button>
         </div>
         <BottomNav />
       </div>
-    )
+    );
   }
 
   return (
@@ -182,7 +185,12 @@ export default function UserProfilePage() {
       {/* Header with back button */}
       <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b">
         <div className="flex items-center gap-3 p-4">
-          <Button variant="ghost" size="sm" onClick={handleBack} className="p-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleBack}
+            className="p-2"
+          >
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -206,5 +214,5 @@ export default function UserProfilePage() {
 
       <BottomNav />
     </div>
-  )
+  );
 }

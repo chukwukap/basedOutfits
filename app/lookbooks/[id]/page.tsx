@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useParams } from "next/navigation"
-import { BottomNav } from "@/components/bottom-nav"
-import { LookbookDetailsHeader } from "@/components/lookbook-details-header"
-import { LookbookLooksGrid } from "@/components/lookbook-looks-grid"
-import { EditLookbookModal } from "@/components/edit-lookbook-modal"
-import { DeleteLookbookDialog } from "@/components/delete-lookbook-dialog"
-import { TipModal } from "@/components/tip-modal"
-import { CollectModal } from "@/components/collect-modal"
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { BottomNav } from "@/app/_components/bottom-nav";
+import { LookbookDetailsHeader } from "@/app/_components/lookbook-details-header";
+import { LookbookLooksGrid } from "@/app/_components/lookbook-looks-grid";
+import { EditLookbookModal } from "@/app/_components/edit-lookbook-modal";
+import { DeleteLookbookDialog } from "@/app/_components/delete-lookbook-dialog";
+import { TipModal } from "@/app/_components/tip-modal";
+import { CollectModal } from "@/app/_components/collect-modal";
 
 // Mock lookbook data
 const mockLookbooks = {
@@ -32,7 +32,11 @@ const mockLookbooks = {
         title: "Beach Day Casual",
         description: "Perfect for a day by the ocean",
         imageUrl: "/summer-fashion-outfit.png",
-        author: { name: "Sarah Chen", avatar: "/diverse-group-profile.png", fid: "sarahc" },
+        author: {
+          name: "Sarah Chen",
+          avatar: "/diverse-group-profile.png",
+          fid: "sarahc",
+        },
         tags: ["summer", "beach", "casual"],
         brands: ["Zara", "H&M"],
         tips: 15,
@@ -46,7 +50,11 @@ const mockLookbooks = {
         title: "Sunny Brunch Look",
         description: "Bright and cheerful for weekend brunches",
         imageUrl: "/fashionable-summer-outfit.png",
-        author: { name: "Alex Rivera", avatar: "/diverse-group-profile.png", fid: "alexr" },
+        author: {
+          name: "Alex Rivera",
+          avatar: "/diverse-group-profile.png",
+          fid: "alexr",
+        },
         tags: ["brunch", "weekend", "bright"],
         brands: ["Mango", "COS"],
         tips: 22,
@@ -60,7 +68,11 @@ const mockLookbooks = {
         title: "Festival Ready",
         description: "Boho vibes for music festivals",
         imageUrl: "/street-style-outfit.png",
-        author: { name: "Jordan Kim", avatar: "/diverse-group-profile.png", fid: "jordank" },
+        author: {
+          name: "Jordan Kim",
+          avatar: "/diverse-group-profile.png",
+          fid: "jordank",
+        },
         tags: ["festival", "boho", "music"],
         brands: ["Free People", "Urban Outfitters"],
         tips: 18,
@@ -90,7 +102,11 @@ const mockLookbooks = {
         title: "Monday Meeting",
         description: "Sharp and professional for important meetings",
         imageUrl: "/business-casual-outfit.png",
-        author: { name: "Taylor Swift", avatar: "/diverse-group-profile.png", fid: "tswift" },
+        author: {
+          name: "Taylor Swift",
+          avatar: "/diverse-group-profile.png",
+          fid: "tswift",
+        },
         tags: ["business", "professional", "meeting"],
         brands: ["Uniqlo", "Everlane"],
         tips: 9,
@@ -104,7 +120,11 @@ const mockLookbooks = {
         title: "Casual Friday",
         description: "Relaxed but still office-appropriate",
         imageUrl: "/elegant-evening-dress.png",
-        author: { name: "Maya Patel", avatar: "/diverse-group-profile.png", fid: "mayap" },
+        author: {
+          name: "Maya Patel",
+          avatar: "/diverse-group-profile.png",
+          fid: "mayap",
+        },
         tags: ["casual", "friday", "office"],
         brands: ["Loft", "Banana Republic"],
         tips: 14,
@@ -115,73 +135,80 @@ const mockLookbooks = {
       },
     ],
   },
-}
+};
 
 export default function LookbookDetailsPage() {
-  const params = useParams()
-  const lookbookId = params.id as string
+  const params = useParams();
+  const lookbookId = params.id as string;
 
-  const [lookbook, setLookbook] = useState<any>(null)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [showTipModal, setShowTipModal] = useState(false)
-  const [showCollectModal, setShowCollectModal] = useState(false)
-  const [selectedLook, setSelectedLook] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [lookbook, setLookbook] = useState<any>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showTipModal, setShowTipModal] = useState(false);
+  const [showCollectModal, setShowCollectModal] = useState(false);
+  const [selectedLook, setSelectedLook] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Simulate loading
     setTimeout(() => {
-      const foundLookbook = mockLookbooks[lookbookId as keyof typeof mockLookbooks]
-      setLookbook(foundLookbook || null)
-      setLoading(false)
-    }, 500)
-  }, [lookbookId])
+      const foundLookbook =
+        mockLookbooks[lookbookId as keyof typeof mockLookbooks];
+      setLookbook(foundLookbook || null);
+      setLoading(false);
+    }, 500);
+  }, [lookbookId]);
 
   const handleEditLookbook = () => {
-    setShowEditModal(true)
-  }
+    setShowEditModal(true);
+  };
 
   const handleDeleteLookbook = () => {
-    setShowDeleteDialog(true)
-  }
+    setShowDeleteDialog(true);
+  };
 
   const handleSaveEdit = (updatedLookbook: any) => {
-    setLookbook({ ...lookbook, ...updatedLookbook, updatedAt: new Date().toISOString().split("T")[0] })
-    setShowEditModal(false)
-  }
+    setLookbook({
+      ...lookbook,
+      ...updatedLookbook,
+      updatedAt: new Date().toISOString().split("T")[0],
+    });
+    setShowEditModal(false);
+  };
 
   const handleConfirmDelete = () => {
     // Navigate back to lookbooks page
-    window.location.href = "/lookbooks"
-  }
+    window.location.href = "/lookbooks";
+  };
 
   const handleLookClick = (look: any) => {
     // Navigate to look details
-    window.location.href = `/look/${look.id}`
-  }
+    window.location.href = `/look/${look.id}`;
+  };
 
   const handleTipLook = (look: any) => {
-    setSelectedLook(look)
-    setShowTipModal(true)
-  }
+    setSelectedLook(look);
+    setShowTipModal(true);
+  };
 
   const handleCollectLook = (look: any) => {
-    setSelectedLook(look)
-    setShowCollectModal(true)
-  }
+    setSelectedLook(look);
+    setShowCollectModal(true);
+  };
 
   const handleRemoveLook = (lookId: string) => {
     if (lookbook) {
-      const updatedLooks = lookbook.looks.filter((look: any) => look.id !== lookId)
+      const updatedLooks = lookbook.looks.filter(
+        (look: any) => look.id !== lookId,
+      );
       setLookbook({
         ...lookbook,
         looks: updatedLooks,
         lookCount: updatedLooks.length,
         updatedAt: new Date().toISOString().split("T")[0],
-      })
+      });
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -200,7 +227,7 @@ export default function LookbookDetailsPage() {
         </div>
         <BottomNav />
       </div>
-    )
+    );
   }
 
   if (!lookbook) {
@@ -208,7 +235,9 @@ export default function LookbookDetailsPage() {
       <div className="min-h-screen bg-background pb-20 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-2">Lookbook Not Found</h2>
-          <p className="text-muted-foreground mb-4">This lookbook doesn't exist or has been deleted.</p>
+          <p className="text-muted-foreground mb-4">
+            This lookbook doesn't exist or has been deleted.
+          </p>
           <button
             onClick={() => (window.location.href = "/lookbooks")}
             className="px-4 py-2 bg-primary text-primary-foreground rounded-lg"
@@ -218,13 +247,17 @@ export default function LookbookDetailsPage() {
         </div>
         <BottomNav />
       </div>
-    )
+    );
   }
 
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <LookbookDetailsHeader lookbook={lookbook} onEdit={handleEditLookbook} onDelete={handleDeleteLookbook} />
+      <LookbookDetailsHeader
+        lookbook={lookbook}
+        onEdit={handleEditLookbook}
+        onDelete={handleDeleteLookbook}
+      />
 
       {/* Looks Grid */}
       <main className="p-4">
@@ -271,5 +304,5 @@ export default function LookbookDetailsPage() {
 
       <BottomNav />
     </div>
-  )
+  );
 }

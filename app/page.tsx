@@ -1,22 +1,23 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import { BottomNav } from "@/components/bottom-nav"
-import { LookCard } from "@/components/look-card"
-import { LookCardSkeleton } from "@/components/look-card-skeleton"
-import { TipModal } from "@/components/tip-modal"
-import { CollectModal } from "@/components/collect-modal"
-import { OnboardingTutorial } from "@/components/onboarding-tutorial"
-import { TrendingTags } from "@/components/trending-tags"
-import { DiscoverCreators } from "@/components/discover-creators"
-import { RefreshCw, Users, Globe } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect, useRef, useCallback } from "react";
+import { BottomNav } from "@/app/_components/bottom-nav";
+import { LookCard } from "@/app/_components/look-card";
+import { LookCardSkeleton } from "@/app/_components/look-card-skeleton";
+import { TipModal } from "@/app/_components/tip-modal";
+import { CollectModal } from "@/app/_components/collect-modal";
+import { OnboardingTutorial } from "@/app/_components/onboarding-tutorial";
+import { TrendingTags } from "@/app/_components/trending-tags";
+import { DiscoverCreators } from "@/app/_components/discover-creators";
+import { RefreshCw, Users, Globe } from "lucide-react";
+import { Button } from "@/app/_components/ui/button";
 
 const mockLooks = [
   {
     id: "1",
     title: "Summer Vibes",
-    description: "Perfect outfit for a sunny day in the city. Love mixing casual pieces with statement accessories!",
+    description:
+      "Perfect outfit for a sunny day in the city. Love mixing casual pieces with statement accessories!",
     imageUrl: "/fashionable-summer-outfit.png",
     author: {
       name: "Sarah Chen",
@@ -34,7 +35,8 @@ const mockLooks = [
   {
     id: "2",
     title: "Evening Elegance",
-    description: "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful.",
+    description:
+      "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful.",
     imageUrl: "/elegant-evening-dress.png",
     author: {
       name: "Alex Rivera",
@@ -52,7 +54,8 @@ const mockLooks = [
   {
     id: "3",
     title: "Street Style Maven",
-    description: "Channeling my inner street style photographer today. Bold colors and patterns are my thing!",
+    description:
+      "Channeling my inner street style photographer today. Bold colors and patterns are my thing!",
     imageUrl: "/street-style-outfit.png",
     author: {
       name: "Jordan Kim",
@@ -70,7 +73,8 @@ const mockLooks = [
   {
     id: "4",
     title: "Business Casual Chic",
-    description: "Work from home but make it fashion. Comfortable yet professional for video calls.",
+    description:
+      "Work from home but make it fashion. Comfortable yet professional for video calls.",
     imageUrl: "/business-casual-outfit.png",
     author: {
       name: "Taylor Swift",
@@ -88,7 +92,8 @@ const mockLooks = [
   {
     id: "5",
     title: "Cozy Weekend Vibes",
-    description: "Perfect lazy Sunday outfit. Comfort is key but still want to look put together.",
+    description:
+      "Perfect lazy Sunday outfit. Comfort is key but still want to look put together.",
     imageUrl: "/summer-fashion-outfit.png",
     author: {
       name: "Maya Patel",
@@ -103,154 +108,173 @@ const mockLooks = [
     location: "Los Angeles",
     createdAt: "12h ago",
   },
-]
+];
 
 export default function HomePage() {
-  const [looks, setLooks] = useState<typeof mockLooks>([])
-  const [filteredLooks, setFilteredLooks] = useState<typeof mockLooks>([])
-  const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
-  const [selectedLook, setSelectedLook] = useState<(typeof mockLooks)[0] | null>(null)
-  const [showTipModal, setShowTipModal] = useState(false)
-  const [showCollectModal, setShowCollectModal] = useState(false)
-  const [showOnboarding, setShowOnboarding] = useState(false)
-  const [onboardingChecked, setOnboardingChecked] = useState(false)
+  const [looks, setLooks] = useState<typeof mockLooks>([]);
+  const [filteredLooks, setFilteredLooks] = useState<typeof mockLooks>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedLook, setSelectedLook] = useState<
+    (typeof mockLooks)[0] | null
+  >(null);
+  const [showTipModal, setShowTipModal] = useState(false);
+  const [showCollectModal, setShowCollectModal] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
 
-  const [selectedTag, setSelectedTag] = useState<string | null>(null)
-  const [feedType, setFeedType] = useState<"all" | "following">("all")
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [feedType, setFeedType] = useState<"all" | "following">("all");
 
-  const [scrollY, setScrollY] = useState(0)
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up")
-  const [isScrolled, setIsScrolled] = useState(false)
-  const lastScrollY = useRef(0)
-  const ticking = useRef(false)
+  const [scrollY, setScrollY] = useState(0);
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
+  const [isScrolled, setIsScrolled] = useState(false);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   const checkFirstTimeUser = () => {
-    const hasSeenOnboarding = localStorage.getItem("looks_onboarding_completed")
+    const hasSeenOnboarding = localStorage.getItem(
+      "looks_onboarding_completed",
+    );
     if (!hasSeenOnboarding) {
-      setShowOnboarding(true)
+      setShowOnboarding(true);
     }
-    setOnboardingChecked(true)
-  }
+    setOnboardingChecked(true);
+  };
 
   useEffect(() => {
-    checkFirstTimeUser()
-  }, [])
+    checkFirstTimeUser();
+  }, []);
 
   // Simulate loading feed
   useEffect(() => {
     const loadFeed = async () => {
-      setLoading(true)
+      setLoading(true);
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      setLooks(mockLooks)
-      setLoading(false)
-    }
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setLooks(mockLooks);
+      setLoading(false);
+    };
 
     // Only load feed after onboarding check is complete
     if (onboardingChecked) {
-      loadFeed()
+      loadFeed();
     }
-  }, [onboardingChecked])
+  }, [onboardingChecked]);
 
   useEffect(() => {
-    let filtered = looks
+    let filtered = looks;
 
     // Filter by feed type (following vs all)
     if (feedType === "following") {
-      filtered = filtered.filter((look) => look.author.isFollowing)
+      filtered = filtered.filter((look) => look.author.isFollowing);
     }
 
     // Filter by selected tag
     if (selectedTag) {
-      filtered = filtered.filter((look) => look.tags.some((tag) => tag.toLowerCase() === selectedTag.toLowerCase()))
+      filtered = filtered.filter((look) =>
+        look.tags.some(
+          (tag) => tag.toLowerCase() === selectedTag.toLowerCase(),
+        ),
+      );
     }
 
-    setFilteredLooks(filtered)
-  }, [looks, selectedTag, feedType])
+    setFilteredLooks(filtered);
+  }, [looks, selectedTag, feedType]);
 
   const handleRefresh = async () => {
-    setRefreshing(true)
+    setRefreshing(true);
     // Simulate refresh
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     // In real app, this would fetch new looks
-    setLooks([...mockLooks])
-    setRefreshing(false)
-  }
+    setLooks([...mockLooks]);
+    setRefreshing(false);
+  };
 
   const handleTip = (look: (typeof mockLooks)[0]) => {
-    setSelectedLook(look)
-    setShowTipModal(true)
-  }
+    setSelectedLook(look);
+    setShowTipModal(true);
+  };
 
   const handleCollect = (look: (typeof mockLooks)[0]) => {
-    setSelectedLook(look)
-    setShowCollectModal(true)
-  }
+    setSelectedLook(look);
+    setShowCollectModal(true);
+  };
 
   const handleTipComplete = (amount: number) => {
     if (selectedLook) {
       // Update tip count optimistically
-      setLooks((prev) => prev.map((look) => (look.id === selectedLook.id ? { ...look, tips: look.tips + 1 } : look)))
+      setLooks((prev) =>
+        prev.map((look) =>
+          look.id === selectedLook.id ? { ...look, tips: look.tips + 1 } : look,
+        ),
+      );
     }
-    setShowTipModal(false)
-    setSelectedLook(null)
-  }
+    setShowTipModal(false);
+    setSelectedLook(null);
+  };
 
   const handleCollectComplete = () => {
     if (selectedLook) {
       // Update collection count optimistically
       setLooks((prev) =>
-        prev.map((look) => (look.id === selectedLook.id ? { ...look, collections: look.collections + 1 } : look)),
-      )
+        prev.map((look) =>
+          look.id === selectedLook.id
+            ? { ...look, collections: look.collections + 1 }
+            : look,
+        ),
+      );
     }
-    setShowCollectModal(false)
-    setSelectedLook(null)
-  }
+    setShowCollectModal(false);
+    setSelectedLook(null);
+  };
 
   const handleOnboardingComplete = () => {
-    localStorage.setItem("looks_onboarding_completed", "true")
-    setShowOnboarding(false)
-  }
+    localStorage.setItem("looks_onboarding_completed", "true");
+    setShowOnboarding(false);
+  };
 
   const handleTagSelect = (tag: string) => {
-    setSelectedTag(selectedTag === tag ? null : tag)
-  }
+    setSelectedTag(selectedTag === tag ? null : tag);
+  };
 
   const handleFeedToggle = () => {
-    setFeedType(feedType === "all" ? "following" : "all")
-  }
+    setFeedType(feedType === "all" ? "following" : "all");
+  };
 
   const updateScrollDirection = useCallback(() => {
-    const scrollY = window.scrollY
-    const direction = scrollY > lastScrollY.current ? "down" : "up"
+    const scrollY = window.scrollY;
+    const direction = scrollY > lastScrollY.current ? "down" : "up";
 
-    if (direction !== scrollDirection && Math.abs(scrollY - lastScrollY.current) > 10) {
-      setScrollDirection(direction)
+    if (
+      direction !== scrollDirection &&
+      Math.abs(scrollY - lastScrollY.current) > 10
+    ) {
+      setScrollDirection(direction);
     }
 
-    setScrollY(scrollY)
-    setIsScrolled(scrollY > 50)
-    lastScrollY.current = scrollY > 0 ? scrollY : 0
-    ticking.current = false
-  }, [scrollDirection])
+    setScrollY(scrollY);
+    setIsScrolled(scrollY > 50);
+    lastScrollY.current = scrollY > 0 ? scrollY : 0;
+    ticking.current = false;
+  }, [scrollDirection]);
 
   const requestTick = useCallback(() => {
     if (!ticking.current) {
-      requestAnimationFrame(updateScrollDirection)
-      ticking.current = true
+      requestAnimationFrame(updateScrollDirection);
+      ticking.current = true;
     }
-  }, [updateScrollDirection])
+  }, [updateScrollDirection]);
 
   useEffect(() => {
-    const onScroll = () => requestTick()
+    const onScroll = () => requestTick();
 
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [requestTick])
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [requestTick]);
 
   if (showOnboarding) {
-    return <OnboardingTutorial onComplete={handleOnboardingComplete} />
+    return <OnboardingTutorial onComplete={handleOnboardingComplete} />;
   }
 
   return (
@@ -272,7 +296,10 @@ export default function HomePage() {
 
           {/* Middle: Trending Tags */}
           <div className="flex-1 min-w-0">
-            <TrendingTags selectedTag={selectedTag} onTagSelect={handleTagSelect} />
+            <TrendingTags
+              selectedTag={selectedTag}
+              onTagSelect={handleTagSelect}
+            />
           </div>
 
           {/* Right: Feed Toggle & Actions */}
@@ -283,10 +310,22 @@ export default function HomePage() {
               onClick={handleFeedToggle}
               className="p-2"
             >
-              {feedType === "following" ? <Users className="w-4 h-4" /> : <Globe className="w-4 h-4" />}
+              {feedType === "following" ? (
+                <Users className="w-4 h-4" />
+              ) : (
+                <Globe className="w-4 h-4" />
+              )}
             </Button>
-            <Button variant="ghost" size="sm" onClick={handleRefresh} disabled={refreshing} className="p-2">
-              <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="p-2"
+            >
+              <RefreshCw
+                className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
+              />
             </Button>
           </div>
         </div>
@@ -312,7 +351,9 @@ export default function HomePage() {
         <main className="px-4 py-6 space-y-6">
           {loading
             ? // Loading skeletons
-              Array.from({ length: 3 }).map((_, i) => <LookCardSkeleton key={i} />)
+              Array.from({ length: 3 }).map((_, i) => (
+                <LookCardSkeleton key={i} />
+              ))
             : filteredLooks.map((look) => (
                 <LookCard
                   key={look.id}
@@ -329,13 +370,15 @@ export default function HomePage() {
               </div>
               <h3 className="font-semibold mb-2">No looks found</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                {selectedTag ? `No looks found for #${selectedTag}` : "No looks from people you follow"}
+                {selectedTag
+                  ? `No looks found for #${selectedTag}`
+                  : "No looks from people you follow"}
               </p>
               <Button
                 variant="outline"
                 onClick={() => {
-                  setSelectedTag(null)
-                  setFeedType("all")
+                  setSelectedTag(null);
+                  setFeedType("all");
                 }}
               >
                 View All Looks
@@ -344,7 +387,9 @@ export default function HomePage() {
           )}
         </main>
 
-        {!loading && filteredLooks.length > 0 && <DiscoverCreators selectedTag={selectedTag} />}
+        {!loading && filteredLooks.length > 0 && (
+          <DiscoverCreators selectedTag={selectedTag} />
+        )}
       </div>
 
       {/* Modals */}
@@ -367,5 +412,5 @@ export default function HomePage() {
 
       <BottomNav scrollDirection={scrollDirection} isScrolled={isScrolled} />
     </div>
-  )
+  );
 }

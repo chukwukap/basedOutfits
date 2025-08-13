@@ -1,34 +1,39 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { BottomNav } from "@/components/bottom-nav"
-import { PostLookForm } from "@/components/post-look-form"
-import { PostSuccessModal } from "@/components/post-success-modal"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { BottomNav } from "@/app/_components/bottom-nav";
+import { PostLookForm } from "@/app/_components/post-look-form";
+import { PostSuccessModal } from "@/app/_components/post-success-modal";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/app/_components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function PostPage() {
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [postedLook, setPostedLook] = useState<any>(null)
-  const router = useRouter()
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [postedLook, setPostedLook] = useState<any>(null);
+  const router = useRouter();
 
   const handlePostSuccess = (lookData: any) => {
-    setPostedLook(lookData)
-    setShowSuccessModal(true)
-  }
+    setPostedLook(lookData);
+    setShowSuccessModal(true);
+  };
 
   const handleSuccessClose = () => {
-    setShowSuccessModal(false)
-    router.push("/") // Navigate back to home feed
-  }
+    setShowSuccessModal(false);
+    router.push("/"); // Navigate back to home feed
+  };
 
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
         <div className="flex items-center gap-3 p-4">
-          <Button variant="ghost" size="sm" onClick={() => router.back()} className="p-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.back()}
+            className="p-2"
+          >
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <h1 className="text-xl font-semibold">Post Look</h1>
@@ -50,5 +55,5 @@ export default function PostPage() {
 
       <BottomNav />
     </div>
-  )
+  );
 }

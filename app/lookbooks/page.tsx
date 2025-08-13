@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { BottomNav } from "@/components/bottom-nav"
-import { LookbooksHeader } from "@/components/lookbooks-header"
-import { LookbookCard } from "@/components/lookbook-card"
-import { CreateLookbookFab } from "@/components/create-lookbook-fab"
-import { CreateLookbookModal } from "@/components/create-lookbook-modal"
-import { EditLookbookModal } from "@/components/edit-lookbook-modal"
-import { DeleteLookbookDialog } from "@/components/delete-lookbook-dialog"
+import { useState } from "react";
+import { BottomNav } from "@/app/_components/bottom-nav";
+import { LookbooksHeader } from "@/app/_components/lookbooks-header";
+import { LookbookCard } from "@/app/_components/lookbook-card";
+import { CreateLookbookFab } from "@/app/_components/create-lookbook-fab";
+import { CreateLookbookModal } from "@/app/_components/create-lookbook-modal";
+import { EditLookbookModal } from "@/app/_components/edit-lookbook-modal";
+import { DeleteLookbookDialog } from "@/app/_components/delete-lookbook-dialog";
 
 // Mock lookbooks data
 const mockLookbooks = [
@@ -61,22 +61,22 @@ const mockLookbooks = [
     createdAt: "2024-01-03",
     updatedAt: "2024-01-12",
   },
-]
+];
 
 export default function LookbooksPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedFilter, setSelectedFilter] = useState("all")
-  const [sortBy, setSortBy] = useState("recent")
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [selectedLookbook, setSelectedLookbook] = useState<any>(null)
-  const [lookbooks, setLookbooks] = useState(mockLookbooks)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("recent");
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedLookbook, setSelectedLookbook] = useState<any>(null);
+  const [lookbooks, setLookbooks] = useState(mockLookbooks);
 
   const handleLookbookClick = (lookbook: any) => {
     // Navigate to lookbook details page
-    window.location.href = `/lookbooks/${lookbook.id}`
-  }
+    window.location.href = `/lookbooks/${lookbook.id}`;
+  };
 
   const handleCreateLookbook = (newLookbook: any) => {
     const lookbook = {
@@ -85,63 +85,72 @@ export default function LookbooksPage() {
       lookCount: 0,
       createdAt: new Date().toISOString().split("T")[0],
       updatedAt: new Date().toISOString().split("T")[0],
-    }
-    setLookbooks([lookbook, ...lookbooks])
-    setShowCreateModal(false)
-  }
+    };
+    setLookbooks([lookbook, ...lookbooks]);
+    setShowCreateModal(false);
+  };
 
   const handleEditLookbook = (lookbook: any) => {
-    setSelectedLookbook(lookbook)
-    setShowEditModal(true)
-  }
+    setSelectedLookbook(lookbook);
+    setShowEditModal(true);
+  };
 
   const handleSaveEdit = (updatedLookbook: any) => {
     setLookbooks(
       lookbooks.map((lb) =>
-        lb.id === updatedLookbook.id ? { ...updatedLookbook, updatedAt: new Date().toISOString().split("T")[0] } : lb,
+        lb.id === updatedLookbook.id
+          ? {
+              ...updatedLookbook,
+              updatedAt: new Date().toISOString().split("T")[0],
+            }
+          : lb,
       ),
-    )
-    setShowEditModal(false)
-    setSelectedLookbook(null)
-  }
+    );
+    setShowEditModal(false);
+    setSelectedLookbook(null);
+  };
 
   const handleDeleteLookbook = (lookbook: any) => {
-    setSelectedLookbook(lookbook)
-    setShowDeleteDialog(true)
-  }
+    setSelectedLookbook(lookbook);
+    setShowDeleteDialog(true);
+  };
 
   const handleConfirmDelete = (lookbookId: string) => {
-    setLookbooks(lookbooks.filter((lb) => lb.id !== lookbookId))
-    setSelectedLookbook(null)
-  }
+    setLookbooks(lookbooks.filter((lb) => lb.id !== lookbookId));
+    setSelectedLookbook(null);
+  };
 
   const handleTogglePrivacy = (lookbook: any) => {
     setLookbooks(
       lookbooks.map((lb) =>
         lb.id === lookbook.id
-          ? { ...lb, isPublic: !lb.isPublic, updatedAt: new Date().toISOString().split("T")[0] }
+          ? {
+              ...lb,
+              isPublic: !lb.isPublic,
+              updatedAt: new Date().toISOString().split("T")[0],
+            }
           : lb,
       ),
-    )
-  }
+    );
+  };
 
   const handleShareLookbook = async (lookbook: any) => {
-    const shareUrl = `${window.location.origin}/lookbooks/${lookbook.id}`
+    const shareUrl = `${window.location.origin}/lookbooks/${lookbook.id}`;
     if (navigator.share) {
       try {
         await navigator.share({
           title: lookbook.name,
           text: lookbook.description,
           url: shareUrl,
-        })
+        });
       } catch (err) {
-        console.log("Share cancelled")
+        console.log("Share cancelled");
       }
     } else {
-      navigator.clipboard.writeText(shareUrl)
+      navigator.clipboard.writeText(shareUrl);
       // Could show a toast here
     }
-  }
+  };
 
   const handleDuplicateLookbook = (lookbook: any) => {
     const duplicated = {
@@ -150,9 +159,9 @@ export default function LookbooksPage() {
       name: `${lookbook.name} (Copy)`,
       createdAt: new Date().toISOString().split("T")[0],
       updatedAt: new Date().toISOString().split("T")[0],
-    }
-    setLookbooks([duplicated, ...lookbooks])
-  }
+    };
+    setLookbooks([duplicated, ...lookbooks]);
+  };
 
   // Filter and sort lookbooks
   const filteredLookbooks = lookbooks
@@ -161,26 +170,30 @@ export default function LookbooksPage() {
         return (
           lookbook.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           lookbook.description.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        );
       }
-      if (selectedFilter === "public") return lookbook.isPublic
-      if (selectedFilter === "private") return !lookbook.isPublic
-      return true
+      if (selectedFilter === "public") return lookbook.isPublic;
+      if (selectedFilter === "private") return !lookbook.isPublic;
+      return true;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case "recent":
-          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          return (
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          );
         case "oldest":
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
         case "name":
-          return a.name.localeCompare(b.name)
+          return a.name.localeCompare(b.name);
         case "size":
-          return b.lookCount - a.lookCount
+          return b.lookCount - a.lookCount;
         default:
-          return 0
+          return 0;
       }
-    })
+    });
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -202,7 +215,9 @@ export default function LookbooksPage() {
             <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
               <span className="text-2xl">📚</span>
             </div>
-            <h3 className="font-semibold text-lg mb-2">{searchQuery ? "No lookbooks found" : "No lookbooks yet"}</h3>
+            <h3 className="font-semibold text-lg mb-2">
+              {searchQuery ? "No lookbooks found" : "No lookbooks yet"}
+            </h3>
             <p className="text-muted-foreground text-sm max-w-sm mb-4">
               {searchQuery
                 ? `No lookbooks match "${searchQuery}". Try a different search term.`
@@ -239,7 +254,11 @@ export default function LookbooksPage() {
       <CreateLookbookFab onClick={() => setShowCreateModal(true)} />
 
       {/* Modals */}
-      <CreateLookbookModal open={showCreateModal} onOpenChange={setShowCreateModal} onSave={handleCreateLookbook} />
+      <CreateLookbookModal
+        open={showCreateModal}
+        onOpenChange={setShowCreateModal}
+        onSave={handleCreateLookbook}
+      />
 
       <EditLookbookModal
         open={showEditModal}
@@ -257,5 +276,5 @@ export default function LookbooksPage() {
 
       <BottomNav />
     </div>
-  )
+  );
 }

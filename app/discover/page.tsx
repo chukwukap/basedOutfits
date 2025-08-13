@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { BottomNav } from "@/components/bottom-nav"
-import { DiscoverHeader } from "@/components/discover-header"
-import { TrendingLookbooks } from "@/components/trending-lookbooks"
-import { FeaturedCreators } from "@/components/featured-creators"
+import { useState } from "react";
+import { BottomNav } from "@/app/_components/bottom-nav";
+import { DiscoverHeader } from "@/app/_components/discover-header";
+import { TrendingLookbooks } from "@/app/_components/trending-lookbooks";
+import { FeaturedCreators } from "@/app/_components/featured-creators";
 
 export default function DiscoverPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -23,7 +23,10 @@ export default function DiscoverPage() {
       {/* Main Content */}
       <main className="p-4 space-y-6">
         {/* Trending Lookbooks */}
-        <TrendingLookbooks searchQuery={searchQuery} selectedCategory={selectedCategory} />
+        <TrendingLookbooks
+          searchQuery={searchQuery}
+          selectedCategory={selectedCategory}
+        />
 
         {/* Featured Creators */}
         <FeaturedCreators />
@@ -31,5 +34,5 @@ export default function DiscoverPage() {
 
       <BottomNav />
     </div>
-  )
+  );
 }
