@@ -3,21 +3,13 @@
 import { Dialog, DialogContent } from "@/app/_components/ui/dialog";
 import { Button } from "@/app/_components/ui/button";
 import { CheckCircle, Home, Share2 } from "lucide-react";
-
-interface Look {
-  id: string;
-  title: string;
-  author: {
-    name: string;
-    avatar: string;
-  };
-  images: string[];
-}
+import { LookFetchPayload } from "@/lib/types";
+import Image from "next/image";
 
 interface PostSuccessModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  look: Look | null;
+  look: LookFetchPayload | null;
   onClose: () => void;
 }
 
@@ -33,17 +25,17 @@ export function PostSuccessModal({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Check out my look: ${look.title}`,
+          title: `Check out my look: ${look.caption}`,
           text: `I just posted a new look on Looks!`,
           url: `${window.location.origin}/look/${look.id}`,
         });
       } catch (err) {
-        console.log("Share cancelled");
+        console.error("Share cancelled", err);
       }
     } else {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(
-        `Check out my look: ${look.title} - ${window.location.origin}/look/${look.id}`,
+        `Check out my look: ${look.caption} - ${window.location.origin}/look/${look.id}`,
       );
     }
   };
@@ -74,14 +66,16 @@ export function PostSuccessModal({
           {/* Look preview */}
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
             <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted">
-              <img
-                src={look.images[0] || "/placeholder.svg"}
-                alt={look.title}
+              <Image
+                src={look.imageUrl || "/placeholder.svg"}
+                width={48}
+                height={48}
+                alt={look.caption || "Look image"}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="flex-1 text-left">
-              <p className="font-medium text-sm">{look.title}</p>
+              <p className="font-medium text-sm">{look.caption}</p>
               <p className="text-xs text-muted-foreground">
                 by {look.author.name}
               </p>

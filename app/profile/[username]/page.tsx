@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { UserProfileHeader } from "@/app/_components/user-profile-header";
-import { UserLookbooksGrid } from "@/app/_components/user-lookbooks-grid";
+import { UserProfileHeader } from "@/app/profile/_components/user-profile-header";
+import { UserLookbooksGrid } from "@/app/profile/_components/user-lookbooks-grid";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { UserProfile, UserLookbook } from "@/lib/types";

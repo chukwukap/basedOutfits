@@ -2,18 +2,19 @@
 
 import { useState } from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { PostLookForm } from "@/app/_components/post-look-form";
-import { PostSuccessModal } from "@/app/_components/post-success-modal";
+import { PostLookForm } from "@/app/post/_components/post-look-form";
+import { PostSuccessModal } from "@/app/post/_components/post-success-modal";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { useRouter } from "next/navigation";
+import { LookFetchPayload } from "@/lib/types";
 
 export default function PostPage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [postedLook, setPostedLook] = useState<any>(null);
+  const [postedLook, setPostedLook] = useState<LookFetchPayload | null>(null);
   const router = useRouter();
 
-  const handlePostSuccess = (lookData: any) => {
+  const handlePostSuccess = (lookData: LookFetchPayload) => {
     setPostedLook(lookData);
     setShowSuccessModal(true);
   };
