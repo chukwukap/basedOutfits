@@ -1,112 +1,63 @@
-# MiniKit Template
+# Lookbook — Farcaster Mini App for Fashion Inspiration
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-onchain --mini`](), configured with:
+**Lookbook** is a highly social Farcaster mini app for discovering, collecting, and sharing fashion looks.  
+Users can browse outfits, collect their favorites into personal Lookbooks, and track creators whose style they love — all while staying inside the Farcaster ecosystem.
 
-- [MiniKit](https://docs.base.org/builderkits/minikit/overview)
-- [OnchainKit](https://www.base.org/builders/onchainkit)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Next.js](https://nextjs.org/docs)
+---
 
-## Getting Started
+## ✨ Features
 
-1. Install dependencies:
+- **Social Look Discovery**
+  - Scroll through an endless feed of user-submitted looks.
+  - Filter by category, style, season, or trending status.
+  - Mobile-first UI with smooth disappearing headers & bottom nav on scroll (inspired by Twitter).
+
+- **Look Details Page**
+  - Full-screen photo(s) of the look.
+  - Detailed outfit breakdown: brand, item type, pricing (optional).
+  - Creator’s profile & other looks.
+  - Collect button (small fee in USDC) to save to your personal Lookbook.
+
+- **Lookbooks (Boards)**
+  - Organize collected looks into themed boards (e.g., “Streetwear”, “Summer Fits”).
+  - Public or private Lookbooks.
+  - Share Lookbooks via Farcaster cast.
+
+- **Style-Track System**
+  - Contextual follow feature just for fashion content.
+  - Track looks from creators without following all their Farcaster posts.
+  - Personal “Style Feed” based on tracked creators.
+
+- **Collect to Closet**
+  - Pay a small USDC fee to collect a look into your closet.
+  - Closet is viewable only by you (or publicly if toggled).
+
+- **Onboarding Tutorial**
+  - Mobile-optimized step-by-step guide for first-time users.
+  - Explains how to browse, collect, tip, and style-track.
+  - Interactive tooltips on first visit.
+
+- **Tipping Creators**
+  - Support your favorite creators with USDC tips.
+  - Tips are displayed on the Look’s detail page.
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend:** Next.js, Tailwind CSS, Base MiniKit
+- **Backend:** Node.js (Express) + Prisma ORM
+- **Database:** PostgreSQL
+- **Payments:** Basepay (USDC)
+- **Hosting:** Vercel (frontend)
+- **Authentication:** Farcaster Sign-in
+
+---
+
+## 📦 Installation
+
 ```bash
+git clone https://github.com/<your-org>/<your-repo>.git
+cd <your-repo>
 npm install
-# or
-yarn install
-# or
-pnpm install
-# or
-bun install
 ```
-
-2. Verify environment variables, these will be set up by the `npx create-onchain --mini` command:
-
-You can regenerate the FARCASTER Account Association environment variables by running `npx create-onchain --manifest` in your project directory.
-
-The environment variables enable the following features:
-
-- Frame metadata - Sets up the Frame Embed that will be shown when you cast your frame
-- Account association - Allows users to add your frame to their account, enables notifications
-- Redis API keys - Enable Webhooks and background notifications for your application by storing users notification details
-
-```bash
-# Shared/OnchainKit variables
-NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME=
-NEXT_PUBLIC_URL=
-NEXT_PUBLIC_ICON_URL=
-NEXT_PUBLIC_ONCHAINKIT_API_KEY=
-
-# Frame metadata
-FARCASTER_HEADER=
-FARCASTER_PAYLOAD=
-FARCASTER_SIGNATURE=
-NEXT_PUBLIC_APP_ICON=
-NEXT_PUBLIC_APP_SUBTITLE=
-NEXT_PUBLIC_APP_DESCRIPTION=
-NEXT_PUBLIC_APP_SPLASH_IMAGE=
-NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR=
-NEXT_PUBLIC_APP_PRIMARY_CATEGORY=
-NEXT_PUBLIC_APP_HERO_IMAGE=
-NEXT_PUBLIC_APP_TAGLINE=
-NEXT_PUBLIC_APP_OG_TITLE=
-NEXT_PUBLIC_APP_OG_DESCRIPTION=
-NEXT_PUBLIC_APP_OG_IMAGE=
-
-# Redis config
-REDIS_URL=
-REDIS_TOKEN=
-```
-
-3. Start the development server:
-```bash
-npm run dev
-```
-
-## Template Features
-
-### Frame Configuration
-- `.well-known/farcaster.json` endpoint configured for Frame metadata and account association
-- Frame metadata automatically added to page headers in `layout.tsx`
-
-### Background Notifications
-- Redis-backed notification system using Upstash
-- Ready-to-use notification endpoints in `api/notify` and `api/webhook`
-- Notification client utilities in `lib/notification-client.ts`
-
-### Theming
-- Custom theme defined in `theme.css` with OnchainKit variables
-- Pixel font integration with Pixelify Sans
-- Dark/light mode support through OnchainKit
-
-### MiniKit Provider
-The app is wrapped with `MiniKitProvider` in `providers.tsx`, configured with:
-- OnchainKit integration
-- Access to Frames context
-- Sets up Wagmi Connectors
-- Sets up Frame SDK listeners
-- Applies Safe Area Insets
-
-## Customization
-
-To get started building your own frame, follow these steps:
-
-1. Remove the DemoComponents:
-   - Delete `components/DemoComponents.tsx`
-   - Remove demo-related imports from `page.tsx`
-
-2. Start building your Frame:
-   - Modify `page.tsx` to create your Frame UI
-   - Update theme variables in `theme.css`
-   - Adjust MiniKit configuration in `providers.tsx`
-
-3. Add your frame to your account:
-   - Cast your frame to see it in action
-   - Share your frame with others to start building your community
-
-## Learn More
-
-- [MiniKit Documentation](https://docs.base.org/builderkits/minikit/overview)
-- [OnchainKit Documentation](https://docs.base.org/builderkits/onchainkit/getting-started)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
