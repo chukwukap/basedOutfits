@@ -53,11 +53,3 @@ Users can browse outfits, collect their favorites into personal Lookbooks, and t
 - **Authentication:** Farcaster Sign-in
 
 ---
-
-## 📦 Installation
-
-```bash
-git clone https://github.com/<your-org>/<your-repo>.git
-cd <your-repo>
-npm install
-```
