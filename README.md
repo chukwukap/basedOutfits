@@ -1,9 +1,7 @@
-# Lookbook — Farcaster Mini App for Fashion Inspiration
+# Lookbook — Farcaster Miniapp for Fashion Inspiration
 
-**Lookbook** is a highly social Farcaster mini app for discovering, collecting, and sharing fashion looks.  
+**Lookbook** is a highly social Farcaster miniapp for discovering, collecting, and sharing fashion looks.
 Users can browse outfits, collect their favorites into personal Lookbooks, and track creators whose style they love — all while staying inside the Farcaster ecosystem.
-
----
 
 ## ✨ Features
 
@@ -45,11 +43,90 @@ Users can browse outfits, collect their favorites into personal Lookbooks, and t
 
 ## 🛠 Tech Stack
 
-- **Frontend:** Next.js, Tailwind CSS, Base MiniKit
+- **Frontend:** Next.js, Tailwind CSS, Farcaster MiniKit
 - **Backend:** Node.js (Express) + Prisma ORM
 - **Database:** PostgreSQL
-- **Payments:** Basepay (USDC)
-- **Hosting:** Vercel (frontend)
+- **Payments:** Coinbase SpendPermissionManager (USDC)
+- **Hosting:** Vercel (frontend) + Railway/Fly.io (backend)
 - **Authentication:** Farcaster Sign-in
 
 ---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/chukwukap/lookbook.git
+cd lookbook
+npm install
+```
+
+### Environment Variables
+
+Create a `.env` file in the root and set:
+
+```
+DATABASE_URL=postgresql://user:password@host:port/dbname
+NEXT_PUBLIC_MINIKIT_API_KEY=your_farcaster_minikit_key
+COINBASE_API_KEY=your_coinbase_key
+```
+
+---
+
+## 🚀 Development
+
+Run locally:
+
+```bash
+npm run dev
+```
+
+Prisma commands:
+
+```bash
+npx prisma migrate dev
+npx prisma studio
+```
+
+---
+
+## 📐 Database Models
+
+### Core Entities
+
+- **User** — linked to Farcaster account.
+- **Look** — outfit post with image, description, and details.
+- **Lookbook** — collection of looks.
+- **StyleFollow** — tracks fashion-only follows.
+- **Collection** — records when a user collects a look into a Lookbook.
+- **Tip** — logs tips given to a creator for a look.
+
+---
+
+## 🎯 User Flows
+
+1. **Onboarding**
+   - First-time visitor sees a short tutorial.
+   - Highlight feed, collect button, style-track, and tip feature.
+
+2. **Browsing & Filtering**
+   - Scroll feed, filter by category/style/trending.
+   - Smooth hide/reveal header & nav on scroll.
+
+3. **Viewing a Look**
+   - Tap to see full details and related looks.
+   - Option to collect into a Lookbook (pay fee).
+   - Tip creator or style-track them.
+
+4. **Lookbook Management**
+   - Create themed boards.
+   - Organize collected looks.
+   - Share on Farcaster.
+
+---
+
+## 🔮 Roadmap
+
+- [ ] Multi-image looks.
+- [ ] AI tagging for outfits.
+- [ ] Notifications for new looks from tracked creators.
+- [ ] Seasonal/trend-based challenges.
