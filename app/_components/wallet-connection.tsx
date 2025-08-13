@@ -21,6 +21,7 @@ export function WalletConnection({
   useEffect(() => {
     // Check if wallet is already connected
     checkWalletConnection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkWalletConnection = async () => {

@@ -8,7 +8,55 @@ import { CollectModal } from "@/app/_components/collect-modal";
 import { CommentsSection } from "./_components/comments-section";
 import { ArrowLeft, Share2, DollarSign, Heart } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
-import { Look } from "@/lib/generated/prisma";
+import type { LookFetchPayload } from "@/lib/types";
+// Local type matching the UI detail view's expected shape
+type DetailedLook = {
+  id: string;
+  title: string;
+  description: string;
+  images: string[];
+  author: {
+    name: string;
+    avatar: string;
+    fid: string;
+    bio: string;
+    followers: number;
+    following: number;
+  };
+  tags: string[];
+  brands: string[];
+  tips: number;
+  collections: number;
+  location?: string;
+  createdAt: string;
+  season?: string;
+  occasion?: string;
+  colors?: string[];
+};
+
+function toLookFetchPayload(look: DetailedLook): LookFetchPayload {
+  return {
+    id: look.id,
+    caption: look.title,
+    description: look.description,
+    imageUrls: look.images,
+    author: {
+      isFollowing: true,
+      avatarUrl: look.author.avatar,
+      fid: look.author.fid,
+      name: look.author.name,
+    },
+    tags: look.tags,
+    brands: look.brands,
+    tips: look.tips,
+    collections: look.collections,
+    location: look.location ?? "",
+    createdAt: new Date(),
+    isPublic: true,
+    authorId: `author-${look.author.fid}`,
+    updatedAt: new Date(),
+  } as LookFetchPayload;
+}
 
 // Mock look data - in real app this would come from API
 const mockLookData = {
@@ -69,9 +117,9 @@ const mockLookData = {
 export default function LookDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [look, setLook] = useState<Look | null>(null);
+  const [look, setLook] = useState<DetailedLook | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedLook, setSelectedLook] = useState<Look | null>(null);
+  const [selectedLook, setSelectedLook] = useState<DetailedLook | null>(null);
   const [showTipModal, setShowTipModal] = useState(false);
   const [showCollectModal, setShowCollectModal] = useState(false);
 
@@ -93,12 +141,12 @@ export default function LookDetailPage() {
     loadLook();
   }, [params.id]);
 
-  const handleTip = (lookData: Look) => {
+  const handleTip = (lookData: DetailedLook) => {
     setSelectedLook(lookData);
     setShowTipModal(true);
   };
 
-  const handleCollect = (lookData: Look) => {
+  const handleCollect = (lookData: DetailedLook) => {
     setSelectedLook(lookData);
     setShowCollectModal(true);
   };
@@ -215,11 +263,14 @@ export default function LookDetailPage() {
               onClick={() => router.push(`/look/${i + 10}`)}
             >
               <div className="aspect-square bg-muted rounded-lg mb-2 overflow-hidden">
-                <img
-                  src={`/stylish-streetwear-look.png?key=xshoq&height=128&width=128&query=fashion look ${i}`}
-                  alt={`Look ${i}`}
-                  className="w-full h-full object-cover"
-                />
+                <picture>
+                  <img
+                    src={`/stylish-streetwear-look.png?key=xshoq&height=128&width=128&query=fashion look ${i}`}
+                    alt={`Look ${i}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </picture>
               </div>
               <p className="text-xs text-muted-foreground truncate">
                 Look Title {i}
@@ -260,13 +311,13 @@ export default function LookDetailPage() {
           <TipModal
             open={showTipModal}
             onOpenChange={setShowTipModal}
-            look={selectedLook}
+            look={toLookFetchPayload(selectedLook)}
             onComplete={handleTipComplete}
           />
           <CollectModal
             open={showCollectModal}
             onOpenChange={setShowCollectModal}
-            look={selectedLook}
+            look={toLookFetchPayload(selectedLook)}
             onComplete={handleCollectComplete}
           />
         </>

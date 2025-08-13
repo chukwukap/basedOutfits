@@ -13,12 +13,18 @@ import { Textarea } from "@/app/_components/ui/textarea";
 import { Label } from "@/app/_components/ui/label";
 import { Switch } from "@/app/_components/ui/switch";
 import { Upload, ImageIcon } from "lucide-react";
-import { LookbookResponse } from "@/lib/types";
+// Passing a minimal lookbook payload upward; parent composes full object
+type NewLookbookPayload = {
+  name: string;
+  description: string;
+  isPublic: boolean;
+  coverImage: string;
+};
 
 interface CreateLookbookModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (lookbook: LookbookResponse) => void;
+  onSave: (lookbook: NewLookbookPayload) => void;
 }
 
 export function CreateLookbookModal({
@@ -41,11 +47,12 @@ export function CreateLookbookModal({
       coverImage: coverImage || "/placeholder.svg",
     });
 
-    // Reset form
+    // Reset form and close
     setName("");
     setDescription("");
     setIsPublic(false);
     setCoverImage("");
+    onOpenChange(false);
   };
 
   const handleClose = () => {

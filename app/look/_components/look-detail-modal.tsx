@@ -58,7 +58,7 @@ export function LookDetailModal({
           text: `Check out this look from my closet: ${look.title}`,
           url: `${window.location.origin}/look/${look.id}`,
         });
-      } catch (err) {
+      } catch {
         console.log("Share cancelled");
       }
     } else {

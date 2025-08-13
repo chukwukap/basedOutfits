@@ -91,7 +91,8 @@ export function TrendingLookbooks({
     );
   };
 
-  const handleLookbookClick = (lookbook: any) => {
+  type TrendingLookbook = (typeof mockTrendingLookbooks)[number];
+  const handleLookbookClick = (lookbook: TrendingLookbook) => {
     window.location.href = `/profile/${lookbook.creator.username}/lookbook/${lookbook.id}`;
   };
 

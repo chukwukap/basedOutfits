@@ -82,7 +82,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
           <div className="absolute inset-0 bg-muted animate-pulse" />
         )}
         <Image
-          src={look.imageUrl || "/placeholder.svg"}
+          src={(look.imageUrls && look.imageUrls[0]) || "/placeholder.svg"}
           alt={look.caption || "Look image"}
           fill
           className="object-cover transition-opacity duration-300"

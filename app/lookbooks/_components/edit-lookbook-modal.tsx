@@ -1,6 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
+export type EditableLookbook = {
+  id: string;
+  name: string;
+  description?: string | null;
+  isPublic: boolean;
+  coverImage?: string | null;
+};
 import {
   Dialog,
   DialogContent,
@@ -14,19 +22,11 @@ import { Label } from "@/app/_components/ui/label";
 import { Switch } from "@/app/_components/ui/switch";
 import { Upload, ImageIcon } from "lucide-react";
 
-interface Lookbook {
-  id: string;
-  name: string;
-  description: string;
-  isPublic: boolean;
-  coverImage: string;
-}
-
 interface EditLookbookModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  lookbook: Lookbook | null;
-  onSave: (lookbook: Lookbook) => void;
+  lookbook: EditableLookbook | null;
+  onSave: (lookbook: EditableLookbook) => void;
 }
 
 export function EditLookbookModal({
@@ -44,9 +44,9 @@ export function EditLookbookModal({
   useEffect(() => {
     if (lookbook) {
       setName(lookbook.name);
-      setDescription(lookbook.description);
+      setDescription(lookbook.description ?? "");
       setIsPublic(lookbook.isPublic);
-      setCoverImage(lookbook.coverImage);
+      setCoverImage(lookbook.coverImage ?? "");
     }
   }, [lookbook]);
 

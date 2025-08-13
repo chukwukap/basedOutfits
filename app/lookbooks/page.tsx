@@ -6,9 +6,19 @@ import { LookbooksHeader } from "./[id]/_components/lookbooks-header";
 import { LookbookCard } from "./[id]/_components/lookbook-card";
 import { CreateLookbookFab } from "./_components/create-lookbook-fab";
 import { CreateLookbookModal } from "./_components/create-lookbook-modal";
-import { EditLookbookModal } from "./_components/edit-lookbook-modal";
+import {
+  EditLookbookModal,
+  type EditableLookbook,
+} from "./_components/edit-lookbook-modal";
 import { DeleteLookbookDialog } from "./_components/delete-lookbook-dialog";
 import { LookbookResponse } from "@/lib/types";
+
+type NewLookbookPayload = {
+  name: string;
+  description: string;
+  isPublic: boolean;
+  coverImage: string;
+};
 
 // Mock lookbooks data
 const mockLookbooks: LookbookResponse[] = [
@@ -95,13 +105,19 @@ export default function LookbooksPage() {
     window.location.href = `/lookbooks/${lookbook.id}`;
   };
 
-  const handleCreateLookbook = (newLookbook: LookbookResponse) => {
-    const lookbook = {
-      ...newLookbook,
+  const handleCreateLookbook = (newLookbook: NewLookbookPayload) => {
+    const lookbook: LookbookResponse = {
       id: Date.now().toString(),
-      lookCount: 0,
+      name: newLookbook.name,
+      description: newLookbook.description,
+      coverImage: newLookbook.coverImage,
+      isPublic: newLookbook.isPublic,
+      ownerId: "owner-1",
       createdAt: new Date(),
       updatedAt: new Date(),
+      lookCount: 0,
+      isFollowing: false,
+      followers: 0,
     };
     setLookbooks([lookbook, ...lookbooks]);
     setShowCreateModal(false);
@@ -118,7 +134,7 @@ export default function LookbooksPage() {
         lb.id === updatedLookbook.id
           ? {
               ...updatedLookbook,
-              updatedAt: new Date().toISOString().split("T")[0],
+              updatedAt: new Date(),
             }
           : lb,
       ),
@@ -144,7 +160,7 @@ export default function LookbooksPage() {
           ? {
               ...lb,
               isPublic: !lb.isPublic,
-              updatedAt: new Date().toISOString().split("T")[0],
+              updatedAt: new Date(),
             }
           : lb,
       ),
@@ -157,15 +173,14 @@ export default function LookbooksPage() {
       try {
         await navigator.share({
           title: lookbook.name,
-          text: lookbook.description,
+          text: lookbook.description ?? undefined,
           url: shareUrl,
         });
-      } catch (err) {
+      } catch {
         console.log("Share cancelled");
       }
     } else {
       navigator.clipboard.writeText(shareUrl);
-      // Could show a toast here
     }
   };
 
@@ -282,8 +297,27 @@ export default function LookbooksPage() {
       <EditLookbookModal
         open={showEditModal}
         onOpenChange={setShowEditModal}
-        lookbook={selectedLookbook}
-        onSave={handleSaveEdit}
+        lookbook={
+          selectedLookbook
+            ? {
+                id: selectedLookbook.id,
+                name: selectedLookbook.name,
+                description: selectedLookbook.description,
+                isPublic: selectedLookbook.isPublic,
+                coverImage: selectedLookbook.coverImage,
+              }
+            : null
+        }
+        onSave={(updated: EditableLookbook) =>
+          handleSaveEdit({
+            ...selectedLookbook!,
+            name: updated.name,
+            description: updated.description ?? null,
+            isPublic: updated.isPublic,
+            coverImage: updated.coverImage ?? null,
+            updatedAt: new Date(),
+          })
+        }
       />
 
       <DeleteLookbookDialog

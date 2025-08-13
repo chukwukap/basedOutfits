@@ -164,7 +164,9 @@ export function AddToLookbookSheet({
     }
   };
 
-  const handleCreateLookbook = (newLookbook: any) => {
+  const handleCreateLookbook = (
+    newLookbook: Omit<Lookbook, "id" | "lookCount">,
+  ) => {
     const lookbook = {
       ...newLookbook,
       id: Date.now().toString(),
@@ -371,13 +373,21 @@ export function AddToLookbookSheet({
               )}
 
               {paymentState === "success" && (
-                <PaymentReceipt
-                  amount={0.001}
-                  currency="ETH"
-                  method={paymentMethod || "basepay"}
-                  transactionHash={transactionHash}
-                  onClose={handlePaymentSuccess}
-                />
+                <>
+                  <PaymentReceipt
+                    type="collect"
+                    amount={0.001}
+                    recipient={look.author.name}
+                    transactionHash={transactionHash}
+                    paymentMethod={paymentMethod || "basepay"}
+                  />
+                  <Button
+                    onClick={handlePaymentSuccess}
+                    className="w-full mt-2"
+                  >
+                    Done
+                  </Button>
+                </>
               )}
 
               {paymentState === "error" && (

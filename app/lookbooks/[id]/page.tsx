@@ -4,11 +4,15 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { LookbookDetailsHeader } from "@/app/lookbooks/[id]/_components/lookbook-details-header";
-import { LookbookLooksGrid } from "@/app/lookbooks/[id]/_components/lookbook-looks-grid";
+import {
+  LookbookLooksGrid,
+  type Look as GridLook,
+} from "@/app/lookbooks/[id]/_components/lookbook-looks-grid";
 import { EditLookbookModal } from "@/app/lookbooks/_components/edit-lookbook-modal";
 import { DeleteLookbookDialog } from "@/app/lookbooks/_components/delete-lookbook-dialog";
 import { TipModal } from "@/app/_components/tip-modal";
 import { CollectModal } from "@/app/_components/collect-modal";
+import type { LookFetchPayload } from "@/lib/types";
 
 // Mock lookbook data
 const mockLookbooks = {
@@ -141,12 +145,14 @@ export default function LookbookDetailsPage() {
   const params = useParams();
   const lookbookId = params.id as string;
 
-  const [lookbook, setLookbook] = useState<any>(null);
+  type Lookbook = (typeof mockLookbooks)[keyof typeof mockLookbooks];
+  type LookItem = GridLook;
+  const [lookbook, setLookbook] = useState<Lookbook | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showTipModal, setShowTipModal] = useState(false);
   const [showCollectModal, setShowCollectModal] = useState(false);
-  const [selectedLook, setSelectedLook] = useState<any>(null);
+  const [selectedLook, setSelectedLook] = useState<LookItem | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -167,11 +173,14 @@ export default function LookbookDetailsPage() {
     setShowDeleteDialog(true);
   };
 
-  const handleSaveEdit = (updatedLookbook: any) => {
-    setLookbook({
-      ...lookbook,
-      ...updatedLookbook,
-      updatedAt: new Date().toISOString().split("T")[0],
+  const handleSaveEdit = (updatedLookbook: Partial<Lookbook>) => {
+    setLookbook((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        ...updatedLookbook,
+        updatedAt: new Date().toISOString().split("T")[0],
+      };
     });
     setShowEditModal(false);
   };
@@ -181,26 +190,24 @@ export default function LookbookDetailsPage() {
     window.location.href = "/lookbooks";
   };
 
-  const handleLookClick = (look: any) => {
+  const handleLookClick = (look: LookItem) => {
     // Navigate to look details
     window.location.href = `/look/${look.id}`;
   };
 
-  const handleTipLook = (look: any) => {
+  const handleTipLook = (look: LookItem) => {
     setSelectedLook(look);
     setShowTipModal(true);
   };
 
-  const handleCollectLook = (look: any) => {
+  const handleCollectLook = (look: LookItem) => {
     setSelectedLook(look);
     setShowCollectModal(true);
   };
 
   const handleRemoveLook = (lookId: string) => {
     if (lookbook) {
-      const updatedLooks = lookbook.looks.filter(
-        (look: any) => look.id !== lookId,
-      );
+      const updatedLooks = lookbook.looks.filter((look) => look.id !== lookId);
       setLookbook({
         ...lookbook,
         looks: updatedLooks,
@@ -236,7 +243,7 @@ export default function LookbookDetailsPage() {
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-2">Lookbook Not Found</h2>
           <p className="text-muted-foreground mb-4">
-            This lookbook doesn't exist or has been deleted.
+            This lookbook doesn&apos;t exist or has been deleted.
           </p>
           <button
             onClick={() => (window.location.href = "/lookbooks")}
@@ -262,7 +269,7 @@ export default function LookbookDetailsPage() {
       {/* Looks Grid */}
       <main className="p-4">
         <LookbookLooksGrid
-          looks={lookbook.looks}
+          looks={lookbook.looks as GridLook[]}
           onLookClick={handleLookClick}
           onTipLook={handleTipLook}
           onCollectLook={handleCollectLook}
@@ -274,8 +281,22 @@ export default function LookbookDetailsPage() {
       <EditLookbookModal
         open={showEditModal}
         onOpenChange={setShowEditModal}
-        lookbook={lookbook}
-        onSave={handleSaveEdit}
+        lookbook={{
+          id: lookbook.id,
+          name: lookbook.name,
+          description: lookbook.description,
+          isPublic: lookbook.isPublic,
+          coverImage: lookbook.coverImage,
+        }}
+        onSave={(updated) =>
+          handleSaveEdit({
+            id: updated.id,
+            name: updated.name,
+            description: updated.description ?? "",
+            isPublic: updated.isPublic,
+            coverImage: updated.coverImage ?? "",
+          })
+        }
       />
 
       <DeleteLookbookDialog
@@ -290,13 +311,65 @@ export default function LookbookDetailsPage() {
           <TipModal
             open={showTipModal}
             onOpenChange={setShowTipModal}
-            look={selectedLook}
+            look={
+              selectedLook
+                ? (function mapLook(): LookFetchPayload {
+                    return {
+                      id: selectedLook.id,
+                      caption: selectedLook.title,
+                      description: selectedLook.description,
+                      imageUrls: [selectedLook.imageUrl],
+                      author: {
+                        isFollowing: false,
+                        avatarUrl: selectedLook.author.avatar,
+                        fid: selectedLook.author.fid,
+                        name: selectedLook.author.name,
+                      },
+                      tags: selectedLook.tags,
+                      brands: selectedLook.brands,
+                      tips: selectedLook.tips,
+                      collections: selectedLook.collections,
+                      location: selectedLook.location ?? "",
+                      createdAt: new Date(),
+                      isPublic: true,
+                      authorId: `author-${selectedLook.author.fid}`,
+                      updatedAt: new Date(),
+                    } as LookFetchPayload;
+                  })()
+                : ({} as LookFetchPayload)
+            }
             onComplete={() => setShowTipModal(false)}
           />
           <CollectModal
             open={showCollectModal}
             onOpenChange={setShowCollectModal}
-            look={selectedLook}
+            look={
+              selectedLook
+                ? (function mapLook(): LookFetchPayload {
+                    return {
+                      id: selectedLook.id,
+                      caption: selectedLook.title,
+                      description: selectedLook.description,
+                      imageUrls: [selectedLook.imageUrl],
+                      author: {
+                        isFollowing: false,
+                        avatarUrl: selectedLook.author.avatar,
+                        fid: selectedLook.author.fid,
+                        name: selectedLook.author.name,
+                      },
+                      tags: selectedLook.tags,
+                      brands: selectedLook.brands,
+                      tips: selectedLook.tips,
+                      collections: selectedLook.collections,
+                      location: selectedLook.location ?? "",
+                      createdAt: new Date(),
+                      isPublic: true,
+                      authorId: `author-${selectedLook.author.fid}`,
+                      updatedAt: new Date(),
+                    } as LookFetchPayload;
+                  })()
+                : ({} as LookFetchPayload)
+            }
             onComplete={() => setShowCollectModal(false)}
           />
         </>

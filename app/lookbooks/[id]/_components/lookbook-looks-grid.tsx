@@ -28,7 +28,7 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 
-interface Look {
+export interface Look {
   id: string;
   title: string;
   description: string;

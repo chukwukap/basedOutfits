@@ -1,0 +1,11 @@
+# Ignore generated Prisma client and runtimes
+lib/generated/
+
+# Build output
+.next/
+
+# Prisma build artifacts
+prisma/migrations/**/migration.sql
+
+# Misc
+node_modules/

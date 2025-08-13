@@ -39,3 +39,10 @@ export type LookbookResponse = Lookbook & {
   isFollowing: boolean;
   followers: number;
 };
+
+// A user-facing lookbook structure used in profile pages
+export type UserLookbook = Lookbook & {
+  lookCount: number;
+  isFollowing: boolean;
+  followers: number;
+};

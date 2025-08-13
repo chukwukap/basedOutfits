@@ -68,7 +68,7 @@ export function LookbookDetailsHeader({
           text: lookbook.description,
           url: shareUrl,
         });
-      } catch (err) {
+      } catch {
         console.log("Share cancelled");
       }
     } else {
