@@ -1,0 +1,193 @@
+"use client"
+
+import type React from "react"
+
+import { Heart, DollarSign, Share2, MapPin, Clock } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+
+interface Look {
+  id: string
+  title: string
+  description: string
+  imageUrl: string
+  author: {
+    name: string
+    avatar: string
+    fid: string
+  }
+  tags: string[]
+  brands: string[]
+  tips: number
+  collections: number
+  location?: string
+  createdAt: string
+}
+
+interface LookCardProps {
+  look: Look
+  onTip: () => void
+  onCollect: () => void
+}
+
+export function LookCard({ look, onTip, onCollect }: LookCardProps) {
+  const [imageLoading, setImageLoading] = useState(true)
+  const [tipping, setTipping] = useState(false)
+  const [collecting, setCollecting] = useState(false)
+  const router = useRouter()
+
+  const handleCardClick = () => {
+    router.push(`/look/${look.id}`)
+  }
+
+  const handleTip = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setTipping(true)
+    onTip()
+    // Reset after a delay to show feedback
+    setTimeout(() => setTipping(false), 1000)
+  }
+
+  const handleCollect = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setCollecting(true)
+    onCollect()
+    // Reset after a delay to show feedback
+    setTimeout(() => setCollecting(false), 1000)
+  }
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    // TODO: Implement native share or copy link
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: look.title,
+          text: look.description,
+          url: `${window.location.origin}/look/${look.id}`,
+        })
+      } catch (err) {
+        console.log("Share cancelled")
+      }
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(`${window.location.origin}/look/${look.id}`)
+    }
+  }
+
+  return (
+    <Card
+      className="overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer"
+      onClick={handleCardClick}
+    >
+      {/* Image */}
+      <div className="relative aspect-[3/4] bg-muted">
+        {imageLoading && <div className="absolute inset-0 bg-muted animate-pulse" />}
+        <Image
+          src={look.imageUrl || "/placeholder.svg"}
+          alt={look.title}
+          fill
+          className="object-cover transition-opacity duration-300"
+          onLoad={() => setImageLoading(false)}
+        />
+        {/* Overlay with location and time */}
+        <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
+          {look.location && (
+            <Badge variant="secondary" className="bg-black/50 text-white border-0 backdrop-blur-sm">
+              <MapPin className="w-3 h-3 mr-1" />
+              {look.location}
+            </Badge>
+          )}
+          <Badge variant="secondary" className="bg-black/50 text-white border-0 backdrop-blur-sm">
+            <Clock className="w-3 h-3 mr-1" />
+            {look.createdAt}
+          </Badge>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 space-y-3">
+        {/* Author */}
+        <div className="flex items-center gap-3">
+          <Avatar className="w-9 h-9 ring-2 ring-background">
+            <AvatarImage src={look.author.avatar || "/placeholder.svg"} />
+            <AvatarFallback className="text-xs">{look.author.name[0]}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="font-medium text-sm truncate">{look.author.name}</p>
+            <p className="text-xs text-muted-foreground">@{look.author.fid}</p>
+          </div>
+        </div>
+
+        {/* Title and Description */}
+        <div>
+          <h3 className="font-semibold text-lg leading-tight mb-1">{look.title}</h3>
+          <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">{look.description}</p>
+        </div>
+
+        {/* Tags and Brands */}
+        <div className="flex flex-wrap gap-2">
+          {look.tags.slice(0, 3).map((tag) => (
+            <Badge key={tag} variant="secondary" className="text-xs font-medium">
+              #{tag}
+            </Badge>
+          ))}
+          {look.tags.length > 3 && (
+            <Badge variant="outline" className="text-xs">
+              +{look.tags.length - 3} more
+            </Badge>
+          )}
+        </div>
+
+        {/* Brands */}
+        {look.brands.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {look.brands.map((brand) => (
+              <Badge key={brand} variant="outline" className="text-xs font-medium">
+                {brand}
+              </Badge>
+            ))}
+          </div>
+        )}
+
+        {/* Stats */}
+        <div className="flex items-center gap-4 text-sm text-muted-foreground pt-1">
+          <span className="flex items-center gap-1">
+            <DollarSign className="w-3 h-3" />
+            {look.tips} tips
+          </span>
+          <span className="flex items-center gap-1">
+            <Heart className="w-3 h-3" />
+            {look.collections} collected
+          </span>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleTip}
+            disabled={tipping}
+            className="flex-1 bg-transparent hover:bg-primary/5"
+          >
+            <DollarSign className="w-4 h-4 mr-2" />
+            {tipping ? "Tipping..." : "Tip"}
+          </Button>
+          <Button variant="default" size="sm" onClick={handleCollect} disabled={collecting} className="flex-1">
+            <Heart className="w-4 h-4 mr-2" />
+            {collecting ? "Collecting..." : "Collect"}
+          </Button>
+          <Button variant="ghost" size="sm" onClick={handleShare} className="px-3">
+            <Share2 className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </Card>
+  )
+}
