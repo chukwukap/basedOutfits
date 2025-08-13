@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono";
 // import { OnboardingReset } from "@/components/onboarding-reset";
 import "./globals.css";
 import { Providers } from "./_components/providers";
+import { ThemeProvider } from "@/contexts/theme-context";
 
 export const metadata: Metadata = {
   title: "Lookbook - Share & Collect Inspiring Fashion",
@@ -61,7 +62,10 @@ html {
         `}</style>
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <ThemeProvider>
+          <Providers>{children}</Providers>
+        </ThemeProvider>
+
         {/* <OnboardingReset /> */}
       </body>
     </html>
