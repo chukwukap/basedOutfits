@@ -20,15 +20,7 @@ import { CreateLookbookModal } from "@/app/_components/create-lookbook-modal";
 import { PaymentMethodSelector } from "@/app/_components/payment-method-selector";
 import { PaymentReceipt } from "@/app/_components/payment-receipt";
 import Image from "next/image";
-
-interface Look {
-  id: string;
-  title: string;
-  author: {
-    name: string;
-    avatar: string;
-  };
-}
+import { LookFetchPayload } from "@/lib/types";
 
 interface Lookbook {
   id: string;
@@ -42,7 +34,7 @@ interface Lookbook {
 interface AddToLookbookSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  look: Look;
+  look: LookFetchPayload;
   onComplete: (lookbookName: string) => void;
 }
 
@@ -228,13 +220,15 @@ export function AddToLookbookSheet({
               {/* Look Preview */}
               <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                 <Avatar className="w-10 h-10">
-                  <AvatarImage src={look.author.avatar || "/placeholder.svg"} />
+                  <AvatarImage
+                    src={look.author.avatarUrl || "/placeholder.svg"}
+                  />
                   <AvatarFallback>{look.author.name[0]}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-sm">{look.author.name}</p>
                   <p className="text-xs text-muted-foreground truncate">
-                    {look.title}
+                    {look.caption}
                   </p>
                 </div>
               </div>

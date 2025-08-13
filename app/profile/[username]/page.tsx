@@ -7,9 +7,10 @@ import { UserProfileHeader } from "@/app/_components/user-profile-header";
 import { UserLookbooksGrid } from "@/app/_components/user-lookbooks-grid";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
+import { UserProfile, UserLookbook } from "@/lib/types";
 
 // Mock user profiles data
-const mockUserProfiles = {
+const mockUserProfiles: Record<string, UserProfile> = {
   sarahc: {
     username: "sarahc",
     name: "Sarah Chen",
@@ -20,6 +21,7 @@ const mockUserProfiles = {
     totalLooks: 45,
     joinedDate: "2023-08-15",
     isFollowing: false,
+    updatedAt: "2024-01-20",
     publicLookbooks: [
       {
         id: "sarah-1",
@@ -30,7 +32,9 @@ const mockUserProfiles = {
         isPublic: true,
         followers: 234,
         isFollowing: false,
-        updatedAt: "2024-01-20",
+        updatedAt: new Date("2024-01-20"),
+        ownerId: "sarah-1",
+        createdAt: new Date("2024-01-20"),
       },
       {
         id: "sarah-2",
@@ -41,7 +45,9 @@ const mockUserProfiles = {
         isPublic: true,
         followers: 156,
         isFollowing: true,
-        updatedAt: "2024-01-18",
+        updatedAt: new Date("2024-01-18"),
+        ownerId: "sarah-2",
+        createdAt: new Date("2024-01-18"),
       },
       {
         id: "sarah-3",
@@ -52,7 +58,9 @@ const mockUserProfiles = {
         isPublic: true,
         followers: 89,
         isFollowing: false,
-        updatedAt: "2024-01-15",
+        updatedAt: new Date("2024-01-15"),
+        ownerId: "sarah-3",
+        createdAt: new Date("2024-01-15"),
       },
     ],
   },
@@ -66,6 +74,7 @@ const mockUserProfiles = {
     totalLooks: 67,
     joinedDate: "2023-06-10",
     isFollowing: true,
+    updatedAt: "2024-01-19",
     publicLookbooks: [
       {
         id: "alex-1",
@@ -76,7 +85,9 @@ const mockUserProfiles = {
         isPublic: true,
         followers: 445,
         isFollowing: false,
-        updatedAt: "2024-01-19",
+        updatedAt: new Date("2024-01-19"),
+        ownerId: "alex-1",
+        createdAt: new Date("2024-01-19"),
       },
       {
         id: "alex-2",
@@ -87,7 +98,9 @@ const mockUserProfiles = {
         isPublic: true,
         followers: 312,
         isFollowing: true,
-        updatedAt: "2024-01-17",
+        updatedAt: new Date("2024-01-17"),
+        ownerId: "alex-2",
+        createdAt: new Date("2024-01-17"),
       },
     ],
   },
@@ -97,7 +110,7 @@ export default function UserProfilePage() {
   const params = useParams();
   const username = params.username as string;
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -128,7 +141,7 @@ export default function UserProfilePage() {
     if (user) {
       setUser({
         ...user,
-        publicLookbooks: user.publicLookbooks.map((lb: any) =>
+        publicLookbooks: user.publicLookbooks.map((lb: UserLookbook) =>
           lb.id === lookbookId
             ? {
                 ...lb,
@@ -141,7 +154,7 @@ export default function UserProfilePage() {
     }
   };
 
-  const handleLookbookClick = (lookbook: any) => {
+  const handleLookbookClick = (lookbook: UserLookbook) => {
     window.location.href = `/lookbooks/${lookbook.id}`;
   };
 
@@ -171,7 +184,7 @@ export default function UserProfilePage() {
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-2">User Not Found</h2>
           <p className="text-muted-foreground mb-4">
-            This user doesn't exist or their profile is private.
+            This user doesn&apos;t exist or their profile is private.
           </p>
           <Button onClick={handleBack}>Go Back</Button>
         </div>

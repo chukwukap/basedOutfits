@@ -3,20 +3,12 @@
 import { useState } from "react";
 import { AddToLookbookSheet } from "@/app/_components/add-to-lookbook-sheet";
 import { SuccessToast } from "@/app/_components/success-toast";
-
-interface Look {
-  id: string;
-  title: string;
-  author: {
-    name: string;
-    avatar: string;
-  };
-}
+import { LookFetchPayload } from "@/lib/types";
 
 interface CollectModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  look: Look;
+  look: LookFetchPayload;
   onComplete: () => void;
 }
 

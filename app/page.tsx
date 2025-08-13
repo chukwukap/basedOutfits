@@ -1,27 +1,28 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { BottomNav } from "@/app/_components/bottom-nav";
-import { LookCard } from "@/app/_components/look-card";
-import { LookCardSkeleton } from "@/app/_components/look-card-skeleton";
-import { TipModal } from "@/app/_components/tip-modal";
-import { CollectModal } from "@/app/_components/collect-modal";
-import { OnboardingTutorial } from "@/app/_components/onboarding-tutorial";
-import { TrendingTags } from "@/app/_components/trending-tags";
-import { DiscoverCreators } from "@/app/_components/discover-creators";
+import { BottomNav } from "./_components/bottom-nav";
+import { LookCard } from "./_components/look-card";
+import { LookCardSkeleton } from "./_components/look-card-skeleton";
+import { TipModal } from "./_components/tip-modal";
+import { CollectModal } from "./_components/collect-modal";
+import { OnboardingTutorial } from "./_components/onboarding-tutorial";
+import { TrendingTags } from "./_components/trending-tags";
+import { DiscoverCreators } from "./_components/discover-creators";
 import { RefreshCw, Users, Globe } from "lucide-react";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "./_components/ui/button";
+import { LookFetchPayload } from "@/lib/types";
 
-const mockLooks = [
+const mockLooks: LookFetchPayload[] = [
   {
     id: "1",
-    title: "Summer Vibes",
+    caption: "Summer Vibes",
     description:
       "Perfect outfit for a sunny day in the city. Love mixing casual pieces with statement accessories!",
     imageUrl: "/fashionable-summer-outfit.png",
     author: {
       name: "Sarah Chen",
-      avatar: "/diverse-group-profile.png",
+      avatarUrl: "/diverse-group-profile.png",
       fid: "12345",
       isFollowing: true,
     },
@@ -30,17 +31,24 @@ const mockLooks = [
     tips: 12,
     collections: 8,
     location: "New York",
-    createdAt: "2h ago",
+    createdAt: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours ago
+    isPublic: true,
+    audioUrl: null,
+    videoUrl: null,
+    linkUrl: null,
+    authorId: "1",
+    price: 100,
+    updatedAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
   },
   {
     id: "2",
-    title: "Evening Elegance",
+    caption: "Evening Elegance",
     description:
       "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful.",
     imageUrl: "/elegant-evening-dress.png",
     author: {
       name: "Alex Rivera",
-      avatar: "/diverse-group-profile.png",
+      avatarUrl: "/diverse-group-profile.png",
       fid: "67890",
       isFollowing: false,
     },
@@ -49,17 +57,24 @@ const mockLooks = [
     tips: 24,
     collections: 15,
     location: "Paris",
-    createdAt: "4h ago",
+    createdAt: new Date(Date.now() + 4 * 60 * 60 * 1000), // 4 hours ago
+    isPublic: true,
+    audioUrl: null,
+    videoUrl: null,
+    linkUrl: null,
+    authorId: "2",
+    price: 100,
+    updatedAt: new Date(Date.now() + 4 * 60 * 60 * 1000),
   },
   {
     id: "3",
-    title: "Street Style Maven",
+    caption: "Street Style Maven",
     description:
       "Channeling my inner street style photographer today. Bold colors and patterns are my thing!",
     imageUrl: "/street-style-outfit.png",
     author: {
       name: "Jordan Kim",
-      avatar: "/diverse-group-profile.png",
+      avatarUrl: "/diverse-group-profile.png",
       fid: "11111",
       isFollowing: true,
     },
@@ -68,17 +83,24 @@ const mockLooks = [
     tips: 18,
     collections: 22,
     location: "Tokyo",
-    createdAt: "6h ago",
+    createdAt: new Date(Date.now() + 6 * 60 * 60 * 1000), // 6 hours ago
+    isPublic: true,
+    audioUrl: null,
+    videoUrl: null,
+    linkUrl: null,
+    authorId: "3",
+    price: 100,
+    updatedAt: new Date(Date.now() + 6 * 60 * 60 * 1000),
   },
   {
     id: "4",
-    title: "Business Casual Chic",
+    caption: "Business Casual Chic",
     description:
       "Work from home but make it fashion. Comfortable yet professional for video calls.",
     imageUrl: "/business-casual-outfit.png",
     author: {
       name: "Taylor Swift",
-      avatar: "/diverse-group-profile.png",
+      avatarUrl: "/diverse-group-profile.png",
       fid: "22222",
       isFollowing: true,
     },
@@ -87,17 +109,24 @@ const mockLooks = [
     tips: 9,
     collections: 12,
     location: "San Francisco",
-    createdAt: "8h ago",
+    createdAt: new Date(Date.now() + 8 * 60 * 60 * 1000), // 8 hours ago
+    isPublic: true,
+    audioUrl: null,
+    videoUrl: null,
+    linkUrl: null,
+    authorId: "4",
+    price: 100,
+    updatedAt: new Date(Date.now() + 8 * 60 * 60 * 1000),
   },
   {
     id: "5",
-    title: "Cozy Weekend Vibes",
+    caption: "Cozy Weekend Vibes",
     description:
       "Perfect lazy Sunday outfit. Comfort is key but still want to look put together.",
     imageUrl: "/summer-fashion-outfit.png",
     author: {
       name: "Maya Patel",
-      avatar: "/diverse-group-profile.png",
+      avatarUrl: "/diverse-group-profile.png",
       fid: "33333",
       isFollowing: false,
     },
@@ -106,7 +135,14 @@ const mockLooks = [
     tips: 15,
     collections: 7,
     location: "Los Angeles",
-    createdAt: "12h ago",
+    createdAt: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hours ago
+    isPublic: true,
+    audioUrl: null,
+    videoUrl: null,
+    linkUrl: null,
+    authorId: "5",
+    price: 100,
+    updatedAt: new Date(Date.now() + 12 * 60 * 60 * 1000),
   },
 ];
 
@@ -126,7 +162,7 @@ export default function HomePage() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [feedType, setFeedType] = useState<"all" | "following">("all");
 
-  const [scrollY, setScrollY] = useState(0);
+  const [, setScrollY] = useState(0);
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);

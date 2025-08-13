@@ -8,21 +8,10 @@ import {
 import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
 import { UserPlus, UserCheck, Calendar } from "lucide-react";
-
-interface User {
-  username: string;
-  name: string;
-  avatar: string;
-  bio: string;
-  followers: number;
-  following: number;
-  totalLooks: number;
-  joinedDate: string;
-  isFollowing: boolean;
-}
+import { UserProfile } from "@/lib/types";
 
 interface UserProfileHeaderProps {
-  user: User;
+  user: UserProfile;
   onFollowUser: () => void;
 }
 
@@ -36,7 +25,9 @@ export function UserProfileHeader({
       <div className="flex items-start gap-4">
         <Avatar className="w-20 h-20 ring-2 ring-background shadow-lg">
           <AvatarImage src={user.avatar || "/placeholder.svg"} />
-          <AvatarFallback className="text-lg">{user.name[0]}</AvatarFallback>
+          <AvatarFallback className="text-lg">
+            {user.name?.[0] || "U"}
+          </AvatarFallback>
         </Avatar>
 
         <div className="flex-1 space-y-3">

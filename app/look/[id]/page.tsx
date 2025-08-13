@@ -5,8 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import { LookDetailView } from "@/app/_components/look-detail-view";
 import { TipModal } from "@/app/_components/tip-modal";
 import { CollectModal } from "@/app/_components/collect-modal";
+import { CommentsSection } from "@/app/_components/comments-section";
 import { ArrowLeft, Share2, DollarSign, Heart } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
+import { Look } from "@prisma/client";
 
 // Mock look data - in real app this would come from API
 const mockLookData = {
@@ -91,12 +93,12 @@ export default function LookDetailPage() {
     loadLook();
   }, [params.id]);
 
-  const handleTip = (lookData: any) => {
+  const handleTip = (lookData: Look) => {
     setSelectedLook(lookData);
     setShowTipModal(true);
   };
 
-  const handleCollect = (lookData: any) => {
+  const handleCollect = (lookData: Look) => {
     setSelectedLook(lookData);
     setShowCollectModal(true);
   };
@@ -127,7 +129,7 @@ export default function LookDetailPage() {
           text: look.description,
           url: window.location.href,
         });
-      } catch (err) {
+      } catch {
         console.log("Share cancelled");
       }
     } else {
@@ -157,7 +159,7 @@ export default function LookDetailPage() {
         <div className="text-center">
           <h1 className="text-xl font-semibold mb-2">Look not found</h1>
           <p className="text-muted-foreground mb-4">
-            This look might have been removed or doesn't exist.
+            This look might have been removed or doesn&apos;t exist.
           </p>
           <Button onClick={() => router.push("/")}>Back to Feed</Button>
         </div>
@@ -166,7 +168,7 @@ export default function LookDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-32">
       {/* Header */}
       <header className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
         <div className="flex items-center justify-between p-4">
@@ -194,6 +196,9 @@ export default function LookDetailPage() {
 
       {/* Look Detail - No embedded actions */}
       <LookDetailView look={look} />
+
+      {/* Comments Section */}
+      <CommentsSection lookId={look.id} />
 
       {/* Other Looks by This Poster */}
       <div className="px-4 py-6">

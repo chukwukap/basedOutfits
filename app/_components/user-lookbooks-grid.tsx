@@ -9,21 +9,11 @@ import { Heart, Users, Calendar, HeartOff } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-interface Lookbook {
-  id: string;
-  name: string;
-  description: string;
-  coverImage: string;
-  lookCount: number;
-  isPublic: boolean;
-  followers: number;
-  isFollowing: boolean;
-  updatedAt: string;
-}
+import { UserLookbook } from "@/lib/types";
 
 interface UserLookbooksGridProps {
-  lookbooks: Lookbook[];
-  onLookbookClick: (lookbook: Lookbook) => void;
+  lookbooks: UserLookbook[];
+  onLookbookClick: (lookbook: UserLookbook) => void;
   onFollowLookbook: (lookbookId: string) => void;
 }
 
@@ -53,8 +43,8 @@ export function UserLookbooksGrid({
         </div>
         <h3 className="font-semibold text-lg mb-2">No Public Lookbooks</h3>
         <p className="text-muted-foreground text-sm max-w-sm">
-          This user hasn't made any lookbooks public yet. Check back later for
-          new collections!
+          This user hasn&apos;t made any lookbooks public yet. Check back later
+          for new collections!
         </p>
       </div>
     );

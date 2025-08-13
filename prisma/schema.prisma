@@ -15,16 +15,15 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  username     String   @unique
-  email        String   @unique
-  passwordHash String
-  name         String?
-  bio          String?
-  avatarUrl    String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
+  id            String         @id @default(cuid())
+  username      String         @unique
+  fid           String?
+  email         String?        @unique
+  name          String?
+  bio           String?
+  avatarUrl     String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   looks         Look[]
   lookbooks     Lookbook[]
   followers     Follow[]       @relation("followers")
@@ -40,14 +39,22 @@ model User {
 }
 
 model Look {
-  id        String   @id @default(cuid())
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
-  caption   String?
-  mediaUrl  String
-  tags      String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  caption     String?
+  description String?
+  imageUrl    String?
+  videoUrl    String?
+  audioUrl    String?
+  linkUrl     String?
+  location    String?
+  brands      String[]
+  price       Float?
+  tags        String[]
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   likes    Like[]
   comments Comment[]

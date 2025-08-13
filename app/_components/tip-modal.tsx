@@ -20,20 +20,12 @@ import { Alert, AlertDescription } from "@/app/_components/ui/alert";
 import { DollarSign, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { PaymentMethodSelector } from "@/app/_components/payment-method-selector";
 import { PaymentReceipt } from "@/app/_components/payment-receipt";
-
-interface Look {
-  id: string;
-  title: string;
-  author: {
-    name: string;
-    avatar: string;
-  };
-}
+import { LookFetchPayload } from "@/lib/types";
 
 interface TipModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  look: Look;
+  look: LookFetchPayload;
   onComplete: (amount: number) => void;
 }
 
@@ -151,13 +143,13 @@ export function TipModal({
           {/* Look info */}
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
             <Avatar className="w-10 h-10">
-              <AvatarImage src={look.author.avatar || "/placeholder.svg"} />
+              <AvatarImage src={look.author.avatarUrl || "/placeholder.svg"} />
               <AvatarFallback>{look.author.name[0]}</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm">{look.author.name}</p>
               <p className="text-xs text-muted-foreground truncate">
-                {look.title}
+                {look.caption}
               </p>
             </div>
             {paymentState === "success" && (

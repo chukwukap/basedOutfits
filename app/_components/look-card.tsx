@@ -14,27 +14,11 @@ import { Badge } from "@/app/_components/ui/badge";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-interface Look {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  author: {
-    name: string;
-    avatar: string;
-    fid: string;
-  };
-  tags: string[];
-  brands: string[];
-  tips: number;
-  collections: number;
-  location?: string;
-  createdAt: string;
-}
+import { LookFetchPayload } from "@/lib/types";
+import { formatDate } from "@/lib/utils";
 
 interface LookCardProps {
-  look: Look;
+  look: LookFetchPayload;
   onTip: () => void;
   onCollect: () => void;
 }
@@ -72,12 +56,12 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: look.title,
-          text: look.description,
+          title: look.caption || "",
+          text: look.description || "",
           url: `${window.location.origin}/look/${look.id}`,
         });
       } catch (err) {
-        console.log("Share cancelled");
+        console.error("Share cancelled", err);
       }
     } else {
       // Fallback: copy to clipboard
@@ -99,7 +83,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
         )}
         <Image
           src={look.imageUrl || "/placeholder.svg"}
-          alt={look.title}
+          alt={look.caption || "Look image"}
           fill
           className="object-cover transition-opacity duration-300"
           onLoad={() => setImageLoading(false)}
@@ -120,7 +104,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
             className="bg-black/50 text-white border-0 backdrop-blur-sm"
           >
             <Clock className="w-3 h-3 mr-1" />
-            {look.createdAt}
+            {formatDate(look.createdAt)}
           </Badge>
         </div>
       </div>
@@ -130,7 +114,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
         {/* Author */}
         <div className="flex items-center gap-3">
           <Avatar className="w-9 h-9 ring-2 ring-background">
-            <AvatarImage src={look.author.avatar || "/placeholder.svg"} />
+            <AvatarImage src={look.author.avatarUrl || "/placeholder.svg"} />
             <AvatarFallback className="text-xs">
               {look.author.name[0]}
             </AvatarFallback>
@@ -144,7 +128,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
         {/* Title and Description */}
         <div>
           <h3 className="font-semibold text-lg leading-tight mb-1">
-            {look.title}
+            {look.caption}
           </h3>
           <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
             {look.description}
@@ -192,7 +176,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
           </span>
           <span className="flex items-center gap-1">
             <Heart className="w-3 h-3" />
-            {look.collections} added // Changed from "collected" to "added"
+            {look.collections} added
           </span>
         </div>
 
