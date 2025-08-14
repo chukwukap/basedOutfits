@@ -14,7 +14,10 @@ import { Button } from "./_components/ui/button";
 import { LookFetchPayload } from "@/lib/types";
 import { useSearchParams } from "next/navigation";
 
-async function fetchLooks(params: { tag?: string | null; following?: boolean }) {
+async function fetchLooks(params: {
+  tag?: string | null;
+  following?: boolean;
+}) {
   const qs = new URLSearchParams();
   if (params.tag) qs.set("tag", params.tag);
   if (params.following) qs.set("following", "1");
@@ -66,7 +69,10 @@ function HomePageInner() {
       setLoading(true);
       const tagFromUrl = searchParams.get("tag");
       try {
-        const data = await fetchLooks({ tag: tagFromUrl, following: feedType === "following" });
+        const data = await fetchLooks({
+          tag: tagFromUrl,
+          following: feedType === "following",
+        });
         setLooks(data);
       } catch {
         setLooks([]);
@@ -102,7 +108,10 @@ function HomePageInner() {
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
-      const data = await fetchLooks({ tag: selectedTag, following: feedType === "following" });
+      const data = await fetchLooks({
+        tag: selectedTag,
+        following: feedType === "following",
+      });
       setLooks(data);
     } finally {
       setRefreshing(false);
@@ -336,7 +345,7 @@ function HomePageInner() {
 
 export default function HomePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-background" />}> 
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <HomePageInner />
     </Suspense>
   );

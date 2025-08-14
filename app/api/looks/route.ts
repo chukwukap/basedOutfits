@@ -89,9 +89,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "authorId and imageUrls required" }, { status: 400 });
     }
 
+    // Resolve placeholder usernames to real ids (e.g., "demo")
+    let resolvedAuthorId = authorId;
+    const authorById = await prisma.user.findUnique({ where: { id: authorId } });
+    if (!authorById) {
+      const authorByUsername = await prisma.user.findUnique({ where: { username: authorId } });
+      if (authorByUsername) resolvedAuthorId = authorByUsername.id;
+    }
+
     const created = await prisma.look.create({
       data: {
-        authorId,
+        authorId: resolvedAuthorId,
         caption,
         description,
         imageUrls,

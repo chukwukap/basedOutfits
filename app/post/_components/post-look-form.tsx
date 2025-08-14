@@ -98,6 +98,15 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     }
   }, []);
 
+  const uploadFile = async (file: File): Promise<string> => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: fd });
+    if (!res.ok) throw new Error("Upload failed");
+    const data = (await res.json()) as { url: string };
+    return data.url;
+  };
+
   const handleFiles = (files: File[]) => {
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
 
@@ -115,10 +124,17 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
         },
       ]);
 
-      // Mark as uploaded immediately (in a real app, integrate storage)
-      setImages((prev) =>
-        prev.map((img) => (img.id === id ? { ...img, uploading: false } : img)),
-      );
+      // Upload to backend
+      (async () => {
+        try {
+          const url = await uploadFile(file);
+          setImages((prev) =>
+            prev.map((img) => (img.id === id ? { ...img, uploading: false, preview: url } : img)),
+          );
+        } catch {
+          setImages((prev) => prev.filter((img) => img.id !== id));
+        }
+      })();
     });
   };
 

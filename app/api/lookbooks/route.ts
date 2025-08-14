@@ -60,9 +60,29 @@ export async function POST(req: Request) {
 
     if (!ownerId || !name) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
+    // Resolve owner id: allow passing either user id or username (e.g., "demo")
+    let resolvedOwnerId = ownerId;
+    const byId = await prisma.user.findUnique({ where: { id: ownerId } });
+    if (!byId) {
+      const byUsername = await prisma.user.findUnique({ where: { username: ownerId } });
+      if (byUsername) {
+        resolvedOwnerId = byUsername.id;
+      } else if (ownerId === "demo" && process.env.NODE_ENV !== "production") {
+        // Dev convenience: create demo user automatically
+        const demo = await prisma.user.upsert({
+          where: { username: "demo" },
+          update: {},
+          create: { username: "demo", name: "Demo User", avatarUrl: "/looks/diverse-group-profile.png" },
+        });
+        resolvedOwnerId = demo.id;
+      } else {
+        return NextResponse.json({ error: "Owner not found" }, { status: 400 });
+      }
+    }
+
     const created = await prisma.lookbook.create({
       data: {
-        ownerId,
+        ownerId: resolvedOwnerId,
         name,
         description,
         coverImage,
