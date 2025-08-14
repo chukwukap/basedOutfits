@@ -2,9 +2,9 @@
 
 import { type ReactNode } from "react";
 import { base } from "wagmi/chains";
-import { MiniKitProvider } from "@coinbase/onchainkit/minikit";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { MiniKitProvider, useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useEffect } from "react";
+import { useAccount } from "wagmi";
 
 export function Providers(props: { children: ReactNode }) {
   return (
@@ -28,6 +28,7 @@ export function Providers(props: { children: ReactNode }) {
 
 function MiniKitBootstrap() {
   const { context, isFrameReady, setFrameReady } = useMiniKit();
+  const { address: walletAddress } = useAccount();
 
   useEffect(() => {
     if (!isFrameReady) setFrameReady();
@@ -39,40 +40,24 @@ function MiniKitBootstrap() {
       try {
         if (!context) return;
         const stored = localStorage.getItem("looks_user_synced");
-        type CtxUser = {
-          fid?: number | string;
-          username?: string;
-          displayName?: string;
-          pfpUrl?: string;
-          ethAddress?: string;
-          custodyAddress?: string;
-          address?: string;
-        };
-        type Ctx = { user?: CtxUser; client?: CtxUser } | null;
-        const c = (context as Ctx) || null;
-        const fid: string | undefined = (
-          (c?.user?.fid ?? c?.client?.fid) as number | string | undefined
-        )?.toString();
-        const username: string | undefined = (c?.user?.username ??
-          c?.client?.username) as string | undefined;
-        const name: string | undefined = (c?.user?.displayName ??
-          c?.client?.displayName) as string | undefined;
-        const avatarUrl: string | undefined = (c?.user?.pfpUrl ??
-          c?.client?.pfpUrl) as string | undefined;
-        const walletAddress: string | undefined = (
-          c?.user?.ethAddress ||
-          c?.user?.address ||
-          c?.user?.custodyAddress ||
-          c?.client?.ethAddress ||
-          c?.client?.address ||
-          c?.client?.custodyAddress
-        ) as string | undefined;
+        const c = context || null;
+        const fid = c?.user?.fid?.toString();
+        const username = c?.user?.username;
+        const name = c?.user?.displayName;
+        const avatarUrl = c?.user?.pfpUrl;
+
         if (!fid || !username) return;
         if (stored === username) return;
         await fetch("/api/users/me", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fid, username, name, avatarUrl, walletAddress }),
+          body: JSON.stringify({
+            fid,
+            username,
+            name,
+            avatarUrl,
+            walletAddress,
+          }),
         });
         localStorage.setItem("looks_user_synced", username);
       } catch {
@@ -80,7 +65,7 @@ function MiniKitBootstrap() {
       }
     };
     syncUser();
-  }, [context]);
+  }, [context, walletAddress]);
 
   return null;
 }

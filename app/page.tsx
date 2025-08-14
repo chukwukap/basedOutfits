@@ -14,6 +14,8 @@ import { Button } from "./_components/ui/button";
 import { LookFetchPayload } from "@/lib/types";
 import { useSearchParams } from "next/navigation";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { useAccount } from "wagmi";
+import Image from "next/image";
 
 async function fetchLooks(params: {
   tag?: string | null;
@@ -30,6 +32,7 @@ async function fetchLooks(params: {
 function HomePageInner() {
   const searchParams = useSearchParams();
   const { context } = useMiniKit();
+  const { address: walletAddress } = useAccount();
   const [looks, setLooks] = useState<LookFetchPayload[]>([]);
   const [filteredLooks, setFilteredLooks] = useState<LookFetchPayload[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +46,7 @@ function HomePageInner() {
   const [onboardingChecked, setOnboardingChecked] = useState(false);
 
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [feedType, setFeedType] = useState<"all" | "following">("all");
+  const [feedType, setFeedType] = useState<"foryou" | "following">("foryou");
 
   const [, setScrollY] = useState(0);
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
@@ -164,42 +167,22 @@ function HomePageInner() {
     setShowOnboarding(false);
     // On first-time completion, if context exists, ensure user exists in DB
     try {
-      type CtxUser = {
-        fid?: number | string;
-        username?: string;
-        displayName?: string;
-        pfpUrl?: string;
-        ethAddress?: string;
-        custodyAddress?: string;
-        address?: string;
-      };
-      type Ctx = { user?: CtxUser; client?: CtxUser } | null;
-      const c = (context as Ctx) || null;
-      const fid = (
-        (c?.user?.fid ?? c?.client?.fid) as number | string | undefined
-      )?.toString();
-      const username = (c?.user?.username ?? c?.client?.username) as
-        | string
-        | undefined;
-      const name = (c?.user?.displayName ?? c?.client?.displayName) as
-        | string
-        | undefined;
-      const avatarUrl = (c?.user?.pfpUrl ?? c?.client?.pfpUrl) as
-        | string
-        | undefined;
-      const walletAddress = (
-        c?.user?.ethAddress ||
-        c?.user?.address ||
-        c?.user?.custodyAddress ||
-        c?.client?.ethAddress ||
-        c?.client?.address ||
-        c?.client?.custodyAddress
-      ) as string | undefined;
+      const c = context || null;
+      const fid = c?.user?.fid?.toString();
+      const username = c?.user?.username;
+      const name = c?.user?.displayName;
+      const avatarUrl = c?.user?.pfpUrl;
       if (fid && username) {
         fetch("/api/users/me", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fid, username, name, avatarUrl, walletAddress }),
+          body: JSON.stringify({
+            fid,
+            username,
+            name,
+            avatarUrl,
+            walletAddress,
+          }),
         });
       }
     } catch {}
@@ -210,7 +193,7 @@ function HomePageInner() {
   };
 
   const handleFeedToggle = () => {
-    setFeedType(feedType === "all" ? "following" : "all");
+    setFeedType(feedType === "foryou" ? "following" : "foryou");
   };
 
   const updateScrollDirection = useCallback(() => {
@@ -259,9 +242,13 @@ function HomePageInner() {
         <div className="flex items-center justify-between p-4 gap-3">
           {/* Left: App Logo */}
           <div className="flex items-center gap-2 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-              <span className="text-white text-sm font-bold">L</span>
-            </div>
+            <Image
+              src="/logo.png"
+              alt="Looks"
+              width={32}
+              height={32}
+              className="rounded-lg"
+            />
             <span className="font-semibold text-lg hidden sm:block">Looks</span>
           </div>
 
@@ -349,7 +336,7 @@ function HomePageInner() {
                 variant="outline"
                 onClick={() => {
                   setSelectedTag(null);
-                  setFeedType("all");
+                  setFeedType("foryou");
                 }}
               >
                 View All Looks
