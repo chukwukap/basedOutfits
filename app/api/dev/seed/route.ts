@@ -28,9 +28,7 @@ export async function POST() {
             authorId: demoUser.id,
             caption: "Summer Vibes",
             description: "Perfect outfit for a sunny day in the city.",
-            imageUrls: [
-              "/looks/fashionable-summer-outfit.png",
-            ],
+            imageUrls: ["/looks/fashionable-summer-outfit.png"],
             tags: ["SummerFits", "Streetwear", "Accessories"],
             brands: ["Zara", "Nike"],
             location: "New York",
@@ -40,9 +38,7 @@ export async function POST() {
             authorId: demoUser.id,
             caption: "Evening Elegance",
             description: "Sophisticated look for dinner dates.",
-            imageUrls: [
-              "/looks/elegant-evening-dress.png",
-            ],
+            imageUrls: ["/looks/elegant-evening-dress.png"],
             tags: ["OfficeChic", "Minimalist", "DateNight"],
             brands: ["H&M", "Mango"],
             location: "Paris",
@@ -74,5 +70,3 @@ export async function POST() {
 }
 
 export const dynamic = "force-dynamic";
-
-

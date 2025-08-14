@@ -28,7 +28,9 @@ type TrendingLookbook = {
 };
 
 async function fetchTrendingLookbooks(): Promise<TrendingLookbook[]> {
-  const res = await fetch("/api/lookbooks?public=1&limit=12", { cache: "no-store" });
+  const res = await fetch("/api/lookbooks?public=1&limit=12", {
+    cache: "no-store",
+  });
   if (!res.ok) return [];
   return await res.json();
 }
@@ -45,7 +47,9 @@ export function TrendingLookbooks({
   const [lookbooks, setLookbooks] = useState<TrendingLookbook[]>([]);
 
   useEffect(() => {
-    fetchTrendingLookbooks().then(setLookbooks).catch(() => setLookbooks([]));
+    fetchTrendingLookbooks()
+      .then(setLookbooks)
+      .catch(() => setLookbooks([]));
   }, []);
 
   const handleFollowLookbook = (lookbookId: string) => {
@@ -77,7 +81,9 @@ export function TrendingLookbooks({
       const sq = searchQuery.toLowerCase();
       return (
         lookbook.name.toLowerCase().includes(sq) ||
-        (lookbook.description ? lookbook.description.toLowerCase().includes(sq) : false) ||
+        (lookbook.description
+          ? lookbook.description.toLowerCase().includes(sq)
+          : false) ||
         lookbook.creator.name.toLowerCase().includes(sq)
       );
     }

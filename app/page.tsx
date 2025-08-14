@@ -23,7 +23,7 @@ async function fetchLooks(params: { tag?: string | null; following?: boolean }) 
   return (await res.json()) as LookFetchPayload[];
 }
 
-export default function HomePage() {
+function HomePageInner() {
   const searchParams = useSearchParams();
   const [looks, setLooks] = useState<LookFetchPayload[]>([]);
   const [filteredLooks, setFilteredLooks] = useState<LookFetchPayload[]>([]);
@@ -197,7 +197,6 @@ export default function HomePage() {
   }
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-background" />}> 
     <div className="min-h-screen bg-background pb-20">
       <header
         className="fixed top-0 left-0 right-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b transition-transform duration-300 ease-out"
@@ -332,6 +331,13 @@ export default function HomePage() {
 
       <BottomNav scrollDirection={scrollDirection} isScrolled={isScrolled} />
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}> 
+      <HomePageInner />
     </Suspense>
   );
 }

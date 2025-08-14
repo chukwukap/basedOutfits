@@ -23,9 +23,12 @@ interface CommentsSectionProps {
 }
 
 async function fetchComments(lookId: string): Promise<Comment[]> {
-  const res = await fetch(`/api/comments?lookId=${encodeURIComponent(lookId)}`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `/api/comments?lookId=${encodeURIComponent(lookId)}`,
+    {
+      cache: "no-store",
+    },
+  );
   if (!res.ok) return [];
   return await res.json();
 }
@@ -43,7 +46,10 @@ export function CommentsSection({ lookId }: CommentsSectionProps) {
       // Normalize createdAt to string
       const normalized = data.map((c) => ({
         ...c,
-        createdAt: typeof c.createdAt === "string" ? c.createdAt : new Date(c.createdAt).toISOString(),
+        createdAt:
+          typeof c.createdAt === "string"
+            ? c.createdAt
+            : new Date(c.createdAt).toISOString(),
       }));
       setComments(normalized);
       setLoading(false);
