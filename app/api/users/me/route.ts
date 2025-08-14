@@ -4,12 +4,13 @@ import { prisma } from "@/lib/db";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { fid, username, name, avatarUrl, bio } = body as {
+    const { fid, username, name, avatarUrl, bio, walletAddress } = body as {
       fid: string;
       username: string;
       name?: string;
       avatarUrl?: string;
       bio?: string;
+      walletAddress?: string;
     };
 
     if (!fid || !username) {
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
         name,
         avatarUrl,
         bio,
+        walletAddress,
       },
       create: {
         username,
@@ -33,6 +35,7 @@ export async function POST(req: Request) {
         name,
         avatarUrl,
         bio,
+        walletAddress,
       },
     });
 

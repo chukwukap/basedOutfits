@@ -169,6 +169,9 @@ function HomePageInner() {
         username?: string;
         displayName?: string;
         pfpUrl?: string;
+        ethAddress?: string;
+        custodyAddress?: string;
+        address?: string;
       };
       type Ctx = { user?: CtxUser; client?: CtxUser } | null;
       const c = (context as Ctx) || null;
@@ -184,11 +187,19 @@ function HomePageInner() {
       const avatarUrl = (c?.user?.pfpUrl ?? c?.client?.pfpUrl) as
         | string
         | undefined;
+      const walletAddress = (
+        c?.user?.ethAddress ||
+        c?.user?.address ||
+        c?.user?.custodyAddress ||
+        c?.client?.ethAddress ||
+        c?.client?.address ||
+        c?.client?.custodyAddress
+      ) as string | undefined;
       if (fid && username) {
         fetch("/api/users/me", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fid, username, name, avatarUrl }),
+          body: JSON.stringify({ fid, username, name, avatarUrl, walletAddress }),
         });
       }
     } catch {}

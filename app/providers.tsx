@@ -44,6 +44,9 @@ function MiniKitBootstrap() {
           username?: string;
           displayName?: string;
           pfpUrl?: string;
+          ethAddress?: string;
+          custodyAddress?: string;
+          address?: string;
         };
         type Ctx = { user?: CtxUser; client?: CtxUser } | null;
         const c = (context as Ctx) || null;
@@ -56,12 +59,20 @@ function MiniKitBootstrap() {
           c?.client?.displayName) as string | undefined;
         const avatarUrl: string | undefined = (c?.user?.pfpUrl ??
           c?.client?.pfpUrl) as string | undefined;
+        const walletAddress: string | undefined = (
+          c?.user?.ethAddress ||
+          c?.user?.address ||
+          c?.user?.custodyAddress ||
+          c?.client?.ethAddress ||
+          c?.client?.address ||
+          c?.client?.custodyAddress
+        ) as string | undefined;
         if (!fid || !username) return;
         if (stored === username) return;
         await fetch("/api/users/me", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fid, username, name, avatarUrl }),
+          body: JSON.stringify({ fid, username, name, avatarUrl, walletAddress }),
         });
         localStorage.setItem("looks_user_synced", username);
       } catch {
