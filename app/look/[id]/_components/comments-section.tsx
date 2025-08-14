@@ -60,7 +60,10 @@ export function CommentsSection({ lookId }: CommentsSectionProps) {
   }, [lookId]);
 
   const handleAddComment = async (content: string) => {
-    const c = (context as unknown as { user?: { username?: string; fid?: number | string } } | null) || null;
+    const c =
+      (context as unknown as {
+        user?: { username?: string; fid?: number | string };
+      } | null) || null;
     const currentUserId = (c?.user?.username || c?.user?.fid?.toString()) ?? "";
     const res = await fetch("/api/comments", {
       method: "POST",

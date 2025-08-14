@@ -164,13 +164,26 @@ function HomePageInner() {
     setShowOnboarding(false);
     // On first-time completion, if context exists, ensure user exists in DB
     try {
-      type CtxUser = { fid?: number | string; username?: string; displayName?: string; pfpUrl?: string };
+      type CtxUser = {
+        fid?: number | string;
+        username?: string;
+        displayName?: string;
+        pfpUrl?: string;
+      };
       type Ctx = { user?: CtxUser; client?: CtxUser } | null;
       const c = (context as Ctx) || null;
-      const fid = ((c?.user?.fid ?? c?.client?.fid) as number | string | undefined)?.toString();
-      const username = (c?.user?.username ?? c?.client?.username) as string | undefined;
-      const name = (c?.user?.displayName ?? c?.client?.displayName) as string | undefined;
-      const avatarUrl = (c?.user?.pfpUrl ?? c?.client?.pfpUrl) as string | undefined;
+      const fid = (
+        (c?.user?.fid ?? c?.client?.fid) as number | string | undefined
+      )?.toString();
+      const username = (c?.user?.username ?? c?.client?.username) as
+        | string
+        | undefined;
+      const name = (c?.user?.displayName ?? c?.client?.displayName) as
+        | string
+        | undefined;
+      const avatarUrl = (c?.user?.pfpUrl ?? c?.client?.pfpUrl) as
+        | string
+        | undefined;
       if (fid && username) {
         fetch("/api/users/me", {
           method: "POST",

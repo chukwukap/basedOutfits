@@ -112,7 +112,11 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
   const handleFiles = (files: File[]) => {
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
 
-    imageFiles.forEach((file) => {
+    // Enforce up to 5 images total
+    const availableSlots = Math.max(0, 5 - images.length);
+    const filesToAdd = imageFiles.slice(0, availableSlots);
+
+    filesToAdd.forEach((file) => {
       const id = Math.random().toString(36).substr(2, 9);
       const preview = URL.createObjectURL(file);
 
@@ -360,6 +364,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
                   accept="image/*"
                   className="hidden"
                   onChange={handleImageUpload}
+                  disabled={images.length >= 5}
                 />
               </div>
             )}

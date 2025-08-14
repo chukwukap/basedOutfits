@@ -13,7 +13,10 @@ export async function POST(req: Request) {
     };
 
     if (!fid || !username) {
-      return NextResponse.json({ error: "Missing fid or username" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing fid or username" },
+        { status: 400 },
+      );
     }
 
     const user = await prisma.user.upsert({
@@ -41,5 +44,3 @@ export async function POST(req: Request) {
 }
 
 export const dynamic = "force-dynamic";
-
-
