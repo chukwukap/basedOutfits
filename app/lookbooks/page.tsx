@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { LookbooksHeader } from "./[id]/_components/lookbooks-header";
 import { LookbookCard } from "./[id]/_components/lookbook-card";
@@ -20,74 +20,11 @@ type NewLookbookPayload = {
   coverImage: string;
 };
 
-// Mock lookbooks data
-const mockLookbooks: LookbookResponse[] = [
-  {
-    id: "1",
-    name: "Summer Vibes",
-    description: "Light and breezy outfits for hot days",
-    coverImage: "/summer-fashion-outfit.png",
-    lookCount: 12,
-    isPublic: true,
-    ownerId: "1",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isFollowing: false,
-    followers: 0,
-  },
-  {
-    id: "2",
-    name: "Work Wardrobe",
-    description: "Professional looks for the office",
-    coverImage: "/business-casual-outfit.png",
-    lookCount: 8,
-    isPublic: false,
-    ownerId: "2",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isFollowing: false,
-    followers: 0,
-  },
-  {
-    id: "3",
-    name: "Date Night",
-    description: "Elegant outfits for special occasions",
-    coverImage: "/elegant-evening-dress.png",
-    lookCount: 5,
-    isPublic: true,
-    ownerId: "3",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isFollowing: false,
-    followers: 0,
-  },
-  {
-    id: "4",
-    name: "Street Style",
-    description: "Urban and edgy fashion inspiration",
-    coverImage: "/street-style-outfit.png",
-    lookCount: 15,
-    isPublic: true,
-    ownerId: "4",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isFollowing: false,
-    followers: 0,
-  },
-  {
-    id: "5",
-    name: "Weekend Casual",
-    description: "Comfortable looks for relaxing days",
-    coverImage: "/fashionable-summer-outfit.png",
-    lookCount: 7,
-    isPublic: false,
-    ownerId: "5",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isFollowing: false,
-    followers: 0,
-  },
-];
+async function fetchAllLookbooks(): Promise<LookbookResponse[]> {
+  const res = await fetch(`/api/lookbooks?public=0`, { cache: "no-store" });
+  if (!res.ok) return [];
+  return await res.json();
+}
 
 export default function LookbooksPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -98,28 +35,28 @@ export default function LookbooksPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedLookbook, setSelectedLookbook] =
     useState<LookbookResponse | null>(null);
-  const [lookbooks, setLookbooks] = useState(mockLookbooks);
+  const [lookbooks, setLookbooks] = useState<LookbookResponse[]>([]);
+
+  useEffect(() => {
+    fetchAllLookbooks().then(setLookbooks).catch(() => setLookbooks([]));
+  }, []);
 
   const handleLookbookClick = (lookbook: LookbookResponse) => {
     // Navigate to lookbook details page
     window.location.href = `/lookbooks/${lookbook.id}`;
   };
 
-  const handleCreateLookbook = (newLookbook: NewLookbookPayload) => {
-    const lookbook: LookbookResponse = {
-      id: Date.now().toString(),
-      name: newLookbook.name,
-      description: newLookbook.description,
-      coverImage: newLookbook.coverImage,
-      isPublic: newLookbook.isPublic,
-      ownerId: "owner-1",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      lookCount: 0,
-      isFollowing: false,
-      followers: 0,
-    };
-    setLookbooks([lookbook, ...lookbooks]);
+  const handleCreateLookbook = async (newLookbook: NewLookbookPayload) => {
+    const currentUserId = "demo"; // TODO: replace with real auth context id
+    const res = await fetch("/api/lookbooks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ownerId: currentUserId, ...newLookbook }),
+    });
+    if (res.ok) {
+      const created = (await res.json()) as LookbookResponse;
+      setLookbooks([created, ...lookbooks]);
+    }
     setShowCreateModal(false);
   };
 
@@ -128,17 +65,18 @@ export default function LookbooksPage() {
     setShowEditModal(true);
   };
 
-  const handleSaveEdit = (updatedLookbook: LookbookResponse) => {
-    setLookbooks(
-      lookbooks.map((lb) =>
-        lb.id === updatedLookbook.id
-          ? {
-              ...updatedLookbook,
-              updatedAt: new Date(),
-            }
-          : lb,
-      ),
-    );
+  const handleSaveEdit = async (updatedLookbook: LookbookResponse) => {
+    const res = await fetch(`/api/lookbooks/${updatedLookbook.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedLookbook),
+    });
+    if (res.ok) {
+      const saved = (await res.json()) as LookbookResponse;
+      setLookbooks(
+        lookbooks.map((lb) => (lb.id === saved.id ? { ...lb, ...saved } : lb)),
+      );
+    }
     setShowEditModal(false);
     setSelectedLookbook(null);
   };
@@ -148,7 +86,8 @@ export default function LookbooksPage() {
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmDelete = (lookbookId: string) => {
+  const handleConfirmDelete = async (lookbookId: string) => {
+    await fetch(`/api/lookbooks/${lookbookId}`, { method: "DELETE" });
     setLookbooks(lookbooks.filter((lb) => lb.id !== lookbookId));
     setSelectedLookbook(null);
   };

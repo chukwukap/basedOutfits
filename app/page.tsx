@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { BottomNav } from "./_components/bottom-nav";
 import { LookCard } from "./look/_components/look-card";
 import { LookCardSkeleton } from "./look/_components/look-card-skeleton";
@@ -12,128 +12,26 @@ import { DiscoverCreators } from "./discover/_components/discover-creators";
 import { RefreshCw, Users, Globe } from "lucide-react";
 import { Button } from "./_components/ui/button";
 import { LookFetchPayload } from "@/lib/types";
+import { useSearchParams } from "next/navigation";
 
-const mockLooks: LookFetchPayload[] = [
-  {
-    id: "1",
-    caption: "Summer Vibes",
-    description:
-      "Perfect outfit for a sunny day in the city. Love mixing casual pieces with statement accessories!",
-    imageUrls: ["/looks/fashionable-summer-outfit.png"],
-    author: {
-      name: "Sarah Chen",
-      avatarUrl: "/looks/diverse-group-profile.png",
-      fid: "12345",
-      isFollowing: true,
-    },
-    tags: ["SummerFits", "Streetwear", "Accessories"],
-    brands: ["Zara", "Nike"],
-    tips: 12,
-    collections: 8,
-    location: "New York",
-    createdAt: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours ago
-    isPublic: true,
-    authorId: "1",
-    updatedAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
-  },
-  {
-    id: "2",
-    caption: "Evening Elegance",
-    description:
-      "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful.",
-    imageUrls: ["/looks/elegant-evening-dress.png"],
-    author: {
-      name: "Alex Rivera",
-      avatarUrl: "/looks/diverse-group-profile.png",
-      fid: "67890",
-      isFollowing: false,
-    },
-    tags: ["OfficeChic", "Minimalist", "DateNight"],
-    brands: ["H&M", "Mango"],
-    tips: 24,
-    collections: 15,
-    location: "Paris",
-    createdAt: new Date(Date.now() + 4 * 60 * 60 * 1000), // 4 hours ago
-    isPublic: true,
-    authorId: "2",
-    updatedAt: new Date(Date.now() + 4 * 60 * 60 * 1000),
-  },
-  {
-    id: "3",
-    caption: "Street Style Maven",
-    description:
-      "Channeling my inner street style photographer today. Bold colors and patterns are my thing!",
-    imageUrls: ["/looks/street-style-outfit.png"],
-    author: {
-      name: "Jordan Kim",
-      avatarUrl: "/looks/diverse-group-profile.png",
-      fid: "11111",
-      isFollowing: true,
-    },
-    tags: ["Streetwear", "Bold", "Urban"],
-    brands: ["Supreme", "Off-White", "Converse"],
-    tips: 18,
-    collections: 22,
-    location: "Tokyo",
-    createdAt: new Date(Date.now() + 6 * 60 * 60 * 1000), // 6 hours ago
-    isPublic: true,
-    authorId: "3",
-    updatedAt: new Date(Date.now() + 6 * 60 * 60 * 1000),
-  },
-  {
-    id: "4",
-    caption: "Business Casual Chic",
-    description:
-      "Work from home but make it fashion. Comfortable yet professional for video calls.",
-    imageUrls: ["/looks/business-casual-outfit.png"],
-    author: {
-      name: "Taylor Swift",
-      avatarUrl: "/looks/diverse-group-profile.png",
-      fid: "22222",
-      isFollowing: true,
-    },
-    tags: ["OfficeChic", "Professional", "WFH"],
-    brands: ["Uniqlo", "Everlane"],
-    tips: 9,
-    collections: 12,
-    location: "San Francisco",
-    createdAt: new Date(Date.now() + 8 * 60 * 60 * 1000), // 8 hours ago
-    isPublic: true,
-    authorId: "4",
-    updatedAt: new Date(Date.now() + 8 * 60 * 60 * 1000),
-  },
-  {
-    id: "5",
-    caption: "Cozy Weekend Vibes",
-    description:
-      "Perfect lazy Sunday outfit. Comfort is key but still want to look put together.",
-    imageUrls: ["/looks/summer-fashion-outfit.png"],
-    author: {
-      name: "Maya Patel",
-      avatarUrl: "/looks/diverse-group-profile.png",
-      fid: "33333",
-      isFollowing: false,
-    },
-    tags: ["Weekend", "Minimalist", "Comfort"],
-    brands: ["Lululemon", "Patagonia"],
-    tips: 15,
-    collections: 7,
-    location: "Los Angeles",
-    createdAt: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hours ago
-    isPublic: true,
-    authorId: "5",
-    updatedAt: new Date(Date.now() + 12 * 60 * 60 * 1000),
-  },
-];
+async function fetchLooks(params: { tag?: string | null; following?: boolean }) {
+  const qs = new URLSearchParams();
+  if (params.tag) qs.set("tag", params.tag);
+  if (params.following) qs.set("following", "1");
+  const res = await fetch(`/api/looks?${qs.toString()}`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load looks");
+  return (await res.json()) as LookFetchPayload[];
+}
 
 export default function HomePage() {
-  const [looks, setLooks] = useState<typeof mockLooks>([]);
-  const [filteredLooks, setFilteredLooks] = useState<typeof mockLooks>([]);
+  const searchParams = useSearchParams();
+  const [looks, setLooks] = useState<LookFetchPayload[]>([]);
+  const [filteredLooks, setFilteredLooks] = useState<LookFetchPayload[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedLook, setSelectedLook] = useState<
-    (typeof mockLooks)[0] | null
-  >(null);
+  const [selectedLook, setSelectedLook] = useState<LookFetchPayload | null>(
+    null,
+  );
   const [showTipModal, setShowTipModal] = useState(false);
   const [showCollectModal, setShowCollectModal] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -162,21 +60,24 @@ export default function HomePage() {
     checkFirstTimeUser();
   }, []);
 
-  // Simulate loading feed
+  // Load feed
   useEffect(() => {
     const loadFeed = async () => {
       setLoading(true);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setLooks(mockLooks);
-      setLoading(false);
+      const tagFromUrl = searchParams.get("tag");
+      try {
+        const data = await fetchLooks({ tag: tagFromUrl, following: feedType === "following" });
+        setLooks(data);
+      } catch {
+        setLooks([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    // Only load feed after onboarding check is complete
-    if (onboardingChecked) {
-      loadFeed();
-    }
-  }, [onboardingChecked]);
+    if (onboardingChecked) loadFeed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onboardingChecked, feedType, searchParams]);
 
   useEffect(() => {
     let filtered = looks;
@@ -200,19 +101,20 @@ export default function HomePage() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    // Simulate refresh
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    // In real app, this would fetch new looks
-    setLooks([...mockLooks]);
-    setRefreshing(false);
+    try {
+      const data = await fetchLooks({ tag: selectedTag, following: feedType === "following" });
+      setLooks(data);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
-  const handleTip = (look: (typeof mockLooks)[0]) => {
+  const handleTip = (look: LookFetchPayload) => {
     setSelectedLook(look);
     setShowTipModal(true);
   };
 
-  const handleCollect = (look: (typeof mockLooks)[0]) => {
+  const handleCollect = (look: LookFetchPayload) => {
     setSelectedLook(look);
     setShowCollectModal(true);
   };
@@ -295,6 +197,7 @@ export default function HomePage() {
   }
 
   return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}> 
     <div className="min-h-screen bg-background pb-20">
       <header
         className="fixed top-0 left-0 right-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b transition-transform duration-300 ease-out"
@@ -429,5 +332,6 @@ export default function HomePage() {
 
       <BottomNav scrollDirection={scrollDirection} isScrolled={isScrolled} />
     </div>
+    </Suspense>
   );
 }

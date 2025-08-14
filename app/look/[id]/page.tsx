@@ -58,61 +58,28 @@ function toLookFetchPayload(look: DetailedLook): LookFetchPayload {
   } as LookFetchPayload;
 }
 
-// Mock look data - in real app this would come from API
-const mockLookData = {
-  "1": {
-    id: "1",
-    title: "Summer Vibes",
-    description:
-      "Perfect outfit for a sunny day in the city. Love mixing casual pieces with statement accessories! This look is all about comfort meets style - the key is in the layering and choosing pieces that work together harmoniously.",
-    images: [
-      "/fashionable-summer-outfit.png",
-      "/summer-fashion-outfit.png",
-      "/stylish-person-streetwear.png",
-    ],
-    author: {
-      name: "Sarah Chen",
-      avatar: "/diverse-group-profile.png",
-      fid: "12345",
-      bio: "Fashion enthusiast from NYC. Love mixing high and low pieces!",
-      followers: 1240,
-      following: 890,
-    },
-    tags: ["summer", "casual", "streetwear", "accessories", "layering"],
-    brands: ["Zara", "Nike", "Vintage"],
-    tips: 12,
-    collections: 8,
-    location: "New York",
-    createdAt: "2h ago",
-    season: "Summer",
-    occasion: "Casual day out",
-    colors: ["Blue", "White", "Beige"],
-  },
-  "2": {
-    id: "2",
-    title: "Evening Elegance",
-    description:
-      "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful. Perfect for those special occasions when you want to make an impression.",
-    images: ["/elegant-evening-dress.png"],
-    author: {
-      name: "Alex Rivera",
-      avatar: "/diverse-group-profile.png",
-      fid: "67890",
-      bio: "Style blogger and fashion consultant. Helping others find their style!",
-      followers: 2100,
-      following: 450,
-    },
-    tags: ["evening", "elegant", "formal", "date", "sophisticated"],
-    brands: ["H&M", "Mango"],
-    tips: 24,
-    collections: 15,
-    location: "Paris",
-    createdAt: "4h ago",
-    season: "All seasons",
-    occasion: "Evening dinner",
-    colors: ["Black", "Gold"],
-  },
+type LookApiResponse = {
+  id: string;
+  caption: string;
+  description: string;
+  imageUrls: string[];
+  tags: string[];
+  brands: string[];
+  location: string;
+  createdAt: string;
+  updatedAt: string;
+  isPublic: boolean;
+  authorId: string;
+  tips: number;
+  collections: number;
+  author: { isFollowing: boolean; avatarUrl: string; fid: string; name: string };
 };
+
+async function fetchLookById(id: string): Promise<LookApiResponse | null> {
+  const res = await fetch(`/api/looks/${id}`, { cache: "no-store" });
+  if (!res.ok) return null;
+  return (await res.json()) as LookApiResponse;
+}
 
 export default function LookDetailPage() {
   const params = useParams();
@@ -126,14 +93,32 @@ export default function LookDetailPage() {
   useEffect(() => {
     const loadLook = async () => {
       setLoading(true);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
       const lookId = params.id as string;
-      const lookData = mockLookData[lookId as keyof typeof mockLookData];
-
-      if (lookData) {
-        setLook(lookData);
+      const data = await fetchLookById(lookId);
+      if (data) {
+        const detailed: DetailedLook = {
+          id: data.id,
+          title: data.caption,
+          description: data.description,
+          images: data.imageUrls,
+          author: {
+            name: data.author.name,
+            avatar: data.author.avatarUrl,
+            fid: data.author.fid,
+            bio: "",
+            followers: 0,
+            following: 0,
+          },
+          tags: data.tags,
+          brands: data.brands,
+          tips: data.tips,
+          collections: data.collections,
+          location: data.location,
+          createdAt: "",
+        };
+        setLook(detailed);
+      } else {
+        setLook(null);
       }
       setLoading(false);
     };
@@ -255,7 +240,6 @@ export default function LookDetailPage() {
           Other Looks by {look.author.name}
         </h3>
         <div className="flex gap-3 overflow-x-auto pb-2">
-          {/* Mock other looks by same author */}
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}

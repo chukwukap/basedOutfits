@@ -9,102 +9,13 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { UserProfile, UserLookbook } from "@/lib/types";
 
-// Mock user profiles data
-const mockUserProfiles: Record<string, UserProfile> = {
-  sarahc: {
-    username: "sarahc",
-    name: "Sarah Chen",
-    avatar: "/diverse-group-profile.png",
-    bio: "Fashion enthusiast & style curator. Sharing my favorite looks and discoveries.",
-    followers: 1240,
-    following: 890,
-    totalLooks: 45,
-    joinedDate: "2023-08-15",
-    isFollowing: false,
-    updatedAt: "2024-01-20",
-    publicLookbooks: [
-      {
-        id: "sarah-1",
-        name: "Minimalist Chic",
-        description: "Clean lines and neutral tones",
-        coverImage: "/business-casual-outfit.png",
-        lookCount: 18,
-        isPublic: true,
-        followers: 234,
-        isFollowing: false,
-        updatedAt: new Date("2024-01-20"),
-        ownerId: "sarah-1",
-        createdAt: new Date("2024-01-20"),
-      },
-      {
-        id: "sarah-2",
-        name: "Boho Dreams",
-        description: "Free-spirited and flowing styles",
-        coverImage: "/summer-fashion-outfit.png",
-        lookCount: 12,
-        isPublic: true,
-        followers: 156,
-        isFollowing: true,
-        updatedAt: new Date("2024-01-18"),
-        ownerId: "sarah-2",
-        createdAt: new Date("2024-01-18"),
-      },
-      {
-        id: "sarah-3",
-        name: "City Explorer",
-        description: "Urban adventures in style",
-        coverImage: "/street-style-outfit.png",
-        lookCount: 15,
-        isPublic: true,
-        followers: 89,
-        isFollowing: false,
-        updatedAt: new Date("2024-01-15"),
-        ownerId: "sarah-3",
-        createdAt: new Date("2024-01-15"),
-      },
-    ],
-  },
-  alexr: {
-    username: "alexr",
-    name: "Alex Rivera",
-    avatar: "/diverse-group-profile.png",
-    bio: "Sustainable fashion advocate. Curating timeless pieces and ethical brands.",
-    followers: 2100,
-    following: 450,
-    totalLooks: 67,
-    joinedDate: "2023-06-10",
-    isFollowing: true,
-    updatedAt: "2024-01-19",
-    publicLookbooks: [
-      {
-        id: "alex-1",
-        name: "Sustainable Style",
-        description: "Ethical fashion choices",
-        coverImage: "/elegant-evening-dress.png",
-        lookCount: 22,
-        isPublic: true,
-        followers: 445,
-        isFollowing: false,
-        updatedAt: new Date("2024-01-19"),
-        ownerId: "alex-1",
-        createdAt: new Date("2024-01-19"),
-      },
-      {
-        id: "alex-2",
-        name: "Vintage Finds",
-        description: "Timeless pieces with history",
-        coverImage: "/fashionable-summer-outfit.png",
-        lookCount: 28,
-        isPublic: true,
-        followers: 312,
-        isFollowing: true,
-        updatedAt: new Date("2024-01-17"),
-        ownerId: "alex-2",
-        createdAt: new Date("2024-01-17"),
-      },
-    ],
-  },
-};
+async function fetchUserProfile(username: string) {
+  const res = await fetch(`/api/users/${encodeURIComponent(username)}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  return await res.json();
+}
 
 export default function UserProfilePage() {
   const params = useParams();
@@ -114,13 +25,12 @@ export default function UserProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading
-    setTimeout(() => {
-      const foundUser =
-        mockUserProfiles[username as keyof typeof mockUserProfiles];
-      setUser(foundUser || null);
+    (async () => {
+      setLoading(true);
+      const data = await fetchUserProfile(username);
+      setUser(data);
       setLoading(false);
-    }, 500);
+    })();
   }, [username]);
 
   const handleBack = () => {
@@ -137,22 +47,7 @@ export default function UserProfilePage() {
     }
   };
 
-  const handleFollowLookbook = (lookbookId: string) => {
-    if (user) {
-      setUser({
-        ...user,
-        publicLookbooks: user.publicLookbooks.map((lb: UserLookbook) =>
-          lb.id === lookbookId
-            ? {
-                ...lb,
-                isFollowing: !lb.isFollowing,
-                followers: lb.isFollowing ? lb.followers - 1 : lb.followers + 1,
-              }
-            : lb,
-        ),
-      });
-    }
-  };
+  const handleFollowLookbook = () => {};
 
   const handleLookbookClick = (lookbook: UserLookbook) => {
     window.location.href = `/lookbooks/${lookbook.id}`;

@@ -1,0 +1,15 @@
+// Prisma client singleton for server usage
+// Uses the generated client from `lib/generated/prisma` per schema.prisma output
+
+import { PrismaClient } from "./generated/prisma";
+
+declare global {
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
+}
+
+export const prisma: PrismaClient = global.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") global.prisma = prisma;
+
+

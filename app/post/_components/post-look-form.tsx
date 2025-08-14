@@ -115,14 +115,10 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
         },
       ]);
 
-      // Simulate upload process
-      setTimeout(() => {
-        setImages((prev) =>
-          prev.map((img) =>
-            img.id === id ? { ...img, uploading: false } : img,
-          ),
-        );
-      }, 1500);
+      // Mark as uploaded immediately (in a real app, integrate storage)
+      setImages((prev) =>
+        prev.map((img) => (img.id === id ? { ...img, uploading: false } : img)),
+      );
     });
   };
 
@@ -190,33 +186,63 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
 
     setPosting(true);
 
-    // Simulate posting process
-    await new Promise((resolve) => setTimeout(resolve, 2500));
-
-    const lookData: LookFetchPayload = {
-      id: Math.random().toString(36).substr(2, 9),
-      caption: title.trim(),
-      description: description.trim(),
-      imageUrls: images.map((img) => img.preview),
-      tags,
-      brands,
-      location: location.trim(),
-      author: {
-        name: "You",
-        avatarUrl: "/diverse-group-profile.png",
-        fid: "user123",
-        isFollowing: false,
-      },
-      tips: 0,
-      collections: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      isPublic: true,
-      authorId: "user123",
-    };
-
-    onSuccess(lookData);
-    setPosting(false);
+    try {
+      setPosting(true);
+      const currentUserId = "demo"; // TODO: replace with real auth context id
+      const res = await fetch("/api/looks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          authorId: currentUserId,
+          caption: title.trim(),
+          description: description.trim(),
+          imageUrls: images.map((img) => img.preview),
+          tags,
+          brands,
+          location: location.trim(),
+          isPublic: true,
+        }),
+      });
+      if (res.ok) {
+        const created = (await res.json()) as {
+          id: string;
+          caption?: string;
+          description?: string;
+          imageUrls: string[];
+          tags: string[];
+          brands: string[];
+          location?: string;
+          createdAt: string;
+          updatedAt: string;
+          isPublic: boolean;
+          authorId: string;
+        };
+        const lookData: LookFetchPayload = {
+          id: created.id,
+          caption: created.caption ?? "",
+          description: created.description ?? "",
+          imageUrls: created.imageUrls,
+          tags: created.tags,
+          brands: created.brands,
+          location: created.location ?? "",
+          author: {
+            name: "You",
+            avatarUrl: "/diverse-group-profile.png",
+            fid: "demo",
+            isFollowing: false,
+          },
+          tips: 0,
+          collections: 0,
+          createdAt: new Date(created.createdAt),
+          updatedAt: new Date(created.updatedAt),
+          isPublic: created.isPublic,
+          authorId: created.authorId,
+        };
+        onSuccess(lookData);
+      }
+    } finally {
+      setPosting(false);
+    }
 
     // Reset form
     setImages([]);

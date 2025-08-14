@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -45,49 +45,13 @@ type PaymentState =
   | "success"
   | "error";
 
-// Mock user's lookbooks
-const mockUserLookbooks: Lookbook[] = [
-  {
-    id: "1",
-    name: "Summer Vibes",
-    description: "Light and breezy outfits for hot days",
-    coverImage: "/summer-fashion-outfit.png",
-    lookCount: 12,
-    isPublic: true,
-  },
-  {
-    id: "2",
-    name: "Work Wardrobe",
-    description: "Professional looks for the office",
-    coverImage: "/business-casual-outfit.png",
-    lookCount: 8,
-    isPublic: false,
-  },
-  {
-    id: "3",
-    name: "Date Night",
-    description: "Elegant outfits for special occasions",
-    coverImage: "/elegant-evening-dress.png",
-    lookCount: 5,
-    isPublic: true,
-  },
-  {
-    id: "4",
-    name: "Street Style",
-    description: "Urban and edgy fashion inspiration",
-    coverImage: "/street-style-outfit.png",
-    lookCount: 15,
-    isPublic: true,
-  },
-  {
-    id: "5",
-    name: "Weekend Casual",
-    description: "Comfortable looks for relaxing days",
-    coverImage: "/fashionable-summer-outfit.png",
-    lookCount: 7,
-    isPublic: false,
-  },
-];
+async function fetchUserLookbooks(ownerId: string): Promise<Lookbook[]> {
+  const res = await fetch(`/api/lookbooks?ownerId=${encodeURIComponent(ownerId)}&public=0`, {
+    cache: "no-store",
+  });
+  if (!res.ok) return [];
+  return await res.json();
+}
 
 export function AddToLookbookSheet({
   open,
@@ -96,11 +60,18 @@ export function AddToLookbookSheet({
   onComplete,
 }: AddToLookbookSheetProps) {
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [lookbooks, setLookbooks] = useState(mockUserLookbooks);
+  const [lookbooks, setLookbooks] = useState<Lookbook[]>([]);
   const [paymentState, setPaymentState] = useState<PaymentState>("selecting");
   const [selectedLookbook, setSelectedLookbook] = useState<Lookbook | null>(
     null,
   );
+  useEffect(() => {
+    const currentUserId = "demo"; // TODO: replace with real auth context id
+    fetchUserLookbooks(currentUserId)
+      .then(setLookbooks)
+      .catch(() => setLookbooks([]));
+  }, []);
+
   const [paymentMethod, setPaymentMethod] = useState<
     "basepay" | "wallet" | null
   >(null);
@@ -115,16 +86,18 @@ export function AddToLookbookSheet({
     setPaymentMethod(method);
     setPaymentState("processing");
 
-    // Simulate payment processing
-    setTimeout(() => {
-      const success = Math.random() > 0.1; // 90% success rate
-      if (success) {
-        setTransactionHash(
-          `0x${Math.random().toString(16).substr(2, 8)}...${Math.random().toString(16).substr(2, 8)}`,
-        );
+    // Process: add to lookbook via API
+    (async () => {
+      try {
+        const currentUserId = "demo"; // TODO: replace with real auth context id
+        const res = await fetch(`/api/lookbooks/${selectedLookbook?.id}/items`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lookId: look.id, addedById: currentUserId }),
+        });
+        if (!res.ok) throw new Error("Failed to add to lookbook");
+        setTransactionHash(`added:${Date.now()}`);
         setPaymentState("success");
-
-        // Update lookbook count after successful payment
         if (selectedLookbook) {
           setLookbooks(
             lookbooks.map((lb) =>
@@ -134,10 +107,10 @@ export function AddToLookbookSheet({
             ),
           );
         }
-      } else {
+      } catch {
         setPaymentState("error");
       }
-    }, 2000);
+    })();
   };
 
   const handlePaymentSuccess = () => {

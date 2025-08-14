@@ -78,38 +78,26 @@ export function TipModal({
   };
 
   const processBasepayPayment = async () => {
-    // Simulate Basepay integration
-    await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Simulate 90% success rate
-        if (Math.random() > 0.1) {
-          setTransactionHash("0x" + Math.random().toString(16).substr(2, 8));
-          resolve(true);
-        } else {
-          reject(new Error("Basepay transaction failed"));
-        }
-      }, 2500);
+    // For now, instantly create a Tip record
+    const currentUserId = "demo"; // TODO: replace with real auth context id
+    const receiverId = look.authorId;
+    const res = await fetch("/api/tips", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        senderId: currentUserId,
+        receiverId,
+        lookId: look.id,
+        amount: Number.parseFloat(amount),
+        currency: "USDC",
+      }),
     });
-
+    if (!res.ok) throw new Error("Payment failed");
+    setTransactionHash("created:" + Date.now());
     setPaymentState("success");
   };
 
-  const processWalletPayment = async () => {
-    // Simulate wallet connection and signature
-    await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Simulate 85% success rate
-        if (Math.random() > 0.15) {
-          setTransactionHash("0x" + Math.random().toString(16).substr(2, 8));
-          resolve(true);
-        } else {
-          reject(new Error("Wallet signature rejected"));
-        }
-      }, 3000);
-    });
-
-    setPaymentState("success");
-  };
+  const processWalletPayment = processBasepayPayment;
 
   const handleClose = () => {
     if (paymentState === "success") {

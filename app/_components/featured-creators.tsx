@@ -9,62 +9,52 @@ import {
   AvatarImage,
 } from "@/app/_components/ui/avatar";
 import { UserPlus, UserCheck, Star } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-// Mock featured creators data
-const mockFeaturedCreators = [
-  {
-    username: "sarahc",
-    name: "Sarah Chen",
-    avatar: "/diverse-group-profile.png",
-    bio: "Fashion enthusiast & style curator",
-    followers: 1240,
-    lookbooksCount: 3,
-    totalLooks: 45,
-    isFollowing: false,
-    isFeatured: true,
-    tags: ["minimalist", "chic", "sustainable"],
-  },
-  {
-    username: "alexr",
-    name: "Alex Rivera",
-    avatar: "/diverse-group-profile.png",
-    bio: "Sustainable fashion advocate",
-    followers: 2100,
-    lookbooksCount: 2,
-    totalLooks: 67,
-    isFollowing: true,
-    isFeatured: true,
-    tags: ["sustainable", "vintage", "ethical"],
-  },
-  {
-    username: "jordank",
-    name: "Jordan Kim",
-    avatar: "/diverse-group-profile.png",
-    bio: "Street style photographer & curator",
-    followers: 890,
-    lookbooksCount: 4,
-    totalLooks: 32,
-    isFollowing: false,
-    isFeatured: true,
-    tags: ["streetwear", "urban", "photography"],
-  },
-  {
-    username: "mayap",
-    name: "Maya Patel",
-    avatar: "/diverse-group-profile.png",
-    bio: "Color enthusiast & pattern mixer",
-    followers: 1560,
-    lookbooksCount: 5,
-    totalLooks: 58,
-    isFollowing: false,
-    isFeatured: true,
-    tags: ["colorful", "patterns", "bold"],
-  },
-];
+type FeaturedCreator = {
+  username: string;
+  name: string;
+  avatar?: string;
+  bio?: string;
+  followers: number;
+  lookbooksCount: number;
+  totalLooks: number;
+  isFollowing: boolean;
+  isFeatured: boolean;
+  tags: string[];
+};
+
+async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
+  // For now, derive from recent public users via lookbooks/looks counts
+  const usernames = ["demo"]; // TODO: replace with real featured logic
+  const results: FeaturedCreator[] = [];
+  for (const username of usernames) {
+    const res = await fetch(`/api/users/${encodeURIComponent(username)}`, { cache: "no-store" });
+    if (res.ok) {
+      const u = await res.json();
+      results.push({
+        username: u.username,
+        name: u.name,
+        avatar: u.avatar,
+        bio: u.bio,
+        followers: u.followers,
+        lookbooksCount: u.publicLookbooks.length,
+        totalLooks: u.totalLooks,
+        isFollowing: false,
+        isFeatured: true,
+        tags: [],
+      });
+    }
+  }
+  return results;
+}
 
 export function FeaturedCreators() {
-  const [creators, setCreators] = useState(mockFeaturedCreators);
+  const [creators, setCreators] = useState<FeaturedCreator[]>([]);
+
+  useEffect(() => {
+    fetchFeaturedCreators().then(setCreators).catch(() => setCreators([]));
+  }, []);
 
   const handleFollowCreator = (username: string) => {
     setCreators(

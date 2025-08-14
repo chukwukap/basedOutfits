@@ -22,43 +22,13 @@ interface CommentsSectionProps {
   lookId: string;
 }
 
-// Mock comments data
-const mockComments: Comment[] = [
-  {
-    id: "1",
-    lookId: "1",
-    author: {
-      name: "Emma Wilson",
-      avatar: "/diverse-group-profile.png",
-      fid: "11111",
-    },
-    content: "Love this outfit! Where did you get that jacket? 😍",
-    createdAt: "1h ago",
-  },
-  {
-    id: "2",
-    lookId: "1",
-    author: {
-      name: "Marcus Johnson",
-      avatar: "/diverse-group-profile.png",
-      fid: "22222",
-    },
-    content: "The color coordination is perfect! Great styling tips.",
-    createdAt: "3h ago",
-  },
-  {
-    id: "3",
-    lookId: "1",
-    author: {
-      name: "Sofia Rodriguez",
-      avatar: "/diverse-group-profile.png",
-      fid: "33333",
-    },
-    content:
-      "This is giving me major summer vibes! Need to recreate this look 🌞",
-    createdAt: "5h ago",
-  },
-];
+async function fetchComments(lookId: string): Promise<Comment[]> {
+  const res = await fetch(`/api/comments?lookId=${encodeURIComponent(lookId)}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) return [];
+  return await res.json();
+}
 
 export function CommentsSection({ lookId }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -67,36 +37,31 @@ export function CommentsSection({ lookId }: CommentsSectionProps) {
   const commentsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Simulate API call to fetch comments
-    const loadComments = async () => {
+    const load = async () => {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const lookComments = mockComments.filter(
-        (comment) => comment.lookId === lookId,
-      );
-      setComments(lookComments);
+      const data = await fetchComments(lookId);
+      // Normalize createdAt to string
+      const normalized = data.map((c) => ({
+        ...c,
+        createdAt: typeof c.createdAt === "string" ? c.createdAt : new Date(c.createdAt).toISOString(),
+      }));
+      setComments(normalized);
       setLoading(false);
     };
-
-    loadComments();
+    load();
   }, [lookId]);
 
-  const handleAddComment = (content: string) => {
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      lookId,
-      author: {
-        name: "You", // In real app, this would come from Farcaster context
-        avatar: "/diverse-group-profile.png",
-        fid: "current-user",
-      },
-      content,
-      createdAt: "now",
-    };
-
-    // Optimistic UI - add comment immediately
-    setComments((prev) => [newComment, ...prev]);
+  const handleAddComment = async (content: string) => {
+    const currentUserId = "demo"; // TODO: replace with real auth context id
+    const res = await fetch("/api/comments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lookId, authorId: currentUserId, content }),
+    });
+    if (res.ok) {
+      const created = (await res.json()) as Comment;
+      setComments((prev) => [created, ...prev]);
+    }
   };
 
   const displayedComments = showAll ? comments : comments.slice(0, 3);

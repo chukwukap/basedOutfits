@@ -12,59 +12,26 @@ import {
 } from "@/app/_components/ui/avatar";
 import { Heart, Users, TrendingUp } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-// Mock trending lookbooks data
-const mockTrendingLookbooks = [
-  {
-    id: "trending-1",
-    name: "Minimalist Chic",
-    description: "Clean lines and neutral tones",
-    coverImage: "/business-casual-outfit.png",
-    lookCount: 18,
-    followers: 234,
-    isFollowing: false,
-    creator: {
-      username: "sarahc",
-      name: "Sarah Chen",
-      avatar: "/diverse-group-profile.png",
-    },
-    category: "fashion",
-    trending: true,
-  },
-  {
-    id: "trending-2",
-    name: "Sustainable Style",
-    description: "Ethical fashion choices",
-    coverImage: "/elegant-evening-dress.png",
-    lookCount: 22,
-    followers: 445,
-    isFollowing: true,
-    creator: {
-      username: "alexr",
-      name: "Alex Rivera",
-      avatar: "/diverse-group-profile.png",
-    },
-    category: "fashion",
-    trending: true,
-  },
-  {
-    id: "trending-3",
-    name: "Street Vibes",
-    description: "Urban fashion inspiration",
-    coverImage: "/street-style-outfit.png",
-    lookCount: 15,
-    followers: 189,
-    isFollowing: false,
-    creator: {
-      username: "jordank",
-      name: "Jordan Kim",
-      avatar: "/diverse-group-profile.png",
-    },
-    category: "streetwear",
-    trending: true,
-  },
-];
+type TrendingLookbook = {
+  id: string;
+  name: string;
+  description?: string;
+  coverImage?: string;
+  lookCount: number;
+  followers: number;
+  isFollowing: boolean;
+  creator: { username: string; name: string; avatar?: string };
+  category?: string;
+  trending?: boolean;
+};
+
+async function fetchTrendingLookbooks(): Promise<TrendingLookbook[]> {
+  const res = await fetch("/api/lookbooks?public=1&limit=12", { cache: "no-store" });
+  if (!res.ok) return [];
+  return await res.json();
+}
 
 interface TrendingLookbooksProps {
   searchQuery: string;
@@ -75,7 +42,11 @@ export function TrendingLookbooks({
   searchQuery,
   selectedCategory,
 }: TrendingLookbooksProps) {
-  const [lookbooks, setLookbooks] = useState(mockTrendingLookbooks);
+  const [lookbooks, setLookbooks] = useState<TrendingLookbook[]>([]);
+
+  useEffect(() => {
+    fetchTrendingLookbooks().then(setLookbooks).catch(() => setLookbooks([]));
+  }, []);
 
   const handleFollowLookbook = (lookbookId: string) => {
     setLookbooks(
@@ -91,7 +62,6 @@ export function TrendingLookbooks({
     );
   };
 
-  type TrendingLookbook = (typeof mockTrendingLookbooks)[number];
   const handleLookbookClick = (lookbook: TrendingLookbook) => {
     window.location.href = `/profile/${lookbook.creator.username}/lookbook/${lookbook.id}`;
   };
@@ -104,12 +74,11 @@ export function TrendingLookbooks({
   // Filter lookbooks
   const filteredLookbooks = lookbooks.filter((lookbook) => {
     if (searchQuery) {
+      const sq = searchQuery.toLowerCase();
       return (
-        lookbook.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lookbook.description
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        lookbook.creator.name.toLowerCase().includes(searchQuery.toLowerCase())
+        lookbook.name.toLowerCase().includes(sq) ||
+        (lookbook.description ? lookbook.description.toLowerCase().includes(sq) : false) ||
+        lookbook.creator.name.toLowerCase().includes(sq)
       );
     }
     if (selectedCategory !== "all") {
