@@ -212,8 +212,12 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
 
     try {
       setPosting(true);
-      const c = (context as unknown as { user?: { username?: string; fid?: number | string } } | null) || null;
-      const currentUserId = (c?.user?.username || c?.user?.fid?.toString()) ?? "";
+      const c =
+        (context as unknown as {
+          user?: { username?: string; fid?: number | string };
+        } | null) || null;
+      const currentUserId =
+        (c?.user?.username || c?.user?.fid?.toString()) ?? "";
       const res = await fetch("/api/looks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
