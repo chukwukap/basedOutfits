@@ -19,10 +19,10 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Summer Vibes",
     description:
       "Perfect outfit for a sunny day in the city. Love mixing casual pieces with statement accessories!",
-    imageUrls: ["/fashionable-summer-outfit.png"],
+    imageUrls: ["/looks/fashionable-summer-outfit.png"],
     author: {
       name: "Sarah Chen",
-      avatarUrl: "/diverse-group-profile.png",
+      avatarUrl: "/looks/diverse-group-profile.png",
       fid: "12345",
       isFollowing: true,
     },
@@ -41,10 +41,10 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Evening Elegance",
     description:
       "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful.",
-    imageUrls: ["/elegant-evening-dress.png"],
+    imageUrls: ["/looks/elegant-evening-dress.png"],
     author: {
       name: "Alex Rivera",
-      avatarUrl: "/diverse-group-profile.png",
+      avatarUrl: "/looks/diverse-group-profile.png",
       fid: "67890",
       isFollowing: false,
     },
@@ -63,10 +63,10 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Street Style Maven",
     description:
       "Channeling my inner street style photographer today. Bold colors and patterns are my thing!",
-    imageUrls: ["/street-style-outfit.png"],
+    imageUrls: ["/looks/street-style-outfit.png"],
     author: {
       name: "Jordan Kim",
-      avatarUrl: "/diverse-group-profile.png",
+      avatarUrl: "/looks/diverse-group-profile.png",
       fid: "11111",
       isFollowing: true,
     },
@@ -85,10 +85,10 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Business Casual Chic",
     description:
       "Work from home but make it fashion. Comfortable yet professional for video calls.",
-    imageUrls: ["/business-casual-outfit.png"],
+    imageUrls: ["/looks/business-casual-outfit.png"],
     author: {
       name: "Taylor Swift",
-      avatarUrl: "/diverse-group-profile.png",
+      avatarUrl: "/looks/diverse-group-profile.png",
       fid: "22222",
       isFollowing: true,
     },
@@ -107,10 +107,10 @@ const mockLooks: LookFetchPayload[] = [
     caption: "Cozy Weekend Vibes",
     description:
       "Perfect lazy Sunday outfit. Comfort is key but still want to look put together.",
-    imageUrls: ["/summer-fashion-outfit.png"],
+    imageUrls: ["/looks/summer-fashion-outfit.png"],
     author: {
       name: "Maya Patel",
-      avatarUrl: "/diverse-group-profile.png",
+      avatarUrl: "/looks/diverse-group-profile.png",
       fid: "33333",
       isFollowing: false,
     },

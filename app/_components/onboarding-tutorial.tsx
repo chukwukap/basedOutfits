@@ -13,7 +13,6 @@ import {
   Heart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 interface OnboardingTutorialProps {
   onComplete: () => void;
@@ -34,7 +33,7 @@ const tutorialSteps = [
       "Discover new creators",
       "Get inspired daily",
     ],
-    mockImage: "/fashionable-summer-outfit.png",
+    mockImage: "/looks/fashionable-summer-outfit.png",
   },
   {
     id: 2,
@@ -50,7 +49,7 @@ const tutorialSteps = [
       "Support your favorite creators",
       "Build community connections",
     ],
-    mockImage: "/elegant-evening-dress.png",
+    mockImage: "/looks/elegant-evening-dress.png",
   },
   {
     id: 3,
@@ -66,7 +65,7 @@ const tutorialSteps = [
       "Access anytime, anywhere",
       "Create your style library",
     ],
-    mockImage: "/street-style-outfit.png",
+    mockImage: "/looks/street-style-outfit.png",
   },
 ];
 
@@ -160,13 +159,13 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
                 {/* Hero Image */}
                 <div className="relative h-64 bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
                   <div className="relative w-48 h-48 rounded-2xl overflow-hidden shadow-2xl">
-                    <Image
-                      src={step.mockImage || "/placeholder.svg"}
+                    <img
+                      src={step.mockImage || "/looks/placeholder.png"}
                       alt={step.title}
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = "/stylish-streetwear-outfit.png";
+                        target.src = "/looks/stylish-streetwear-outfit.png";
                       }}
                     />
                     {/* Overlay icon */}
