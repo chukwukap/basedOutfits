@@ -5,8 +5,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { senderId, receiverId, lookId, amount, currency, txHash } = body as {
-      senderId: string;
-      receiverId: string;
+      senderId: string; // may be id or username
+      receiverId: string; // may be id or username
       lookId?: string;
       amount: number;
       currency: string;
@@ -17,10 +17,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
+    // Resolve both ids
+    const resolveUserId = async (idOrUsername: string) => {
+      const byId = await prisma.user.findUnique({ where: { id: idOrUsername } });
+      if (byId) return byId.id;
+      const byUsername = await prisma.user.findUnique({ where: { username: idOrUsername } });
+      if (byUsername) return byUsername.id;
+      return idOrUsername; // fallback
+    };
+    const senderResolved = await resolveUserId(senderId);
+    const receiverResolved = await resolveUserId(receiverId);
+
     const tip = await prisma.tip.create({
       data: {
-        senderId,
-        receiverId,
+        senderId: senderResolved,
+        receiverId: receiverResolved,
         lookId,
         amount,
         currency,

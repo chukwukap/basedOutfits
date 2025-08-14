@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 // import { OnboardingReset } from "@/components/onboarding-reset";
-import { Providers } from "./_components/providers";
+import { Providers } from "./providers";
 import { ThemeProvider } from "@/contexts/theme-context";
 import "./globals.css";
 

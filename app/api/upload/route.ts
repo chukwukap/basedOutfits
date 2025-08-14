@@ -14,12 +14,18 @@ export async function POST(req: Request) {
     }
 
     if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "Only image uploads are allowed" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Only image uploads are allowed" },
+        { status: 400 },
+      );
     }
 
     // 10MB limit
     if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: "File too large (max 10MB)" }, { status: 400 });
+      return NextResponse.json(
+        { error: "File too large (max 10MB)" },
+        { status: 400 },
+      );
     }
 
     // Local dev storage under public/uploads
@@ -42,5 +48,3 @@ export async function POST(req: Request) {
 }
 
 export const dynamic = "force-dynamic";
-
-

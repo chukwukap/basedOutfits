@@ -14,6 +14,7 @@ import { Badge } from "@/app/_components/ui/badge";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useComposeCast } from "@coinbase/onchainkit/minikit";
 import { LookFetchPayload } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
@@ -28,6 +29,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
   const [tipping, setTipping] = useState(false);
   const [adding, setAdding] = useState(false); // Renamed from collecting to adding
   const router = useRouter();
+  const { composeCast } = useComposeCast();
 
   const handleCardClick = () => {
     router.push(`/look/${look.id}`);
@@ -52,23 +54,10 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    // TODO: Implement native share or copy link
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: look.caption || "",
-          text: look.description || "",
-          url: `${window.location.origin}/look/${look.id}`,
-        });
-      } catch (err) {
-        console.error("Share cancelled", err);
-      }
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(
-        `${window.location.origin}/look/${look.id}`,
-      );
-    }
+    composeCast({
+      text: look.caption || "Check this look!",
+      embeds: [`${window.location.origin}/look/${look.id}`],
+    });
   };
 
   return (

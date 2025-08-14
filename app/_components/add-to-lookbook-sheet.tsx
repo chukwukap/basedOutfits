@@ -21,6 +21,7 @@ import { PaymentMethodSelector } from "@/app/_components/payment-method-selector
 import { PaymentReceipt } from "@/app/_components/payment-receipt";
 import Image from "next/image";
 import { LookFetchPayload } from "@/lib/types";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
 
 interface Lookbook {
   id: string;
@@ -59,6 +60,7 @@ export function AddToLookbookSheet({
   look,
   onComplete,
 }: AddToLookbookSheetProps) {
+  const { context } = useMiniKit();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [lookbooks, setLookbooks] = useState<Lookbook[]>([]);
   const [paymentState, setPaymentState] = useState<PaymentState>("selecting");
@@ -66,11 +68,12 @@ export function AddToLookbookSheet({
     null,
   );
   useEffect(() => {
-    const currentUserId = "demo"; // TODO: replace with real auth context id
+    const c = (context as unknown as { user?: { username?: string } } | null) || null;
+    const currentUserId = c?.user?.username || "";
     fetchUserLookbooks(currentUserId)
       .then(setLookbooks)
       .catch(() => setLookbooks([]));
-  }, []);
+  }, [context]);
 
   const [paymentMethod, setPaymentMethod] = useState<
     "basepay" | "wallet" | null
@@ -89,7 +92,8 @@ export function AddToLookbookSheet({
     // Process: add to lookbook via API
     (async () => {
       try {
-        const currentUserId = "demo"; // TODO: replace with real auth context id
+        const c = (context as unknown as { user?: { username?: string } } | null) || null;
+        const currentUserId = c?.user?.username || "";
         const res = await fetch(`/api/lookbooks/${selectedLookbook?.id}/items`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

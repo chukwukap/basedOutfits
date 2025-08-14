@@ -21,6 +21,7 @@ import { DollarSign, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { PaymentMethodSelector } from "@/app/_components/payment-method-selector";
 import { PaymentReceipt } from "@/app/_components/payment-receipt";
 import { LookFetchPayload } from "@/lib/types";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
 
 interface TipModalProps {
   open: boolean;
@@ -38,6 +39,7 @@ export function TipModal({
   look,
   onComplete,
 }: TipModalProps) {
+  const { context } = useMiniKit();
   const [amount, setAmount] = useState("1.00");
   const [paymentState, setPaymentState] = useState<PaymentState>("input");
   const [selectedMethod, setSelectedMethod] =
@@ -79,7 +81,8 @@ export function TipModal({
 
   const processBasepayPayment = async () => {
     // For now, instantly create a Tip record
-    const currentUserId = "demo"; // TODO: replace with real auth context id
+    const c = (context as unknown as { user?: { username?: string; fid?: number | string } } | null) || null;
+    const currentUserId = (c?.user?.username || c?.user?.fid?.toString()) ?? "";
     const receiverId = look.authorId;
     const res = await fetch("/api/tips", {
       method: "POST",

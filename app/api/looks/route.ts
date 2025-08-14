@@ -41,7 +41,9 @@ export async function GET(req: Request) {
     }
 
     const payload = looks
-      .filter((l) => (following && currentUserId ? followingIds.has(l.authorId) : true))
+      .filter((l) =>
+        following && currentUserId ? followingIds.has(l.authorId) : true,
+      )
       .map((l) => ({
         id: l.id,
         caption: l.caption ?? "",
@@ -57,7 +59,8 @@ export async function GET(req: Request) {
         tips: l.tips.length,
         collections: l.saves.length,
         author: {
-          isFollowing: following && currentUserId ? followingIds.has(l.authorId) : false,
+          isFollowing:
+            following && currentUserId ? followingIds.has(l.authorId) : false,
           avatarUrl: l.author.avatarUrl ?? "",
           fid: l.author.fid ?? l.author.username,
           name: l.author.name ?? l.author.username,
@@ -67,14 +70,26 @@ export async function GET(req: Request) {
     return NextResponse.json(payload);
   } catch (error) {
     console.error("GET /api/looks error", error);
-    return NextResponse.json({ error: "Failed to fetch looks" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch looks" },
+      { status: 500 },
+    );
   }
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { authorId, caption, description, imageUrls, tags, brands, location, isPublic } = body as {
+    const {
+      authorId,
+      caption,
+      description,
+      imageUrls,
+      tags,
+      brands,
+      location,
+      isPublic,
+    } = body as {
       authorId: string;
       caption?: string;
       description?: string;
@@ -86,14 +101,21 @@ export async function POST(req: Request) {
     };
 
     if (!authorId || !imageUrls?.length) {
-      return NextResponse.json({ error: "authorId and imageUrls required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "authorId and imageUrls required" },
+        { status: 400 },
+      );
     }
 
     // Resolve placeholder usernames to real ids (e.g., "demo")
     let resolvedAuthorId = authorId;
-    const authorById = await prisma.user.findUnique({ where: { id: authorId } });
+    const authorById = await prisma.user.findUnique({
+      where: { id: authorId },
+    });
     if (!authorById) {
-      const authorByUsername = await prisma.user.findUnique({ where: { username: authorId } });
+      const authorByUsername = await prisma.user.findUnique({
+        where: { username: authorId },
+      });
       if (authorByUsername) resolvedAuthorId = authorByUsername.id;
     }
 
@@ -113,10 +135,11 @@ export async function POST(req: Request) {
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
     console.error("POST /api/looks error", error);
-    return NextResponse.json({ error: "Failed to create look" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to create look" },
+      { status: 500 },
+    );
   }
 }
 
 export const dynamic = "force-dynamic";
-
-

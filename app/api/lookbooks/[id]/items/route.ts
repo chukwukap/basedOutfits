@@ -13,8 +13,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
+    // Resolve addedById as id or username
+    let resolvedAddedById = addedById;
+    const byId = await prisma.user.findUnique({ where: { id: addedById } });
+    if (!byId) {
+      const byUsername = await prisma.user.findUnique({ where: { username: addedById } });
+      if (byUsername) resolvedAddedById = byUsername.id;
+    }
+
     const created = await prisma.lookbookItem.create({
-      data: { lookId, lookbookId, addedById },
+      data: { lookId, lookbookId, addedById: resolvedAddedById },
     });
 
     return NextResponse.json(created, { status: 201 });

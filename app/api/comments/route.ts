@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { lookId, authorId, content } = body as {
       lookId: string;
-      authorId: string;
+      authorId: string; // may be user id, username, or fid
       content: string;
     };
 
@@ -50,10 +50,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Comment too long" }, { status: 400 });
     }
 
+    // Resolve authorId: accept id, username, or fid
+    let resolvedAuthorId = authorId;
+    const byId = await prisma.user.findUnique({ where: { id: authorId } });
+    if (!byId) {
+      const byUsername = await prisma.user.findUnique({ where: { username: authorId } });
+      if (byUsername) resolvedAuthorId = byUsername.id;
+      else {
+        const byFid = await prisma.user.findFirst({ where: { fid: authorId } });
+        if (byFid) resolvedAuthorId = byFid.id;
+      }
+    }
+
     const created = await prisma.comment.create({
       data: {
         lookId,
-        authorId,
+        authorId: resolvedAuthorId,
         content,
       },
       include: { author: true },

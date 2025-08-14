@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { CommentCard } from "./comment-card";
 import { CommentInput } from "./comment-input";
 import { Button } from "@/app/_components/ui/button";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { MessageCircle } from "lucide-react";
 
 interface Comment {
@@ -34,6 +35,7 @@ async function fetchComments(lookId: string): Promise<Comment[]> {
 }
 
 export function CommentsSection({ lookId }: CommentsSectionProps) {
+  const { context } = useMiniKit();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
@@ -58,7 +60,8 @@ export function CommentsSection({ lookId }: CommentsSectionProps) {
   }, [lookId]);
 
   const handleAddComment = async (content: string) => {
-    const currentUserId = "demo"; // TODO: replace with real auth context id
+    const c = (context as unknown as { user?: { username?: string; fid?: number | string } } | null) || null;
+    const currentUserId = (c?.user?.username || c?.user?.fid?.toString()) ?? "";
     const res = await fetch("/api/comments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

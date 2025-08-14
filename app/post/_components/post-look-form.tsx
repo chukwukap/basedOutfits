@@ -13,6 +13,7 @@ import { Upload, X, Camera, MapPin, Tag, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LookFetchPayload } from "@/lib/types";
 import Image from "next/image";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
 
 interface PostLookFormProps {
   onSuccess: (lookData: LookFetchPayload) => void;
@@ -26,6 +27,7 @@ interface ImageFile {
 }
 
 export function PostLookForm({ onSuccess }: PostLookFormProps) {
+  const { context } = useMiniKit();
   const [images, setImages] = useState<ImageFile[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -129,7 +131,9 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
         try {
           const url = await uploadFile(file);
           setImages((prev) =>
-            prev.map((img) => (img.id === id ? { ...img, uploading: false, preview: url } : img)),
+            prev.map((img) =>
+              img.id === id ? { ...img, uploading: false, preview: url } : img,
+            ),
           );
         } catch {
           setImages((prev) => prev.filter((img) => img.id !== id));
@@ -204,7 +208,8 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
 
     try {
       setPosting(true);
-      const currentUserId = "demo"; // TODO: replace with real auth context id
+      const c = (context as unknown as { user?: { username?: string; fid?: number | string } } | null) || null;
+      const currentUserId = (c?.user?.username || c?.user?.fid?.toString()) ?? "";
       const res = await fetch("/api/looks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -13,6 +13,7 @@ import { RefreshCw, Users, Globe } from "lucide-react";
 import { Button } from "./_components/ui/button";
 import { LookFetchPayload } from "@/lib/types";
 import { useSearchParams } from "next/navigation";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
 
 async function fetchLooks(params: {
   tag?: string | null;
@@ -28,6 +29,7 @@ async function fetchLooks(params: {
 
 function HomePageInner() {
   const searchParams = useSearchParams();
+  const { context } = useMiniKit();
   const [looks, setLooks] = useState<LookFetchPayload[]>([]);
   const [filteredLooks, setFilteredLooks] = useState<LookFetchPayload[]>([]);
   const [loading, setLoading] = useState(true);
@@ -160,6 +162,23 @@ function HomePageInner() {
   const handleOnboardingComplete = () => {
     localStorage.setItem("looks_onboarding_completed", "true");
     setShowOnboarding(false);
+    // On first-time completion, if context exists, ensure user exists in DB
+    try {
+      type CtxUser = { fid?: number | string; username?: string; displayName?: string; pfpUrl?: string };
+      type Ctx = { user?: CtxUser; client?: CtxUser } | null;
+      const c = (context as Ctx) || null;
+      const fid = ((c?.user?.fid ?? c?.client?.fid) as number | string | undefined)?.toString();
+      const username = (c?.user?.username ?? c?.client?.username) as string | undefined;
+      const name = (c?.user?.displayName ?? c?.client?.displayName) as string | undefined;
+      const avatarUrl = (c?.user?.pfpUrl ?? c?.client?.pfpUrl) as string | undefined;
+      if (fid && username) {
+        fetch("/api/users/me", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fid, username, name, avatarUrl }),
+        });
+      }
+    } catch {}
   };
 
   const handleTagSelect = (tag: string) => {

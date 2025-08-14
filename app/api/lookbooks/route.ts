@@ -43,7 +43,10 @@ export async function GET(req: Request) {
     return NextResponse.json(payload);
   } catch (error) {
     console.error("GET /api/lookbooks error", error);
-    return NextResponse.json({ error: "Failed to fetch lookbooks" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch lookbooks" },
+      { status: 500 },
+    );
   }
 }
 
@@ -58,13 +61,16 @@ export async function POST(req: Request) {
       isPublic?: boolean;
     };
 
-    if (!ownerId || !name) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    if (!ownerId || !name)
+      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
     // Resolve owner id: allow passing either user id or username (e.g., "demo")
     let resolvedOwnerId = ownerId;
     const byId = await prisma.user.findUnique({ where: { id: ownerId } });
     if (!byId) {
-      const byUsername = await prisma.user.findUnique({ where: { username: ownerId } });
+      const byUsername = await prisma.user.findUnique({
+        where: { username: ownerId },
+      });
       if (byUsername) {
         resolvedOwnerId = byUsername.id;
       } else if (ownerId === "demo" && process.env.NODE_ENV !== "production") {
@@ -72,7 +78,11 @@ export async function POST(req: Request) {
         const demo = await prisma.user.upsert({
           where: { username: "demo" },
           update: {},
-          create: { username: "demo", name: "Demo User", avatarUrl: "/looks/diverse-group-profile.png" },
+          create: {
+            username: "demo",
+            name: "Demo User",
+            avatarUrl: "/looks/diverse-group-profile.png",
+          },
         });
         resolvedOwnerId = demo.id;
       } else {
@@ -93,10 +103,11 @@ export async function POST(req: Request) {
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
     console.error("POST /api/lookbooks error", error);
-    return NextResponse.json({ error: "Failed to create lookbook" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to create lookbook" },
+      { status: 500 },
+    );
   }
 }
 
 export const dynamic = "force-dynamic";
-
-
