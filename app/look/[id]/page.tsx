@@ -1,12 +1,22 @@
 import LookDetailPageClient from "./_components/look-details-page-client";
-import { Metadata } from "next";
-import { prisma } from "@/lib/db";
-import { notFound } from "next/navigation";
-import type { PageProps } from "next";
 
-export async function generateMetadata({ params }: PageProps<{ id: string }>): Promise<Metadata> {
-  const id = params?.id;
+import type { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+import { prisma } from "@/lib/db";
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { id } = await params;
   if (!id) return {};
+
+  const previousImages = (await parent).openGraph?.images || [];
+
   try {
     const look = await prisma.look.findUnique({ where: { id } });
     if (!look) return {};
@@ -21,14 +31,14 @@ export async function generateMetadata({ params }: PageProps<{ id: string }>): P
       title: look.caption || process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
       description: look.description || "",
       openGraph: {
-        images: image ? [image] : [],
+        images: image ? [image, ...previousImages] : previousImages || [],
       },
       other: {
         "fc:frame": JSON.stringify({
           version: "next",
           imageUrl: image,
           button: {
-            title: `Open ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
+            title: `Check out this outfit!`,
             action: {
               type: "launch_frame",
               name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
