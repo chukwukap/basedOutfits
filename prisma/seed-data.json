@@ -34,6 +34,69 @@
       "name": "Arjun",
       "avatarUrl": "https://images.unsplash.com/photo-1554080353-a576cf803bda?auto=format&fit=crop&w=256&q=60",
       "walletAddress": null
+    },
+    {
+      "username": "seoul_street",
+      "fid": "2005",
+      "name": "Minji",
+      "avatarUrl": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
+    },
+    {
+      "username": "nairobi_tailor",
+      "fid": "2006",
+      "name": "Kioni",
+      "avatarUrl": "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
+    },
+    {
+      "username": "nyc_vintage",
+      "fid": "2007",
+      "name": "Jules",
+      "avatarUrl": "https://images.unsplash.com/photo-1520975594081-7a019c1e66f2?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
+    },
+    {
+      "username": "cph_functional",
+      "fid": "2008",
+      "name": "Soren",
+      "avatarUrl": "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
+    },
+    {
+      "username": "rio_carnival",
+      "fid": "2009",
+      "name": "Luna",
+      "avatarUrl": "https://images.unsplash.com/photo-1527980965255-8b31d10f7b8e?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
+    },
+    {
+      "username": "beijing_modern",
+      "fid": "2010",
+      "name": "Wei",
+      "avatarUrl": "https://images.unsplash.com/photo-1511485977113-f34c92461ad9?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
+    },
+    {
+      "username": "casablanca_elegance",
+      "fid": "2011",
+      "name": "Yasmine",
+      "avatarUrl": "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
+    },
+    {
+      "username": "capetown_coastal",
+      "fid": "2012",
+      "name": "Theo",
+      "avatarUrl": "https://images.unsplash.com/photo-1546456073-6712f79251bb?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
+    },
+    {
+      "username": "igbo_senator",
+      "fid": "2013",
+      "name": "Chukwu",
+      "avatarUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&q=60",
+      "walletAddress": null
     }
   ],
   "looks": [
@@ -168,6 +231,126 @@
       "brands": ["Acne Studios", "Arket"],
       "location": "Copenhagen",
       "isPublic": true
+    },
+    {
+      "authorUsername": "seoul_street",
+      "caption": "Seoul Night Layers",
+      "description": "Oversized blazer with cropped top and wide pants.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1520975594081-7a019c1e66f2?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["Asian", "Streetwear", "Oversized"],
+      "brands": ["ADER error", "Gentle Monster"],
+      "location": "Seoul",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "nairobi_tailor",
+      "caption": "Tailored Ankara Suit",
+      "description": "Fitted blazer and tapered trousers in Ankara.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["African", "Tailored", "Ankara"],
+      "brands": ["Custom"],
+      "location": "Nairobi",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "nyc_vintage",
+      "caption": "Vintage Denim Mix",
+      "description": "Patchwork jacket with thrifted finds.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["Vintage", "Denim", "American"],
+      "brands": ["Levi's"],
+      "location": "New York",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "cph_functional",
+      "caption": "Functional Monochrome",
+      "description": "Weatherproof outerwear with minimalist silhouette.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["Scandinavian", "Functional", "Minimalist"],
+      "brands": ["RAINS", "Arket"],
+      "location": "Copenhagen",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "rio_carnival",
+      "caption": "Carnival Spark",
+      "description": "Sequins, feathers, and vibrant hues.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["Latin", "Festival", "Vibrant"],
+      "brands": ["Handmade"],
+      "location": "Rio de Janeiro",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "beijing_modern",
+      "caption": "Beijing Techwear",
+      "description": "Urban techwear with modular pockets.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1511485977113-f34c92461ad9?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["Asian", "Techwear", "Urban"],
+      "brands": ["Stone Island", "Nike ACG"],
+      "location": "Beijing",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "casablanca_elegance",
+      "caption": "Medina Elegance",
+      "description": "Flowing kaftan in soft earth tones.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["MiddleEast", "Traditional", "Elegant"],
+      "brands": ["Artisan"],
+      "location": "Casablanca",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "capetown_coastal",
+      "caption": "Coastal Ease",
+      "description": "Linen shirt, shorts, and sandals.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1546456073-6712f79251bb?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["African", "Coastal", "Casual"],
+      "brands": ["Local"],
+      "location": "Cape Town",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "igbo_senator",
+      "caption": "Igbo Senator - Navy",
+      "description": "Classic senator wear in deep navy with embroidered neckline.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["Nigerian", "Igbo", "Senator", "Traditional"],
+      "brands": ["Local Tailor"],
+      "location": "Enugu",
+      "isPublic": true
+    },
+    {
+      "authorUsername": "igbo_senator",
+      "caption": "Igbo Senator - Cream",
+      "description": "Cream senator set with red cap and beaded accessories.",
+      "imageUrls": [
+        "https://images.unsplash.com/photo-1516826957135-700dedea698c?auto=format&fit=crop&w=1080&q=80"
+      ],
+      "tags": ["Nigerian", "Igbo", "Senator", "Traditional"],
+      "brands": ["Artisan"],
+      "location": "Lagos",
+      "isPublic": true
     }
   ],
   "lookbooks": [
@@ -191,8 +374,41 @@
       "description": "Cultural celebrations and heritage wear",
       "coverImage": "https://images.unsplash.com/photo-1596464716121-e1ee26cfe7f6?auto=format&fit=crop&w=1080&q=80",
       "isPublic": true
+    },
+    {
+      "ownerUsername": "demo",
+      "name": "Cultural Fusion",
+      "description": "Modern takes on heritage styles",
+      "coverImage": "https://images.unsplash.com/photo-1553514029-1318c9127859?auto=format&fit=crop&w=1080&q=80",
+      "isPublic": true
+    },
+    {
+      "ownerUsername": "demo",
+      "name": "Coastal Casual",
+      "description": "Sea breeze looks and linens",
+      "coverImage": "https://images.unsplash.com/photo-1546456073-6712f79251bb?auto=format&fit=crop&w=1080&q=80",
+      "isPublic": true
+    },
+    {
+      "ownerUsername": "demo",
+      "name": "Vintage Finds",
+      "description": "Curated pre-loved pieces",
+      "coverImage": "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1080&q=80",
+      "isPublic": true
+    },
+    {
+      "ownerUsername": "demo",
+      "name": "Monochrome Masters",
+      "description": "All-black and tonal artistry",
+      "coverImage": "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1080&q=80",
+      "isPublic": true
+    },
+    {
+      "ownerUsername": "demo",
+      "name": "Festival Ready",
+      "description": "Sparkle, fringe, and color",
+      "coverImage": "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1080&q=80",
+      "isPublic": true
     }
   ]
 }
-
-
