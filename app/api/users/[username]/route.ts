@@ -17,7 +17,8 @@ export async function GET(req: Request) {
       },
     });
 
-    if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!user)
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     const payload = {
       id: user.id,
@@ -49,10 +50,11 @@ export async function GET(req: Request) {
     return NextResponse.json(payload);
   } catch (error) {
     console.error("GET /api/users/[username] error", error);
-    return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch user" },
+      { status: 500 },
+    );
   }
 }
 
 export const dynamic = "force-dynamic";
-
-

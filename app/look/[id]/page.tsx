@@ -63,7 +63,12 @@ type LookApiResponse = {
   authorId: string;
   tips: number;
   collections: number;
-  author: { isFollowing: boolean; avatarUrl: string; fid: string; name: string };
+  author: {
+    isFollowing: boolean;
+    avatarUrl: string;
+    fid: string;
+    name: string;
+  };
 };
 
 async function fetchLookById(id: string): Promise<LookApiResponse | null> {

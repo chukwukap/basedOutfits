@@ -497,9 +497,8 @@
           { "type": "cap", "name": "Red cap" }
         ]
       }
-    }
-  ],
-  "looks": [
+    },
+
     {
       "authorUsername": "demo",
       "caption": "Lagos Street Style",
@@ -1188,7 +1187,9 @@
       "season": "summer",
       "occasion": "festive",
       "colors": ["red", "yellow", "green"],
-      "details": { "items": [{ "type": "accessory", "name": "Feather headpiece" }] }
+      "details": {
+        "items": [{ "type": "accessory", "name": "Feather headpiece" }]
+      }
     },
     {
       "authorUsername": "casablanca_elegance",

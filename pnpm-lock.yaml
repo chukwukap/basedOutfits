@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@base-org/account-ui':
+        specifier: ^1.0.1
+        version: 1.0.1(@base-org/account@1.1.1(@types/react@18.3.23)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.0.17))(clsx@2.1.1)(preact@10.27.0)(react@18.3.1)
       '@coinbase/onchainkit':
         specifier: latest
         version: 0.38.19(@farcaster/miniapp-sdk@0.1.8(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.17))(@tanstack/query-core@5.83.1)(@types/react@18.3.23)(@upstash/redis@1.35.3)(bufferutil@4.0.9)(immer@10.1.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.0.17)
@@ -235,6 +238,23 @@ packages:
   '@babel/runtime@7.28.2':
     resolution: {integrity: sha512-KHp2IflsnGywDjBWDkR9iEqiWSpc8GIi0lgTT3mOElT0PP1tG26P4tmFI2YvAdzgq9RGyoHZQEIEdZy6Ec5xCA==}
     engines: {node: '>=6.9.0'}
+
+  '@base-org/account-ui@1.0.1':
+    resolution: {integrity: sha512-wWu1PtWies+B5P1v2GoQ9SteaIpXY6AOmWawHSYJZY0hYJA1aqN78u8g0l5A9WJsAe9VXnAkOz/khlbsr/oEIQ==}
+    peerDependencies:
+      '@base-org/account': '*'
+      clsx: '*'
+      preact: '*'
+      react: '*'
+      svelte: '*'
+      vue: '*'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
 
   '@base-org/account@1.1.1':
     resolution: {integrity: sha512-IfVJPrDPhHfqXRDb89472hXkpvJuQQR7FDI9isLPHEqSYt/45whIoBxSPgZ0ssTt379VhQo4+87PWI1DoLSfAQ==}
@@ -4473,6 +4493,14 @@ snapshots:
   '@alloc/quick-lru@5.2.0': {}
 
   '@babel/runtime@7.28.2': {}
+
+  '@base-org/account-ui@1.0.1(@base-org/account@1.1.1(@types/react@18.3.23)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.0.17))(clsx@2.1.1)(preact@10.27.0)(react@18.3.1)':
+    dependencies:
+      '@base-org/account': 1.1.1(@types/react@18.3.23)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.0.17)
+      clsx: 2.1.1
+      preact: 10.27.0
+    optionalDependencies:
+      react: 18.3.1
 
   '@base-org/account@1.1.1(@types/react@18.3.23)(bufferutil@4.0.9)(immer@10.1.1)(react@18.3.1)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.0.17)':
     dependencies:

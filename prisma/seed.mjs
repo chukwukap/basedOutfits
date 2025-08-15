@@ -15,6 +15,68 @@ function readSeedData() {
   return JSON.parse(raw);
 }
 
+function deriveSeason(look) {
+  const t = (look.tags || []).map((x) => x.toLowerCase()).join(" ");
+  const txt = `${(look.caption || "").toLowerCase()} ${(look.description || "").toLowerCase()} ${(look.location || "").toLowerCase()}`;
+  if (/winter|coat|jacket|snow|cold/.test(txt)) return "winter";
+  if (/summer|beach|linen|hot/.test(txt)) return "summer";
+  if (/spring|bloom|light layer/.test(txt)) return "spring";
+  if (/fall|autumn|trench/.test(txt)) return "fall";
+  if (t.includes("scandinavian")) return "winter";
+  if (t.includes("coastal")) return "summer";
+  return undefined;
+}
+
+function deriveOccasion(look) {
+  const t = (look.tags || []).map((x) => x.toLowerCase());
+  const txt = `${(look.caption || "").toLowerCase()} ${(look.description || "").toLowerCase()}`;
+  if (t.includes("evening") || /red carpet|gala|tuxedo/.test(txt))
+    return "evening";
+  if (
+    t.includes("traditional") ||
+    t.includes("festive") ||
+    /wedding|festival/.test(txt)
+  )
+    return "festive";
+  if (t.includes("streetwear") || t.includes("urban")) return "casual";
+  if (t.includes("formal") || /tailored|suit/.test(txt)) return "formal";
+  return "casual";
+}
+
+function deriveColors(look) {
+  const base = `${look.caption || ""} ${look.description || ""}`.toLowerCase();
+  const colors = [];
+  const map = [
+    ["navy", /navy/],
+    ["cream", /cream/],
+    ["red", /red/],
+    ["black", /black/],
+    ["white", /white/],
+    ["beige", /beige/],
+    ["green", /green/],
+    ["blue", /blue/],
+    ["brown", /brown/],
+  ];
+  for (const [name, rx] of map) if (rx.test(base)) colors.push(name);
+  return colors.length ? colors : undefined;
+}
+
+function deriveDetails(look) {
+  const items = [];
+  const brands = look.brands || [];
+  const t = (look.tags || []).map((x) => x.toLowerCase());
+  if (t.includes("senator"))
+    items.push({ type: "two-piece", name: "Senator set" });
+  if (t.includes("sari")) items.push({ type: "dress", name: "Sari" });
+  if (t.includes("trench")) items.push({ type: "coat", name: "Trench coat" });
+  if (t.includes("denim")) items.push({ type: "jacket", name: "Denim jacket" });
+  if (t.includes("techwear"))
+    items.push({ type: "jacket", name: "Techwear shell" });
+  if (items.length === 0) items.push({ type: "top", name: "Styled top" });
+  const brandItems = brands.map((b) => ({ brand: b }));
+  return { items, brandItems };
+}
+
 async function upsertUsers() {
   const { users: sampleUsers } = readSeedData();
 
@@ -51,6 +113,11 @@ async function seedLooks(users) {
         ? l.imageUrls
         : ["/looks/placeholder.png"]; // Placeholder; replace in JSON later
 
+    const season = l.season ?? deriveSeason(l);
+    const occasion = l.occasion ?? deriveOccasion(l);
+    const colors = l.colors ?? deriveColors(l) ?? [];
+    const details = l.details ?? deriveDetails(l);
+
     await prisma.look.create({
       data: {
         authorId,
@@ -61,6 +128,10 @@ async function seedLooks(users) {
         brands: l.brands,
         location: l.location,
         isPublic: l.isPublic,
+        season,
+        occasion,
+        colors,
+        details,
       },
     });
   }

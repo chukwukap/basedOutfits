@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/app/_components/ui/button";
 import { Input } from "@/app/_components/ui/input";
 import { Textarea } from "@/app/_components/ui/textarea";
@@ -35,6 +35,17 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
   const [dragActive, setDragActive] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect coarse pointer devices to optimize the UI for mobile-first capture
+  useEffect(() => {
+    try {
+      setIsMobile(window.matchMedia("(pointer: coarse)").matches);
+    } catch {
+      setIsMobile(true);
+    }
+  }, []);
 
   // simplified: no tags/brands/location
 
@@ -117,6 +128,14 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     if (files) {
       handleFiles(Array.from(files));
     }
+  };
+
+  const openCameraCapture = () => {
+    cameraInputRef.current?.click();
+  };
+
+  const openLibraryPicker = () => {
+    fileInputRef.current?.click();
   };
 
   const removeImage = (id: string) => {
@@ -206,7 +225,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     !images.some((img) => img.uploading);
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 pb-28 md:pb-6">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Image Upload */}
         <div>
@@ -239,7 +258,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
                       type="button"
                       variant="destructive"
                       size="sm"
-                      className="absolute top-2 right-2 w-7 h-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-2 right-2 w-9 h-9 p-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity rounded-full"
                       onClick={() => removeImage(image.id)}
                     >
                       <X className="w-3 h-3" />
@@ -255,30 +274,54 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
             )}
 
             {images.length < 5 && (
-              <div
-                className={cn(
-                  "relative border-2 border-dashed rounded-lg transition-colors cursor-pointer",
-                  dragActive
-                    ? "border-primary bg-primary/5"
-                    : "border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/25",
+              <>
+                {/* Mobile-first: explicit camera/library buttons */}
+                {isMobile ? (
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      type="button"
+                      onClick={openCameraCapture}
+                      className="h-12"
+                      variant="default"
+                    >
+                      <Camera className="w-4 h-4 mr-2" /> Take Photo
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={openLibraryPicker}
+                      className="h-12"
+                      variant="outline"
+                    >
+                      <Upload className="w-4 h-4 mr-2" /> Library
+                    </Button>
+                  </div>
+                ) : (
+                  <div
+                    className={cn(
+                      "relative border-2 border-dashed rounded-lg transition-colors cursor-pointer",
+                      dragActive
+                        ? "border-primary bg-primary/5"
+                        : "border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/25",
+                    )}
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <div className="flex flex-col items-center justify-center py-10 px-4">
+                      <Upload className="w-8 h-8 text-muted-foreground mb-3" />
+                      <p className="text-sm font-medium text-center">
+                        {dragActive ? "Drop photos here" : "Upload photos or drag & drop"}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        PNG, JPG up to 10MB each
+                      </p>
+                    </div>
+                  </div>
                 )}
-                onDragEnter={handleDrag}
-                onDragLeave={handleDrag}
-                onDragOver={handleDrag}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <div className="flex flex-col items-center justify-center py-8 px-4">
-                  <Upload className="w-8 h-8 text-muted-foreground mb-3" />
-                  <p className="text-sm font-medium text-center">
-                    {dragActive
-                      ? "Drop photos here"
-                      : "Upload photos or drag & drop"}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    PNG, JPG up to 10MB each
-                  </p>
-                </div>
+
+                {/* Hidden inputs for both capture modes */}
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -288,7 +331,16 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
                   onChange={handleImageUpload}
                   disabled={images.length >= 5}
                 />
-              </div>
+                <input
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                  disabled={images.length >= 5}
+                />
+              </>
             )}
           </div>
         </div>
@@ -303,7 +355,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Give your look a catchy title..."
-            className="mt-2"
+            className="mt-2 h-12"
             maxLength={100}
           />
           <p className="text-xs text-muted-foreground mt-1">
@@ -321,7 +373,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe your look, occasion, styling tips, or inspiration..."
-            className="mt-2"
+            className="mt-2 min-h-[120px]"
             rows={4}
             maxLength={500}
           />
@@ -332,8 +384,8 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
 
         {/* Tags/Brands/Location removed to match simplified schema */}
 
-        {/* Submit */}
-        <div className="pt-4">
+        {/* Submit (desktop) */}
+        <div className="pt-4 hidden md:block">
           <Button
             type="submit"
             className="w-full h-12 text-base font-semibold"
@@ -348,17 +400,39 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
               "Post Look"
             )}
           </Button>
-          {!isFormValid && (
-            <p className="text-sm text-muted-foreground mt-2 text-center">
-              {images.length === 0
-                ? "Add at least one photo"
-                : !title.trim()
-                  ? "Add a title"
-                  : "Uploading images..."}
-            </p>
-          )}
         </div>
       </form>
+
+      {/* Sticky action bar (mobile) */}
+      <div
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/90 backdrop-blur border-t p-3"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)" }}
+      >
+        <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <p className="text-xs text-muted-foreground">
+              {!isFormValid
+                ? images.length === 0
+                  ? "Add at least one photo"
+                  : !title.trim()
+                    ? "Add a title"
+                    : "Uploading images..."
+                : "Ready to post"}
+            </p>
+          </div>
+          <Button
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              void handleSubmit(e as unknown as React.FormEvent);
+            }}
+            className="h-12 px-6"
+            disabled={!isFormValid || posting}
+          >
+            {posting ? "Posting..." : "Post"}
+          </Button>
+        </div>
+      </div>
     </Card>
   );
 }

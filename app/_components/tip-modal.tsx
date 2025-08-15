@@ -15,14 +15,11 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/app/_components/ui/avatar";
-import { Badge } from "@/app/_components/ui/badge";
 import { Alert, AlertDescription } from "@/app/_components/ui/alert";
-import { DollarSign, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
-import { PaymentMethodSelector } from "@/app/_components/payment-method-selector";
-import { PaymentReceipt } from "@/app/_components/payment-receipt";
+import { DollarSign, AlertCircle, Loader2 } from "lucide-react";
 import { LookFetchPayload } from "@/lib/types";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
-
+import { BasePayButton } from "@base-org/account-ui/react";
 interface TipModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -30,8 +27,7 @@ interface TipModalProps {
   onComplete: (amount: number) => void;
 }
 
-type PaymentState = "input" | "method" | "processing" | "success" | "error";
-type PaymentMethod = "basepay" | "wallet";
+type PaymentState = "input" | "processing";
 
 export function TipModal({
   open,
@@ -42,46 +38,32 @@ export function TipModal({
   const { context } = useMiniKit();
   const [amount, setAmount] = useState("1.00");
   const [paymentState, setPaymentState] = useState<PaymentState>("input");
-  const [selectedMethod, setSelectedMethod] =
-    useState<PaymentMethod>("basepay");
   const [error, setError] = useState("");
-  const [transactionHash, setTransactionHash] = useState("");
 
   const quickAmounts = ["0.50", "1.00", "2.00", "5.00"];
-
-  const handleContinue = () => {
-    const tipAmount = Number.parseFloat(amount);
-    if (tipAmount < 0.5) {
-      setError("Minimum tip amount is $0.50");
-      return;
-    }
-    setError("");
-    setPaymentState("method");
-  };
 
   const handlePayment = async () => {
     setPaymentState("processing");
     setError("");
 
     try {
-      if (selectedMethod === "basepay") {
-        await processBasepayPayment();
-      } else {
-        await processWalletPayment();
-      }
+      await processBasepayPayment();
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
           : "Payment failed. Please try again.",
       );
-      setPaymentState("error");
+      // setPaymentState("error");
     }
   };
 
   const processBasepayPayment = async () => {
     // For now, instantly create a Tip record
-    const c = (context as unknown as { user?: { username?: string; fid?: number | string } } | null) || null;
+    const c =
+      (context as unknown as {
+        user?: { username?: string; fid?: number | string };
+      } | null) || null;
     const currentUserId = (c?.user?.username || c?.user?.fid?.toString()) ?? "";
     const receiverId = look.authorId;
     const res = await fetch("/api/tips", {
@@ -96,28 +78,16 @@ export function TipModal({
       }),
     });
     if (!res.ok) throw new Error("Payment failed");
-    setTransactionHash("created:" + Date.now());
-    setPaymentState("success");
   };
 
-  const processWalletPayment = processBasepayPayment;
-
   const handleClose = () => {
-    if (paymentState === "success") {
-      onComplete(Number.parseFloat(amount));
-    }
+    onComplete(Number.parseFloat(amount));
 
     // Reset state
     setPaymentState("input");
     setAmount("1.00");
     setError("");
-    setTransactionHash("");
     onOpenChange(false);
-  };
-
-  const handleRetry = () => {
-    setPaymentState("method");
-    setError("");
   };
 
   return (
@@ -126,7 +96,7 @@ export function TipModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <DollarSign className="w-5 h-5" />
-            {paymentState === "success" ? "Tip Sent!" : "Tip Creator"}
+            {"Tip Sent!"}
           </DialogTitle>
         </DialogHeader>
 
@@ -143,15 +113,6 @@ export function TipModal({
                 {look.caption}
               </p>
             </div>
-            {paymentState === "success" && (
-              <Badge
-                variant="secondary"
-                className="bg-green-100 text-green-800"
-              >
-                <CheckCircle className="w-3 h-3 mr-1" />
-                Sent
-              </Badge>
-            )}
           </div>
 
           {/* Payment States */}
@@ -210,36 +171,7 @@ export function TipModal({
                 >
                   Cancel
                 </Button>
-                <Button
-                  onClick={handleContinue}
-                  disabled={Number.parseFloat(amount) < 0.5}
-                  className="flex-1"
-                >
-                  Continue
-                </Button>
-              </div>
-            </>
-          )}
-
-          {paymentState === "method" && (
-            <>
-              <PaymentMethodSelector
-                selectedMethod={selectedMethod}
-                onMethodChange={setSelectedMethod}
-                amount={Number.parseFloat(amount)}
-              />
-
-              <div className="flex gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setPaymentState("input")}
-                  className="flex-1"
-                >
-                  Back
-                </Button>
-                <Button onClick={handlePayment} className="flex-1">
-                  Pay ${amount}
-                </Button>
+                <BasePayButton colorScheme="light" onClick={handlePayment} />
               </div>
             </>
           )}
@@ -249,49 +181,9 @@ export function TipModal({
               <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
               <h3 className="font-semibold mb-2">Processing Payment</h3>
               <p className="text-sm text-muted-foreground">
-                {selectedMethod === "basepay"
-                  ? "Confirming transaction with Basepay..."
-                  : "Waiting for wallet confirmation..."}
+                {"Confirming transaction with Basepay..."}
               </p>
             </div>
-          )}
-
-          {paymentState === "success" && (
-            <>
-              <PaymentReceipt
-                type="tip"
-                amount={Number.parseFloat(amount)}
-                recipient={look.author.name}
-                transactionHash={transactionHash}
-                paymentMethod={selectedMethod}
-              />
-
-              <Button onClick={handleClose} className="w-full">
-                Done
-              </Button>
-            </>
-          )}
-
-          {paymentState === "error" && (
-            <>
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-
-              <div className="flex gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  onClick={handleClose}
-                  className="flex-1 bg-transparent"
-                >
-                  Cancel
-                </Button>
-                <Button onClick={handleRetry} className="flex-1">
-                  Try Again
-                </Button>
-              </div>
-            </>
           )}
         </div>
       </DialogContent>

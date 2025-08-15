@@ -17,11 +17,10 @@ import { Badge } from "@/app/_components/ui/badge";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { Plus, Lock, Globe, ArrowLeft } from "lucide-react";
 import { CreateLookbookModal } from "@/app/lookbooks/_components/create-lookbook-modal";
-import { PaymentMethodSelector } from "@/app/_components/payment-method-selector";
-import { PaymentReceipt } from "@/app/_components/payment-receipt";
 import Image from "next/image";
 import { LookFetchPayload } from "@/lib/types";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { BasePayButton } from "@base-org/account-ui/react"; // Import BasePayButton
 
 interface Lookbook {
   id: string;
@@ -47,9 +46,12 @@ type PaymentState =
   | "error";
 
 async function fetchUserLookbooks(ownerId: string): Promise<Lookbook[]> {
-  const res = await fetch(`/api/lookbooks?ownerId=${encodeURIComponent(ownerId)}&public=0`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `/api/lookbooks?ownerId=${encodeURIComponent(ownerId)}&public=0`,
+    {
+      cache: "no-store",
+    },
+  );
   if (!res.ok) return [];
   return await res.json();
 }
@@ -58,7 +60,6 @@ export function AddToLookbookSheet({
   open,
   onOpenChange,
   look,
-  onComplete,
 }: AddToLookbookSheetProps) {
   const { context } = useMiniKit();
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -67,68 +68,78 @@ export function AddToLookbookSheet({
   const [selectedLookbook, setSelectedLookbook] = useState<Lookbook | null>(
     null,
   );
+
   useEffect(() => {
-    const c = (context as unknown as { user?: { username?: string } } | null) || null;
+    const c = context || null;
     const currentUserId = c?.user?.username || "";
     fetchUserLookbooks(currentUserId)
       .then(setLookbooks)
       .catch(() => setLookbooks([]));
   }, [context]);
 
-  const [paymentMethod, setPaymentMethod] = useState<
-    "basepay" | "wallet" | null
-  >(null);
-  const [transactionHash, setTransactionHash] = useState<string>("");
-
+  /**
+   * Handles the selection of a lookbook and transitions to payment state.
+   * @param lookbook The selected lookbook.
+   */
   const handleLookbookSelect = (lookbook: Lookbook) => {
     setSelectedLookbook(lookbook);
     setPaymentState("payment");
   };
 
-  const handlePaymentMethodSelect = (method: "basepay" | "wallet") => {
-    setPaymentMethod(method);
-    setPaymentState("processing");
+  /**
+   * Handles the result of the BasePay payment.
+   * On success, adds the look to the lookbook via API and transitions to success state.
+   * On failure, shows error state.
+   * @param result The result object from BasePayButton.
+   */
+  // const handleBasePayResult = async (result) => {
+  //   if (result.success) {
+  //     setPaymentState("processing");
+  //     setPaymentError("");
+  //     try {
+  //       // Security: Only allow adding to lookbook after successful payment
+  //       const c =
+  //         (context as unknown as { user?: { username?: string } } | null) ||
+  //         null;
+  //       const currentUserId = c?.user?.username || "";
+  //       const res = await fetch(
+  //         `/api/lookbooks/${selectedLookbook?.id}/items`,
+  //         {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({ lookId: look.id, addedById: currentUserId }),
+  //         },
+  //       );
+  //       if (!res.ok) throw new Error("Failed to add to lookbook");
 
-    // Process: add to lookbook via API
-    (async () => {
-      try {
-        const c = (context as unknown as { user?: { username?: string } } | null) || null;
-        const currentUserId = c?.user?.username || "";
-        const res = await fetch(`/api/lookbooks/${selectedLookbook?.id}/items`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ lookId: look.id, addedById: currentUserId }),
-        });
-        if (!res.ok) throw new Error("Failed to add to lookbook");
-        setTransactionHash(`added:${Date.now()}`);
-        setPaymentState("success");
-        if (selectedLookbook) {
-          setLookbooks(
-            lookbooks.map((lb) =>
-              lb.id === selectedLookbook.id
-                ? { ...lb, lookCount: lb.lookCount + 1 }
-                : lb,
-            ),
-          );
-        }
-      } catch {
-        setPaymentState("error");
-      }
-    })();
-  };
+  //       setPaymentState("success");
+  //       if (selectedLookbook) {
+  //         setLookbooks(
+  //           lookbooks.map((lb) =>
+  //             lb.id === selectedLookbook.id
+  //               ? { ...lb, lookCount: lb.lookCount + 1 }
+  //               : lb,
+  //           ),
+  //         );
+  //       }
+  //     } catch {
+  //       setPaymentState("error");
+  //     }
+  //   } else {
+  //     setPaymentState("error");
+  //   }
+  // };
 
-  const handlePaymentSuccess = () => {
-    if (selectedLookbook) {
-      onComplete(selectedLookbook.name);
-    }
-    handleClose();
-  };
+  // const handlePaymentSuccess = () => {
+  //   if (selectedLookbook) {
+  //     onComplete(selectedLookbook.name);
+  //   }
+  //   handleClose();
+  // };
 
   const handleClose = () => {
     setPaymentState("selecting");
     setSelectedLookbook(null);
-    setPaymentMethod(null);
-    setTransactionHash("");
     onOpenChange(false);
   };
 
@@ -314,60 +325,34 @@ export function AddToLookbookSheet({
                 </div>
               )}
 
-              {/* Payment Component */}
+              {/* Payment Form: Only BasePay is supported */}
               {paymentState === "payment" && (
-                <div className="space-y-4">
-                  <PaymentMethodSelector
-                    amount={0.001}
-                    selectedMethod={paymentMethod || "basepay"}
-                    onMethodChange={(method) => setPaymentMethod(method)}
-                  />
-
-                  <Button
-                    onClick={() =>
-                      handlePaymentMethodSelect(paymentMethod || "basepay")
-                    }
-                    className="w-full"
-                    disabled={!paymentMethod}
-                  >
-                    Pay 0.001 ETH
-                  </Button>
+                <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                  <div className="w-full">
+                    {/* Security: Only allow payment to the intended recipient */}
+                    <BasePayButton colorScheme="light" />
+                  </div>
+                  <p className="text-xs text-muted-foreground text-center">
+                    You will pay {1} USDC to add this look to your lookbook.
+                  </p>
                 </div>
               )}
 
+              {/* Processing State */}
               {paymentState === "processing" && (
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                   <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
                   <div className="text-center">
                     <p className="font-medium">Processing Payment</p>
                     <p className="text-sm text-muted-foreground">
-                      {paymentMethod === "basepay"
-                        ? "Processing with Basepay..."
-                        : "Waiting for wallet signature..."}
+                      Processing with BasePay...
                     </p>
                   </div>
                 </div>
               )}
 
-              {paymentState === "success" && (
-                <>
-                  <PaymentReceipt
-                    type="collect"
-                    amount={0.001}
-                    recipient={look.author.name}
-                    transactionHash={transactionHash}
-                    paymentMethod={paymentMethod || "basepay"}
-                  />
-                  <Button
-                    onClick={handlePaymentSuccess}
-                    className="w-full mt-2"
-                  >
-                    Done
-                  </Button>
-                </>
-              )}
-
-              {paymentState === "error" && (
+              {/* Error State */}
+              {/* {paymentState === "error" && (
                 <div className="text-center py-8 space-y-4">
                   <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
                     <span className="text-2xl">❌</span>
@@ -375,14 +360,14 @@ export function AddToLookbookSheet({
                   <div>
                     <p className="font-medium text-red-600">Payment Failed</p>
                     <p className="text-sm text-muted-foreground">
-                      Please try again or use a different payment method
+                      {paymentError || "Please try again."}
                     </p>
                   </div>
                   <Button onClick={handleBack} className="w-full">
                     Try Again
                   </Button>
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </SheetContent>

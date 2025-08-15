@@ -320,10 +320,10 @@ export default function LookbookDetailsPage() {
                         fid: selectedLook.author.fid,
                         name: selectedLook.author.name,
                       },
-                      
+
                       tips: selectedLook.tips,
                       collections: selectedLook.collections,
-                      
+
                       createdAt: new Date(),
                       isPublic: true,
                       authorId: `author-${selectedLook.author.fid}`,
@@ -351,10 +351,10 @@ export default function LookbookDetailsPage() {
                         fid: selectedLook.author.fid,
                         name: selectedLook.author.name,
                       },
-                      
+
                       tips: selectedLook.tips,
                       collections: selectedLook.collections,
-                      
+
                       createdAt: new Date(),
                       isPublic: true,
                       authorId: `author-${selectedLook.author.fid}`,

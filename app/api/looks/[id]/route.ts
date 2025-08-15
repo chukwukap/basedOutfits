@@ -18,7 +18,8 @@ export async function GET(req: Request) {
       },
     });
 
-    if (!look) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!look)
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     const payload = {
       id: look.id,
@@ -53,10 +54,11 @@ export async function GET(req: Request) {
     return NextResponse.json(payload);
   } catch (error) {
     console.error("GET /api/looks/[id] error", error);
-    return NextResponse.json({ error: "Failed to fetch look" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch look" },
+      { status: 500 },
+    );
   }
 }
 
 export const dynamic = "force-dynamic";
-
-
