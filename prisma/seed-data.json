@@ -103,7 +103,7 @@
     {
       "authorUsername": "demo",
       "caption": "Lagos Street Style",
-      "description": "Bold Ankara patterns with modern sneakers.",
+      "description": "Bold Ankara patterns with my favorite sneakers—repping Lagos energy.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["African", "Ankara", "Streetwear"],
       "brands": ["Local Tailor"],
@@ -123,7 +123,7 @@
     {
       "authorUsername": "demo",
       "caption": "Kitenge Elegance",
-      "description": "Contemporary Kitenge suit for evening events.",
+      "description": "Suiting up in Kitenge—feels sharp, grounded, and ready for the night.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["African", "Kitenge", "Formal"],
       "brands": ["Custom"],
@@ -142,7 +142,7 @@
     {
       "authorUsername": "tokyo_minimal",
       "caption": "Tokyo Minimalist",
-      "description": "Clean lines, neutral palette, understated layers.",
+      "description": "Clean lines and quiet confidence—subtle layers that just work.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Asian", "Minimalist", "Urban"],
       "brands": ["Uniqlo", "Comme des Garçons"],
@@ -162,7 +162,7 @@
     {
       "authorUsername": "tokyo_minimal",
       "caption": "Hanbok Fusion",
-      "description": "Classic hanbok silhouette with modern fabrics.",
+      "description": "A modern hanbok twist—soft movement, timeless shape, totally me.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Asian", "Traditional", "Fusion"],
       "brands": ["Independent"],
@@ -181,7 +181,7 @@
     {
       "authorUsername": "demo",
       "caption": "NYC Street Classic",
-      "description": "Denim, tees, and high-tops—timeless combo.",
+      "description": "Denim, white tee, high-tops—NYC classic. Simple, loud, iconic.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["American", "Streetwear", "Denim"],
       "brands": ["Levi's", "Converse"],
@@ -200,7 +200,7 @@
     {
       "authorUsername": "paris_chic",
       "caption": "LA Red Carpet Ready",
-      "description": "Elegant evening dress with metallic accents.",
+      "description": "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful. Perfect for those special occasions when you want to make an impression.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["American", "Evening", "Elegant"],
       "brands": ["Vintage", "Mango"],
@@ -219,7 +219,7 @@
     {
       "authorUsername": "paris_chic",
       "caption": "Parisian Chic",
-      "description": "Trench coat, tailored trousers, silk scarf.",
+      "description": "Trench on, scarf tied—effortless Parisian vibe with a polished edge.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["European", "Chic", "Trench"],
       "brands": ["Burberry", "COS"],
@@ -238,7 +238,7 @@
     {
       "authorUsername": "mumbai_festive",
       "caption": "Festive Sari Glow",
-      "description": "Traditional sari with contemporary drape.",
+      "description": "Sari drape with a modern swing—festive, elegant, and full of joy.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Indian", "Festive", "Traditional"],
       "brands": ["Local Designer"],
@@ -257,7 +257,7 @@
     {
       "authorUsername": "demo",
       "caption": "Desert Modern",
-      "description": "Flowing silhouettes and refined neutrals.",
+      "description": "Refined neutrals and flowing lines—quiet luxury in the desert heat.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["MiddleEast", "Modern", "Neutrals"],
       "brands": ["Independent"],
@@ -273,7 +273,7 @@
     {
       "authorUsername": "lagos_style",
       "caption": "São Paulo Colors",
-      "description": "Vibrant prints with relaxed tailoring.",
+      "description": "Colorful, relaxed, and easy to move in—street-ready and smile-ready.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Latin", "Vibrant", "Casual"],
       "brands": ["H&M", "Zara"],
@@ -292,7 +292,7 @@
     {
       "authorUsername": "paris_chic",
       "caption": "Scandi Minimal",
-      "description": "Monochrome layers with functional design.",
+      "description": "Monochrome and functional—weather-proof and Insta-ready.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Scandinavian", "Minimalist", "Functional"],
       "brands": ["Acne Studios", "Arket"],
@@ -311,7 +311,7 @@
     {
       "authorUsername": "seoul_street",
       "caption": "Seoul Night Layers",
-      "description": "Oversized blazer with cropped top and wide pants.",
+      "description": "Oversized blazer, cropped top, wide pants—Seoul night energy.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Asian", "Streetwear", "Oversized"],
       "brands": ["ADER error", "Gentle Monster"],
@@ -331,7 +331,7 @@
     {
       "authorUsername": "nairobi_tailor",
       "caption": "Tailored Ankara Suit",
-      "description": "Fitted blazer and tapered trousers in Ankara.",
+      "description": "Tailored Ankara fit—bold pattern, sharp cut. Feels unstoppable.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["African", "Tailored", "Ankara"],
       "brands": ["Custom"],
@@ -350,7 +350,7 @@
     {
       "authorUsername": "nyc_vintage",
       "caption": "Vintage Denim Mix",
-      "description": "Patchwork jacket with thrifted finds.",
+      "description": "Thrifted patchwork denim and stories stitched in every seam.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Vintage", "Denim", "American"],
       "brands": ["Levi's"],
@@ -369,7 +369,7 @@
     {
       "authorUsername": "cph_functional",
       "caption": "Functional Monochrome",
-      "description": "Weatherproof outerwear with minimalist silhouette.",
+      "description": "Minimal shell, clean lines—built for rain, made for photos.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Scandinavian", "Functional", "Minimalist"],
       "brands": ["RAINS", "Arket"],
@@ -388,7 +388,7 @@
     {
       "authorUsername": "rio_carnival",
       "caption": "Carnival Spark",
-      "description": "Sequins, feathers, and vibrant hues.",
+      "description": "Sequins, feathers, sunshine—instant festival mood.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Latin", "Festival", "Vibrant"],
       "brands": ["Handmade"],
@@ -407,7 +407,7 @@
     {
       "authorUsername": "beijing_modern",
       "caption": "Beijing Techwear",
-      "description": "Urban techwear with modular pockets.",
+      "description": "Techwear with modular pockets—future city uniform.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Asian", "Techwear", "Urban"],
       "brands": ["Stone Island", "Nike ACG"],
@@ -426,7 +426,7 @@
     {
       "authorUsername": "casablanca_elegance",
       "caption": "Medina Elegance",
-      "description": "Flowing kaftan in soft earth tones.",
+      "description": "Soft earth tones in a flowing kaftan—calm, elegant, effortless.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["MiddleEast", "Traditional", "Elegant"],
       "brands": ["Artisan"],
@@ -442,7 +442,7 @@
     {
       "authorUsername": "capetown_coastal",
       "caption": "Coastal Ease",
-      "description": "Linen shirt, shorts, and sandals.",
+      "description": "Linen shirt and shorts—breeze on skin, salt in the air.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["African", "Coastal", "Casual"],
       "brands": ["Local"],
@@ -462,7 +462,7 @@
     {
       "authorUsername": "igbo_senator",
       "caption": "Igbo Senator - Navy",
-      "description": "Classic senator wear in deep navy with embroidered neckline.",
+      "description": "Classic senator in deep navy—royal vibes with bold red cap.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Nigerian", "Igbo", "Senator", "Traditional"],
       "brands": ["Local Tailor"],
@@ -481,7 +481,7 @@
     {
       "authorUsername": "igbo_senator",
       "caption": "Igbo Senator - Cream",
-      "description": "Cream senator set with red cap and beaded accessories.",
+      "description": "Cream senator fit with red cap—heritage and heat in one look.",
       "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Nigerian", "Igbo", "Senator", "Traditional"],
       "brands": ["Artisan"],
