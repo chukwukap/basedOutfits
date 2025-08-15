@@ -225,7 +225,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     !images.some((img) => img.uploading);
 
   return (
-    <Card className="p-6 pb-28 md:pb-6">
+    <Card className="p-6 pb-28 md:pb-6 border-none shadow-none">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Image Upload */}
         <div>
@@ -312,7 +312,9 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
                     <div className="flex flex-col items-center justify-center py-10 px-4">
                       <Upload className="w-8 h-8 text-muted-foreground mb-3" />
                       <p className="text-sm font-medium text-center">
-                        {dragActive ? "Drop photos here" : "Upload photos or drag & drop"}
+                        {dragActive
+                          ? "Drop photos here"
+                          : "Upload photos or drag & drop"}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         PNG, JPG up to 10MB each
@@ -403,35 +405,26 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
         </div>
       </form>
 
-      {/* Sticky action bar (mobile) */}
-      <div
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/90 backdrop-blur border-t p-3"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)" }}
-      >
-        <div className="flex items-center gap-2">
-          <div className="flex-1">
-            <p className="text-xs text-muted-foreground">
-              {!isFormValid
-                ? images.length === 0
-                  ? "Add at least one photo"
-                  : !title.trim()
-                    ? "Add a title"
-                    : "Uploading images..."
-                : "Ready to post"}
-            </p>
-          </div>
-          <Button
-            type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              void handleSubmit(e as unknown as React.FormEvent);
-            }}
-            className="h-12 px-6"
-            disabled={!isFormValid || posting}
-          >
-            {posting ? "Posting..." : "Post"}
-          </Button>
-        </div>
+      {/* Mobile action bar (now styled the same as desktop submit) */}
+      <div className="pt-4 md:hidden">
+        <Button
+          type="submit"
+          className="w-full h-12 text-base font-semibold"
+          disabled={!isFormValid || posting}
+          onClick={(e) => {
+            e.preventDefault();
+            void handleSubmit(e as unknown as React.FormEvent);
+          }}
+        >
+          {posting ? (
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Posting Look...
+            </div>
+          ) : (
+            "Post Look"
+          )}
+        </Button>
       </div>
     </Card>
   );
