@@ -3,6 +3,7 @@
 import { Dialog, DialogContent } from "@/app/_components/ui/dialog";
 import { Button } from "@/app/_components/ui/button";
 import { CheckCircle, Home, Share2 } from "lucide-react";
+import { useComposeCast } from "@coinbase/onchainkit/minikit";
 import { LookFetchPayload } from "@/lib/types";
 import Image from "next/image";
 
@@ -19,20 +20,17 @@ export function PostSuccessModal({
   look,
   onClose,
 }: PostSuccessModalProps) {
+  const { composeCast } = useComposeCast();
+
   const handleShare = async () => {
     if (!look) return;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `Check out my look: ${look.caption}`,
-          text: `I just posted a new look on Looks!`,
-          url: `${window.location.origin}/look/${look.id}`,
-        });
-      } catch (err) {
-        console.error("Share cancelled", err);
-      }
-    } else {
+    // Prefer MiniKit compose flow with embed
+    try {
+      composeCast({
+        text: `I just posted a new look on Looks! ${look.caption ?? ""} #Looks`,
+        embeds: [`${window.location.origin}/look/${look.id}`],
+      });
+    } catch {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(
         `Check out my look: ${look.caption} - ${window.location.origin}/look/${look.id}`,

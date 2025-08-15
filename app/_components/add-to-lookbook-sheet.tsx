@@ -15,13 +15,14 @@ import {
 } from "@/app/_components/ui/avatar";
 import { Badge } from "@/app/_components/ui/badge";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
-import { Plus, Lock, Globe, ArrowLeft } from "lucide-react";
+import { Plus, Lock, Globe, ArrowLeft, Share2 } from "lucide-react";
 import { CreateLookbookModal } from "@/app/lookbooks/_components/create-lookbook-modal";
 import Image from "next/image";
 import { LookFetchPayload } from "@/lib/types";
 import { BasePayButton } from "@base-org/account-ui/react";
 import { pay } from "@base-org/account";
 import { useUser } from "@/hooks/useUser";
+import { useComposeCast } from "@coinbase/onchainkit/minikit";
 
 interface Lookbook {
   id: string;
@@ -74,6 +75,7 @@ export function AddToLookbookSheet({
     null,
   );
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const { composeCast } = useComposeCast();
 
   useEffect(() => {
     const currentUserId = mini.username || mini.fid || "";
@@ -396,10 +398,8 @@ export function AddToLookbookSheet({
                       // Best-effort share
                       try {
                         // Lazy import to avoid SSR issues
-                        const { useComposeCast } = require("@coinbase/onchainkit/minikit");
-                        const { composeCast } = useComposeCast();
                         composeCast({
-                          text: `I just added a new look to my Lookbook on Looks! #Lookbook`,
+                          text: `I just added a new look to my Lookbook on Looks! #Looks`,
                           embeds: [
                             `${typeof window !== "undefined" ? window.location.origin : ""}/look/${look.id}`,
                           ],

@@ -55,7 +55,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
     composeCast({
-      text: `I just discovered "${look.caption || "this look"}" on Looks! #Lookbook`,
+      text: `I just discovered "${look.caption || "this look"}" on Looks! #Looks`,
       embeds: [`${window.location.origin}/look/${look.id}`],
     });
   };

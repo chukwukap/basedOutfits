@@ -10,11 +10,16 @@ interface ComposeCastButtonProps {
   children?: React.ReactNode;
 }
 
-export function ComposeCastButton({ text, embeds, className, children }: ComposeCastButtonProps) {
+export function ComposeCastButton({
+  text,
+  embeds,
+  className,
+  children,
+}: ComposeCastButtonProps) {
   const { composeCast } = useComposeCast();
 
   const onClick = () => {
-    composeCast({ text, embeds });
+    composeCast({ text, embeds: embeds as [string, string] | undefined });
   };
 
   return (
@@ -23,5 +28,3 @@ export function ComposeCastButton({ text, embeds, className, children }: Compose
     </Button>
   );
 }
-
-
