@@ -14,6 +14,7 @@ import { Label } from "@/app/_components/ui/label";
 import { Switch } from "@/app/_components/ui/switch";
 import { Upload, ImageIcon } from "lucide-react";
 import Image from "next/image";
+import { useUser } from "@/hooks/useUser";
 // Passing a minimal lookbook payload upward; parent composes full object
 type NewLookbookPayload = {
   name: string;
@@ -36,6 +37,7 @@ export function CreateLookbookModal({
   onOpenChange,
   onSave,
 }: CreateLookbookModalProps) {
+  const { mini, db } = useUser();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(false);
@@ -67,8 +69,9 @@ export function CreateLookbookModal({
   const handleSave = async () => {
     if (!name.trim()) return;
 
-    // Owner is required by schema; take from local storage or fallback
-    const ownerId = localStorage.getItem("current_user_id") || "demo-user";
+    // Owner is required by schema; prefer DB id or username/fid, fallback to local storage
+    const ownerId =
+      db?.id || mini.username || mini.fid || localStorage.getItem("current_user_id") || "demo";
 
     try {
       // Persist server-side
@@ -95,7 +98,7 @@ export function CreateLookbookModal({
         isPublic: created.isPublic,
         coverImage: created.coverImage ?? "/placeholder.svg",
         owner: {
-          walletAddress: ,
+          walletAddress: db?.walletAddress || mini.walletAddress || "",
         },
       });
 
