@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -36,6 +36,29 @@ export function CreateLookbookModal({
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [coverImage, setCoverImage] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleChooseImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) return;
+    try {
+      setUploading(true);
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = (await res.json()) as { url: string };
+      setCoverImage(data.url);
+    } catch {
+      // keep silent; could show toast
+    } finally {
+      setUploading(false);
+      // reset input value so the same file can be re-selected if needed
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
 
   const handleSave = async () => {
     if (!name.trim()) return;
@@ -107,10 +130,34 @@ export function CreateLookbookModal({
                   Upload a cover image or leave blank to use the first look
                   added
                 </p>
-                <Button variant="outline" size="sm" className="bg-transparent">
+                {coverImage && (
+                  <img
+                    src={coverImage}
+                    alt="Cover preview"
+                    className="mt-2 h-24 w-24 object-cover rounded"
+                  />
+                )}
+                {uploading && (
+                  <div className="text-xs text-muted-foreground">Uploading…</div>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-transparent"
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                >
                   <Upload className="w-4 h-4 mr-2" />
                   Choose Image
                 </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleChooseImage}
+                />
               </div>
             </div>
           </div>
