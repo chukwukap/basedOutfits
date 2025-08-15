@@ -41,16 +41,18 @@ async function seedLooks(users) {
   const current = await prisma.look.count();
   if (current > 0) return;
   const { looks: lookInputs } = readSeedData();
-  const looks = lookInputs.map((l) => ({
-    authorId: byUsername[l.authorUsername]?.id,
-    caption: l.caption,
-    description: l.description,
-    imageUrls: l.imageUrls,
-    tags: l.tags,
-    brands: l.brands,
-    location: l.location,
-    isPublic: l.isPublic,
-  })).filter((l) => !!l.authorId);
+  const looks = lookInputs
+    .map((l) => ({
+      authorId: byUsername[l.authorUsername]?.id,
+      caption: l.caption,
+      description: l.description,
+      imageUrls: l.imageUrls,
+      tags: l.tags,
+      brands: l.brands,
+      location: l.location,
+      isPublic: l.isPublic,
+    }))
+    .filter((l) => !!l.authorId);
 
   for (const l of looks) {
     await prisma.look.create({ data: l });
@@ -77,10 +79,64 @@ async function seedLookbooks(users) {
   }
 }
 
+async function seedLookbookItems() {
+  // Fetch created lookbooks and looks
+  const lookbooks = await prisma.lookbook.findMany({
+    include: { owner: true },
+  });
+  const looks = await prisma.look.findMany();
+
+  if (lookbooks.length === 0 || looks.length === 0) return;
+
+  const byName = Object.fromEntries(lookbooks.map((lb) => [lb.name, lb]));
+
+  const minimalLb = byName["Minimalist Chic"];
+  const streetLb = byName["Global Streetwear"];
+  const festiveLb = byName["Festive & Traditional"];
+
+  const classify = (tags) => {
+    const lower = (tags || []).map((t) => t.toLowerCase());
+    const hasAny = (...keys) =>
+      keys.some((k) => lower.includes(k.toLowerCase()));
+
+    const targets = [];
+    if (hasAny("minimalist", "scandinavian", "functional", "chic", "trench")) {
+      if (minimalLb) targets.push(minimalLb);
+    }
+    if (hasAny("streetwear", "denim", "urban", "ankara", "latin", "casual")) {
+      if (streetLb) targets.push(streetLb);
+    }
+    if (hasAny("traditional", "festive", "kitenge", "indian", "middleeast")) {
+      if (festiveLb) targets.push(festiveLb);
+    }
+    // Fallback
+    if (targets.length === 0 && streetLb) targets.push(streetLb);
+    return targets;
+  };
+
+  for (const look of looks) {
+    const targets = classify(look.tags);
+    for (const lb of targets) {
+      try {
+        await prisma.lookbookItem.create({
+          data: {
+            lookId: look.id,
+            lookbookId: lb.id,
+            addedById: lb.ownerId,
+          },
+        });
+      } catch {
+        // ignore duplicates due to @@unique([lookId, lookbookId])
+      }
+    }
+  }
+}
+
 async function main() {
   const users = await upsertUsers();
   await seedLooks(users);
   await seedLookbooks(users);
+  await seedLookbookItems();
   console.log("Seed complete");
 }
 
