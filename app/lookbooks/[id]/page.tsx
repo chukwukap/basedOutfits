@@ -41,11 +41,10 @@ const mockLookbooks = {
           avatar: "/diverse-group-profile.png",
           fid: "sarahc",
         },
-        tags: ["summer", "beach", "casual"],
-        brands: ["Zara", "H&M"],
+        // simplified: no tags/brands
         tips: 15,
         collections: 8,
-        location: "Malibu",
+        // simplified: no location
         createdAt: "2 days ago",
         addedAt: "2024-01-20",
       },
@@ -59,11 +58,10 @@ const mockLookbooks = {
           avatar: "/diverse-group-profile.png",
           fid: "alexr",
         },
-        tags: ["brunch", "weekend", "bright"],
-        brands: ["Mango", "COS"],
+        // simplified: no tags/brands
         tips: 22,
         collections: 12,
-        location: "LA",
+        // simplified: no location
         createdAt: "3 days ago",
         addedAt: "2024-01-19",
       },
@@ -77,11 +75,10 @@ const mockLookbooks = {
           avatar: "/diverse-group-profile.png",
           fid: "jordank",
         },
-        tags: ["festival", "boho", "music"],
-        brands: ["Free People", "Urban Outfitters"],
+        // simplified: no tags/brands
         tips: 18,
         collections: 15,
-        location: "Coachella",
+        // simplified: no location
         createdAt: "1 week ago",
         addedAt: "2024-01-18",
       },
@@ -111,11 +108,10 @@ const mockLookbooks = {
           avatar: "/diverse-group-profile.png",
           fid: "tswift",
         },
-        tags: ["business", "professional", "meeting"],
-        brands: ["Uniqlo", "Everlane"],
+        // simplified: no tags/brands
         tips: 9,
         collections: 12,
-        location: "NYC",
+        // simplified: no location
         createdAt: "5 days ago",
         addedAt: "2024-01-16",
       },
@@ -129,11 +125,10 @@ const mockLookbooks = {
           avatar: "/diverse-group-profile.png",
           fid: "mayap",
         },
-        tags: ["casual", "friday", "office"],
-        brands: ["Loft", "Banana Republic"],
+        // simplified: no tags/brands
         tips: 14,
         collections: 7,
-        location: "SF",
+        // simplified: no location
         createdAt: "1 week ago",
         addedAt: "2024-01-15",
       },
@@ -325,11 +320,10 @@ export default function LookbookDetailsPage() {
                         fid: selectedLook.author.fid,
                         name: selectedLook.author.name,
                       },
-                      tags: selectedLook.tags,
-                      brands: selectedLook.brands,
+                      
                       tips: selectedLook.tips,
                       collections: selectedLook.collections,
-                      location: selectedLook.location ?? "",
+                      
                       createdAt: new Date(),
                       isPublic: true,
                       authorId: `author-${selectedLook.author.fid}`,
@@ -357,11 +351,10 @@ export default function LookbookDetailsPage() {
                         fid: selectedLook.author.fid,
                         name: selectedLook.author.name,
                       },
-                      tags: selectedLook.tags,
-                      brands: selectedLook.brands,
+                      
                       tips: selectedLook.tips,
                       collections: selectedLook.collections,
-                      location: selectedLook.location ?? "",
+                      
                       createdAt: new Date(),
                       isPublic: true,
                       authorId: `author-${selectedLook.author.fid}`,

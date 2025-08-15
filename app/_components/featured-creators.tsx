@@ -21,7 +21,7 @@ type FeaturedCreator = {
   totalLooks: number;
   isFollowing: boolean;
   isFeatured: boolean;
-  tags: string[];
+  // simplified: no tags
 };
 
 async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
@@ -42,7 +42,6 @@ async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
         totalLooks: u.totalLooks,
         isFollowing: false,
         isFeatured: true,
-        tags: [],
       });
     }
   }

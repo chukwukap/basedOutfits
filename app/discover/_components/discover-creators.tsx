@@ -10,70 +10,21 @@ import {
 import { Card } from "@/app/_components/ui/card";
 
 const suggestedCreators = [
-  {
-    id: "1",
-    name: "Emma Style",
-    username: "@emmastyle",
-    avatar: "/diverse-group-profile.png",
-    followers: "12.5K",
-    tags: ["Streetwear", "Bold"],
-    isFollowing: false,
-  },
-  {
-    id: "2",
-    name: "Min Chen",
-    username: "@minimalmin",
-    avatar: "/diverse-group-profile.png",
-    followers: "8.2K",
-    tags: ["Minimalist", "OfficeChic"],
-    isFollowing: false,
-  },
-  {
-    id: "3",
-    name: "Alex Urban",
-    username: "@alexurban",
-    avatar: "/diverse-group-profile.png",
-    followers: "15.1K",
-    tags: ["Urban", "Weekend"],
-    isFollowing: false,
-  },
-  {
-    id: "4",
-    name: "Sofia Chic",
-    username: "@sofiachic",
-    avatar: "/diverse-group-profile.png",
-    followers: "9.8K",
-    tags: ["DateNight", "Professional"],
-    isFollowing: false,
-  },
-  {
-    id: "5",
-    name: "Rio Street",
-    username: "@riostreet",
-    avatar: "/diverse-group-profile.png",
-    followers: "11.3K",
-    tags: ["SummerFits", "Accessories"],
-    isFollowing: false,
-  },
+  { id: "1", name: "Emma Style", username: "@emmastyle", avatar: "/diverse-group-profile.png", followers: "12.5K", isFollowing: false },
+  { id: "2", name: "Min Chen", username: "@minimalmin", avatar: "/diverse-group-profile.png", followers: "8.2K", isFollowing: false },
+  { id: "3", name: "Alex Urban", username: "@alexurban", avatar: "/diverse-group-profile.png", followers: "15.1K", isFollowing: false },
+  { id: "4", name: "Sofia Chic", username: "@sofiachic", avatar: "/diverse-group-profile.png", followers: "9.8K", isFollowing: false },
+  { id: "5", name: "Rio Street", username: "@riostreet", avatar: "/diverse-group-profile.png", followers: "11.3K", isFollowing: false },
 ];
 
-interface DiscoverCreatorsProps {
-  selectedTag: string | null;
-}
+interface DiscoverCreatorsProps {}
 
-export function DiscoverCreators({ selectedTag }: DiscoverCreatorsProps) {
+export function DiscoverCreators({}: DiscoverCreatorsProps) {
   const [followingStates, setFollowingStates] = useState<
     Record<string, boolean>
   >({});
 
-  // Filter creators based on selected tag
-  const filteredCreators = selectedTag
-    ? suggestedCreators.filter((creator) =>
-        creator.tags.some(
-          (tag) => tag.toLowerCase() === selectedTag.toLowerCase(),
-        ),
-      )
-    : suggestedCreators;
+  const filteredCreators = suggestedCreators;
 
   const handleFollow = (creatorId: string) => {
     setFollowingStates((prev) => ({
@@ -87,11 +38,7 @@ export function DiscoverCreators({ selectedTag }: DiscoverCreatorsProps) {
   return (
     <div className="px-4 py-6 border-t bg-muted/20">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-lg">
-          {selectedTag
-            ? `Creators posting #${selectedTag}`
-            : "Discover Creators"}
-        </h3>
+        <h3 className="font-semibold text-lg">Discover Creators</h3>
         <Button variant="ghost" size="sm" className="text-primary">
           See All
         </Button>

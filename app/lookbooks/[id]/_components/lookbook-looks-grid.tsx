@@ -16,7 +16,6 @@ import {
   MoreVertical,
   Trash2,
   ExternalLink,
-  MapPin,
   Clock,
 } from "lucide-react";
 import {
@@ -38,11 +37,8 @@ export interface Look {
     avatar: string;
     fid: string;
   };
-  tags: string[];
-  brands: string[];
   tips: number;
   collections: number;
-  location?: string;
   createdAt: string;
   addedAt: string;
 }
@@ -186,34 +182,10 @@ export function LookbookLooksGrid({
                   <span className="text-xs text-muted-foreground">
                     by {look.author.name}
                   </span>
-                  {look.location && (
-                    <>
-                      <span className="text-xs text-muted-foreground">•</span>
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        {look.location}
-                      </span>
-                    </>
-                  )}
+                  {/* location removed in simplified model */}
                 </div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1">
-                  {look.tags.slice(0, 3).map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant="secondary"
-                      className="text-xs px-2 py-0 h-5"
-                    >
-                      #{tag}
-                    </Badge>
-                  ))}
-                  {look.tags.length > 3 && (
-                    <Badge variant="outline" className="text-xs px-2 py-0 h-5">
-                      +{look.tags.length - 3}
-                    </Badge>
-                  )}
-                </div>
+                {/* tags removed in simplified model */}
 
                 {/* Stats and Actions */}
                 <div className="flex items-center justify-between pt-1">

@@ -301,7 +301,9 @@ function HomePageInner() {
                 <span className="text-2xl">👗</span>
               </div>
               <h3 className="font-semibold mb-2">No looks found</h3>
-              <p className="text-muted-foreground text-sm mb-4">No looks from people you follow</p>
+              <p className="text-muted-foreground text-sm mb-4">
+                No looks from people you follow
+              </p>
               <Button
                 variant="outline"
                 onClick={() => {
@@ -314,9 +316,7 @@ function HomePageInner() {
           )}
         </main>
 
-        {!loading && filteredLooks.length > 0 && (
-          <DiscoverCreators selectedTag={selectedTag} />
-        )}
+        {!loading && filteredLooks.length > 0 && <DiscoverCreators />}
       </div>
 
       {/* Modals */}
