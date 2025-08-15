@@ -71,7 +71,11 @@ export function CreateLookbookModal({
 
     // Owner is required by schema; prefer DB id or username/fid, fallback to local storage
     const ownerId =
-      db?.id || mini.username || mini.fid || localStorage.getItem("current_user_id") || "demo";
+      db?.id ||
+      mini.username ||
+      mini.fid ||
+      localStorage.getItem("current_user_id") ||
+      "demo";
 
     try {
       // Persist server-side

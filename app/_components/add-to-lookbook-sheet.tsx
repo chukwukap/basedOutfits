@@ -19,7 +19,6 @@ import { Plus, Lock, Globe, ArrowLeft } from "lucide-react";
 import { CreateLookbookModal } from "@/app/lookbooks/_components/create-lookbook-modal";
 import Image from "next/image";
 import { LookFetchPayload } from "@/lib/types";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { BasePayButton } from "@base-org/account-ui/react";
 import { pay } from "@base-org/account";
 import { useUser } from "@/hooks/useUser";
@@ -389,6 +388,27 @@ export function AddToLookbookSheet({
                       Look added to your lookbook!
                     </p>
                   </div>
+                  {/* Encourage sharing after success */}
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Best-effort share
+                      try {
+                        // Lazy import to avoid SSR issues
+                        const { useComposeCast } = require("@coinbase/onchainkit/minikit");
+                        const { composeCast } = useComposeCast();
+                        composeCast({
+                          text: `I just added a new look to my Lookbook on Looks! #Lookbook`,
+                          embeds: [
+                            `${typeof window !== "undefined" ? window.location.origin : ""}/look/${look.id}`,
+                          ],
+                        });
+                      } catch {}
+                    }}
+                  >
+                    <Share2 className="w-4 h-4 mr-2" /> Share
+                  </Button>
                 </div>
               )}
 

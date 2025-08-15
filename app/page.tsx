@@ -26,7 +26,7 @@ const fetcher = async (url: string): Promise<LookFetchPayload[]> => {
 };
 
 function HomePageInner() {
-  const { mini } = useUser();
+  useUser();
   const [selectedLook, setSelectedLook] = useState<LookFetchPayload | null>(
     null,
   );
