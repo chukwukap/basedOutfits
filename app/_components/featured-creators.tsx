@@ -29,7 +29,9 @@ async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
   const usernames = ["demo"]; // TODO: replace with real featured logic
   const results: FeaturedCreator[] = [];
   for (const username of usernames) {
-    const res = await fetch(`/api/users/${encodeURIComponent(username)}`, { cache: "no-store" });
+    const res = await fetch(`/api/users/${encodeURIComponent(username)}`, {
+      cache: "no-store",
+    });
     if (res.ok) {
       const u = await res.json();
       results.push({
@@ -52,7 +54,9 @@ export function FeaturedCreators() {
   const [creators, setCreators] = useState<FeaturedCreator[]>([]);
 
   useEffect(() => {
-    fetchFeaturedCreators().then(setCreators).catch(() => setCreators([]));
+    fetchFeaturedCreators()
+      .then(setCreators)
+      .catch(() => setCreators([]));
   }, []);
 
   const handleFollowCreator = (username: string) => {
@@ -165,18 +169,7 @@ export function FeaturedCreators() {
                 </div>
               </div>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1">
-                {creator.tags.slice(0, 3).map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="outline"
-                    className="text-xs px-2 py-0 h-5"
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+              {/* Tags removed in simplified model */}
             </div>
           </Card>
         ))}
