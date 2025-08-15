@@ -322,76 +322,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
           </p>
         </div>
 
-        {/* Tags */}
-        <div>
-          <Label className="text-base font-semibold flex items-center gap-2">
-            <Tag className="w-4 h-4" />
-            Tags
-          </Label>
-          <p className="text-sm text-muted-foreground mt-1">
-            Add up to 8 tags to help others discover your look
-          </p>
-
-          {/* Current tags */}
-          {/* simplified: no tags/brands handlers */}
-
-          {/* Tag input */}
-          {/* simplified: no tags/brands handlers */}
-
-          {/* Popular tags */}
-          <div className="mt-3">
-            <p className="text-xs text-muted-foreground mb-2">Popular tags:</p>
-            <div className="flex flex-wrap gap-2">
-              {/* simplified: no tags/brands suggestions */}
-            </div>
-          </div>
-        </div>
-
-        {/* Brands */}
-        <div>
-          <Label className="text-base font-semibold flex items-center gap-2">
-            <Sparkles className="w-4 h-4" />
-            Brands (Optional)
-          </Label>
-          <p className="text-sm text-muted-foreground mt-1">
-            Tag up to 5 brands featured in your look
-          </p>
-
-          {/* Current brands */}
-          {/* simplified: no tags/brands handlers */}
-
-          {/* Brand input */}
-          {/* simplified: no tags/brands handlers */}
-
-          {/* Popular brands */}
-          <div className="mt-3">
-            <p className="text-xs text-muted-foreground mb-2">
-              Popular brands:
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {/* simplified: no tags/brands suggestions */}
-            </div>
-          </div>
-        </div>
-
-        {/* Location */}
-        <div>
-          <Label
-            htmlFor="location"
-            className="text-base font-semibold flex items-center gap-2"
-          >
-            <MapPin className="w-4 h-4" />
-            Location (Optional)
-          </Label>
-          <Input
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Where was this look worn? (e.g., New York, Paris, Tokyo)"
-            className="mt-2"
-            maxLength={50}
-          />
-        </div>
+        {/* Tags/Brands/Location removed to match simplified schema */}
 
         {/* Submit */}
         <div className="pt-4">
