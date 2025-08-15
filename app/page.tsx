@@ -12,7 +12,7 @@ import { DiscoverCreators } from "./discover/_components/discover-creators";
 import { RefreshCw, Users, Globe } from "lucide-react";
 import { Button } from "./_components/ui/button";
 import { LookFetchPayload } from "@/lib/types";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useAccount } from "wagmi";
 import Image from "next/image";
@@ -26,7 +26,7 @@ async function fetchLooks(params: { following?: boolean }) {
 }
 
 function HomePageInner() {
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const { context } = useMiniKit();
   const { address: walletAddress } = useAccount();
   const [looks, setLooks] = useState<LookFetchPayload[]>([]);
@@ -82,7 +82,7 @@ function HomePageInner() {
 
     if (onboardingChecked) loadFeed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onboardingChecked, feedType, searchParams]);
+  }, [onboardingChecked, feedType]);
 
   useEffect(() => {
     let filtered = looks;
@@ -95,13 +95,12 @@ function HomePageInner() {
     // No tag filtering in simplified model
 
     setFilteredLooks(filtered);
-  }, [looks, selectedTag, feedType]);
+  }, [looks, feedType]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
       const data = await fetchLooks({
-        tag: selectedTag,
         following: feedType === "following",
       });
       setLooks(data);
