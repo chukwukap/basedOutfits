@@ -41,8 +41,7 @@ export function CreateLookbookModal({
     if (!name.trim()) return;
 
     // Owner is required by schema; take from local storage or fallback
-    const ownerId =
-      localStorage.getItem("current_user_id") || "demo-user";
+    const ownerId = localStorage.getItem("current_user_id") || "demo-user";
 
     try {
       // Persist server-side
@@ -76,7 +75,7 @@ export function CreateLookbookModal({
       setIsPublic(false);
       setCoverImage("");
       onOpenChange(false);
-    } catch (e) {
+    } catch {
       // No-op UI error surface (could add toast)
     }
   };
