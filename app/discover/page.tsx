@@ -1,38 +1,31 @@
-"use client";
+import DiscoverPageClient from "./_components/discover-page-client";
+import { Metadata } from "next";
 
-import { useState } from "react";
-import { BottomNav } from "@/app/_components/bottom-nav";
-import { DiscoverHeader } from "@/app/discover/_components/discover-header";
-import { TrendingLookbooks } from "@/app/_components/trending-lookbooks";
-import { FeaturedCreators } from "@/app/_components/featured-creators";
+export async function generateMetadata(): Promise<Metadata> {
+  const URL = process.env.NEXT_PUBLIC_URL;
+  return {
+    title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+    description: "Your Mini App description here",
+    other: {
+      "fc:frame": JSON.stringify({
+        version: "next",
+        imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
+        button: {
+          title: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
+          action: {
+            type: "launch_frame",
+            name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+            url: URL,
+            splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
+            splashBackgroundColor:
+              process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
+          },
+        },
+      }),
+    },
+  };
+}
 
 export default function DiscoverPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  return (
-    <div className="min-h-screen bg-background pb-20">
-      {/* Header */}
-      <DiscoverHeader
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-      />
-
-      {/* Main Content */}
-      <main className="p-4 space-y-6">
-        {/* Trending Lookbooks */}
-        <TrendingLookbooks
-          searchQuery={searchQuery}
-          selectedCategory={selectedCategory}
-        />
-
-        {/* Featured Creators */}
-        <FeaturedCreators />
-      </main>
-
-      <BottomNav />
-    </div>
-  );
+  return <DiscoverPageClient />;
 }
