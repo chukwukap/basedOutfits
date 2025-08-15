@@ -10,15 +10,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
 import { Card } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";
-import {
-  Heart,
-  DollarSign,
-  MapPin,
-  Calendar,
-  Users,
-  Palette,
-  Sparkles,
-} from "lucide-react";
+import { Heart, DollarSign, Calendar, Users } from "lucide-react";
 
 interface Look {
   id: string;

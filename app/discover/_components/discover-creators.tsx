@@ -10,14 +10,49 @@ import {
 import { Card } from "@/app/_components/ui/card";
 
 const suggestedCreators = [
-  { id: "1", name: "Emma Style", username: "@emmastyle", avatar: "/diverse-group-profile.png", followers: "12.5K", isFollowing: false },
-  { id: "2", name: "Min Chen", username: "@minimalmin", avatar: "/diverse-group-profile.png", followers: "8.2K", isFollowing: false },
-  { id: "3", name: "Alex Urban", username: "@alexurban", avatar: "/diverse-group-profile.png", followers: "15.1K", isFollowing: false },
-  { id: "4", name: "Sofia Chic", username: "@sofiachic", avatar: "/diverse-group-profile.png", followers: "9.8K", isFollowing: false },
-  { id: "5", name: "Rio Street", username: "@riostreet", avatar: "/diverse-group-profile.png", followers: "11.3K", isFollowing: false },
+  {
+    id: "1",
+    name: "Emma Style",
+    username: "@emmastyle",
+    avatar: "/diverse-group-profile.png",
+    followers: "12.5K",
+    isFollowing: false,
+  },
+  {
+    id: "2",
+    name: "Min Chen",
+    username: "@minimalmin",
+    avatar: "/diverse-group-profile.png",
+    followers: "8.2K",
+    isFollowing: false,
+  },
+  {
+    id: "3",
+    name: "Alex Urban",
+    username: "@alexurban",
+    avatar: "/diverse-group-profile.png",
+    followers: "15.1K",
+    isFollowing: false,
+  },
+  {
+    id: "4",
+    name: "Sofia Chic",
+    username: "@sofiachic",
+    avatar: "/diverse-group-profile.png",
+    followers: "9.8K",
+    isFollowing: false,
+  },
+  {
+    id: "5",
+    name: "Rio Street",
+    username: "@riostreet",
+    avatar: "/diverse-group-profile.png",
+    followers: "11.3K",
+    isFollowing: false,
+  },
 ];
 
-interface DiscoverCreatorsProps {}
+type DiscoverCreatorsProps = object;
 
 export function DiscoverCreators({}: DiscoverCreatorsProps) {
   const [followingStates, setFollowingStates] = useState<

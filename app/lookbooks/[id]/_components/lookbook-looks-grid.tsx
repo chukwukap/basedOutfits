@@ -4,7 +4,6 @@ import type React from "react";
 
 import { Card } from "@/app/_components/ui/card";
 import { Button } from "@/app/_components/ui/button";
-import { Badge } from "@/app/_components/ui/badge";
 import {
   Avatar,
   AvatarFallback,

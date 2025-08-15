@@ -56,7 +56,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFiles(Array.from(e.dataTransfer.files));
     }
-  }, []);
+  }, [handleFiles]);
 
   const uploadFile = async (file: File): Promise<string> => {
     const fd = new FormData();
