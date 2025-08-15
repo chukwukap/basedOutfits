@@ -10,8 +10,7 @@ import { CollectModal } from "./_components/collect-modal";
 import { OnboardingTutorial } from "./_components/onboarding-tutorial";
 import { DiscoverCreators } from "./discover/_components/discover-creators";
 import { LookFetchPayload } from "@/lib/types";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
-import { useAccount } from "wagmi";
+import { useUser } from "@/hooks/useUser";
 import Image from "next/image";
 import { useTheme } from "@/contexts/theme-context";
 
@@ -27,8 +26,7 @@ const fetcher = async (url: string): Promise<LookFetchPayload[]> => {
 };
 
 function HomePageInner() {
-  const { context } = useMiniKit();
-  const { address: walletAddress } = useAccount();
+  const { mini } = useUser();
   const [selectedLook, setSelectedLook] = useState<LookFetchPayload | null>(
     null,
   );
@@ -138,28 +136,7 @@ function HomePageInner() {
     localStorage.setItem("looks_onboarding_completed", "true");
     setShowOnboarding(false);
     // On first-time completion, if context exists, ensure user exists in DB
-    try {
-      const c = context || null;
-      const fid = c?.user?.fid?.toString();
-      const username = c?.user?.username;
-      const name = c?.user?.displayName;
-      const avatarUrl = c?.user?.pfpUrl;
-      if (fid && username) {
-        fetch("/api/users/me", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            fid,
-            username,
-            name,
-            avatarUrl,
-            walletAddress,
-          }),
-        });
-      }
-    } catch {
-      // Fail silently for onboarding user creation
-    }
+    // no-op here: user sync handled globally by useUser()
   };
 
   // Scroll direction logic

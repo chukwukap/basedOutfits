@@ -20,6 +20,9 @@ type NewLookbookPayload = {
   description: string;
   isPublic: boolean;
   coverImage: string;
+  owner: {
+    walletAddress: string;
+  };
 };
 
 interface CreateLookbookModalProps {
@@ -91,6 +94,9 @@ export function CreateLookbookModal({
         description: created.description ?? "",
         isPublic: created.isPublic,
         coverImage: created.coverImage ?? "/placeholder.svg",
+        owner: {
+          walletAddress: ,
+        },
       });
 
       // Reset form and close

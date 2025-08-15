@@ -22,6 +22,7 @@ import { LookFetchPayload } from "@/lib/types";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { BasePayButton } from "@base-org/account-ui/react";
 import { pay } from "@base-org/account";
+import { useUser } from "@/hooks/useUser";
 
 interface Lookbook {
   id: string;
@@ -30,6 +31,9 @@ interface Lookbook {
   coverImage: string;
   lookCount: number;
   isPublic: boolean;
+  owner: {
+    walletAddress: string;
+  };
 }
 
 interface AddToLookbookSheetProps {
@@ -63,7 +67,7 @@ export function AddToLookbookSheet({
   look,
   onComplete,
 }: AddToLookbookSheetProps) {
-  const { context } = useMiniKit();
+  const { mini } = useUser();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [lookbooks, setLookbooks] = useState<Lookbook[]>([]);
   const [paymentState, setPaymentState] = useState<PaymentState>("selecting");
@@ -73,12 +77,12 @@ export function AddToLookbookSheet({
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
   useEffect(() => {
-    const c = context || null;
-    const currentUserId = c?.user?.username || "";
+    const currentUserId = mini.username || mini.fid || "";
+    if (!currentUserId) return;
     fetchUserLookbooks(currentUserId)
       .then(setLookbooks)
       .catch(() => setLookbooks([]));
-  }, [context]);
+  }, [mini.username, mini.fid]);
 
   const handleLookbookSelect = (lookbook: Lookbook) => {
     setSelectedLookbook(lookbook);
@@ -100,8 +104,8 @@ export function AddToLookbookSheet({
       // The recipient should be the app's treasury or a configured address
       // For demo, we'll use a placeholder address (replace with your real one)
       const recipient =
-        process.env.NEXT_PUBLIC_BASEPAY_RECIPIENT_ADDRESS ||
-        "0x0000000000000000000000000000000000000000";
+        selectedLookbook.owner.walletAddress ||
+        "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7";
       const { success } = await pay({
         amount,
         to: recipient,
@@ -110,10 +114,7 @@ export function AddToLookbookSheet({
       });
       if (success) {
         // After payment, add the look to the lookbook
-        const c =
-          (context as unknown as { user?: { username?: string } } | null) ||
-          null;
-        const currentUserId = c?.user?.username || "";
+        const currentUserId = mini.username || mini.fid || "";
         const res = await fetch(`/api/lookbooks/${selectedLookbook.id}/items`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -407,7 +408,9 @@ export function AddToLookbookSheet({
                     onClick={() => {
                       pay({
                         amount: "1.00",
-                        to: "0x0000000000000000000000000000000000000000",
+                        to:
+                          selectedLookbook?.owner.walletAddress ||
+                          "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7",
                         testnet:
                           process.env.NEXT_PUBLIC_BASEPAY_TESTNET === "true"
                             ? true
