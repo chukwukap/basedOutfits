@@ -33,15 +33,12 @@ interface Look {
     followers: number;
     following: number;
   };
-  tags: string[];
-  brands: string[];
+  // simplified: no tags/brands
   tips: number;
   collections: number;
-  location?: string;
+  // simplified: no location
   createdAt: string;
-  season?: string;
-  occasion?: string;
-  colors?: string[];
+  // simplified: no extras
 }
 
 interface LookDetailViewProps {
@@ -101,18 +98,12 @@ export function LookDetailView({ look }: LookDetailViewProps) {
           </p>
         </div>
 
-        {/* Meta Info */}
+        {/* Meta Info (date only in simplified model) */}
         <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
             {look.createdAt}
           </span>
-          {look.location && (
-            <span className="flex items-center gap-1">
-              <MapPin className="w-4 h-4" />
-              {look.location}
-            </span>
-          )}
         </div>
 
         {/* Stats */}
@@ -129,89 +120,13 @@ export function LookDetailView({ look }: LookDetailViewProps) {
 
         <Separator />
 
-        {/* Clickable Tags */}
-        {look.tags.length > 0 && (
-          <div>
-            <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              Style Tags
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {look.tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className="text-sm px-3 py-1 cursor-pointer hover:bg-primary/10 transition-colors"
-                  onClick={() => {
-                    // Navigate to feed with tag filter
-                    window.location.href = `/?tag=${encodeURIComponent(tag)}`;
-                  }}
-                >
-                  #{tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Tags removed in simplified model */}
 
-        {/* Brands */}
-        {look.brands.length > 0 && (
-          <div>
-            <h4 className="font-semibold text-sm mb-3">Featured Brands</h4>
-            <div className="flex flex-wrap gap-2">
-              {look.brands.map((brand) => (
-                <Badge
-                  key={brand}
-                  variant="outline"
-                  className="text-sm px-3 py-1"
-                >
-                  {brand}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Brands removed in simplified model */}
 
-        {/* Optional Details */}
-        <div className="grid grid-cols-2 gap-4">
-          {look.season && (
-            <div>
-              <h5 className="font-medium text-sm text-muted-foreground mb-1">
-                Season
-              </h5>
-              <p className="text-sm">{look.season}</p>
-            </div>
-          )}
-          {look.occasion && (
-            <div>
-              <h5 className="font-medium text-sm text-muted-foreground mb-1">
-                Occasion
-              </h5>
-              <p className="text-sm">{look.occasion}</p>
-            </div>
-          )}
-        </div>
+        {/* Details removed in simplified model */}
 
-        {/* Colors */}
-        {look.colors && look.colors.length > 0 && (
-          <div>
-            <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
-              <Palette className="w-4 h-4" />
-              Color Palette
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {look.colors.map((color) => (
-                <Badge
-                  key={color}
-                  variant="outline"
-                  className="text-sm px-3 py-1"
-                >
-                  {color}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Colors removed in simplified model */}
       </div>
     </div>
   );

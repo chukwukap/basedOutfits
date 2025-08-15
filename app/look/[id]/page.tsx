@@ -23,15 +23,12 @@ type DetailedLook = {
     followers: number;
     following: number;
   };
-  tags: string[];
-  brands: string[];
+  // simplified: no tags/brands
   tips: number;
   collections: number;
-  location?: string;
+  // simplified: no location
   createdAt: string;
-  season?: string;
-  occasion?: string;
-  colors?: string[];
+  // simplified: no extras
 };
 
 function toLookFetchPayload(look: DetailedLook): LookFetchPayload {
@@ -46,11 +43,8 @@ function toLookFetchPayload(look: DetailedLook): LookFetchPayload {
       fid: look.author.fid,
       name: look.author.name,
     },
-    tags: look.tags,
-    brands: look.brands,
     tips: look.tips,
     collections: look.collections,
-    location: look.location ?? "",
     createdAt: new Date(),
     isPublic: true,
     authorId: `author-${look.author.fid}`,
@@ -63,9 +57,6 @@ type LookApiResponse = {
   caption: string;
   description: string;
   imageUrls: string[];
-  tags: string[];
-  brands: string[];
-  location: string;
   createdAt: string;
   updatedAt: string;
   isPublic: boolean;
@@ -109,11 +100,8 @@ export default function LookDetailPage() {
             followers: 0,
             following: 0,
           },
-          tags: data.tags,
-          brands: data.brands,
           tips: data.tips,
           collections: data.collections,
-          location: data.location,
           createdAt: "",
         };
         setLook(detailed);

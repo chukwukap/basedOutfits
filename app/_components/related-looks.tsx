@@ -6,14 +6,13 @@ import { Heart, DollarSign } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Mock related looks data
+// Mock related looks data (kept minimal, no tags filtering)
 const relatedLooksData = [
   {
     id: "3",
     title: "Street Style Maven",
     imageUrl: "/street-style-outfit.png",
     author: "Jordan Kim",
-    tags: ["streetwear", "bold", "urban"],
     tips: 18,
     collections: 22,
   },
@@ -22,7 +21,6 @@ const relatedLooksData = [
     title: "Business Casual Chic",
     imageUrl: "/business-casual-outfit.png",
     author: "Taylor Swift",
-    tags: ["business", "casual", "professional"],
     tips: 9,
     collections: 12,
   },
@@ -31,22 +29,17 @@ const relatedLooksData = [
     title: "Cozy Weekend",
     imageUrl: "/summer-fashion-outfit.png",
     author: "Maya Patel",
-    tags: ["weekend", "cozy", "comfort"],
     tips: 15,
     collections: 7,
   },
 ];
 
-interface RelatedLooksProps {
-  currentLookId: string;
-  tags: string[];
-}
+interface RelatedLooksProps { currentLookId: string }
 
-export function RelatedLooks({ currentLookId, tags }: RelatedLooksProps) {
-  // Filter out current look and find related ones based on tags
+export function RelatedLooks({ currentLookId }: RelatedLooksProps) {
+  // Filter out current look only
   const relatedLooks = relatedLooksData
     .filter((look) => look.id !== currentLookId)
-    .filter((look) => look.tags.some((tag) => tags.includes(tag)))
     .slice(0, 3);
 
   if (relatedLooks.length === 0) {

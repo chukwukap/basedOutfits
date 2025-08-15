@@ -7,7 +7,7 @@ import { LookCardSkeleton } from "./look/_components/look-card-skeleton";
 import { TipModal } from "./_components/tip-modal";
 import { CollectModal } from "./_components/collect-modal";
 import { OnboardingTutorial } from "./_components/onboarding-tutorial";
-import { TrendingTags } from "./_components/trending-tags";
+// Removed TrendingTags in simplified model
 import { DiscoverCreators } from "./discover/_components/discover-creators";
 import { RefreshCw, Users, Globe } from "lucide-react";
 import { Button } from "./_components/ui/button";
@@ -17,12 +17,8 @@ import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useAccount } from "wagmi";
 import Image from "next/image";
 
-async function fetchLooks(params: {
-  tag?: string | null;
-  following?: boolean;
-}) {
+async function fetchLooks(params: { following?: boolean }) {
   const qs = new URLSearchParams();
-  if (params.tag) qs.set("tag", params.tag);
   if (params.following) qs.set("following", "1");
   const res = await fetch(`/api/looks?${qs.toString()}`, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to load looks");
@@ -45,7 +41,7 @@ function HomePageInner() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
 
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  // Tags removed from simplified model
   const [feedType, setFeedType] = useState<"foryou" | "following">("foryou");
 
   const [, setScrollY] = useState(0);
@@ -72,10 +68,8 @@ function HomePageInner() {
   useEffect(() => {
     const loadFeed = async () => {
       setLoading(true);
-      const tagFromUrl = searchParams.get("tag");
       try {
         const data = await fetchLooks({
-          tag: tagFromUrl,
           following: feedType === "following",
         });
         setLooks(data);
@@ -98,14 +92,7 @@ function HomePageInner() {
       filtered = filtered.filter((look) => look.author.isFollowing);
     }
 
-    // Filter by selected tag
-    if (selectedTag) {
-      filtered = filtered.filter((look) =>
-        look.tags.some(
-          (tag) => tag.toLowerCase() === selectedTag.toLowerCase(),
-        ),
-      );
-    }
+    // No tag filtering in simplified model
 
     setFilteredLooks(filtered);
   }, [looks, selectedTag, feedType]);
@@ -188,9 +175,7 @@ function HomePageInner() {
     } catch {}
   };
 
-  const handleTagSelect = (tag: string) => {
-    setSelectedTag(selectedTag === tag ? null : tag);
-  };
+  // No tag selection
 
   const handleFeedToggle = () => {
     setFeedType(feedType === "foryou" ? "following" : "foryou");
@@ -252,13 +237,8 @@ function HomePageInner() {
             <span className="font-semibold text-lg hidden sm:block">Looks</span>
           </div>
 
-          {/* Middle: Trending Tags */}
-          <div className="flex-1 min-w-0">
-            <TrendingTags
-              selectedTag={selectedTag}
-              onTagSelect={handleTagSelect}
-            />
-          </div>
+          {/* Middle cleared in simplified model */}
+          <div className="flex-1 min-w-0" />
 
           {/* Right: Feed Toggle & Actions */}
           <div className="flex items-center gap-2">
@@ -290,16 +270,10 @@ function HomePageInner() {
       </header>
 
       <div className="pt-[73px]">
-        {(selectedTag || feedType === "following") && (
+        {feedType === "following" && (
           <div className="px-4 py-2 bg-muted/50 border-b">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              {feedType === "following" && <span>Following</span>}
-              {selectedTag && (
-                <>
-                  {feedType === "following" && <span>•</span>}
-                  <span>#{selectedTag}</span>
-                </>
-              )}
+              <span>Following</span>
               <span>• {filteredLooks.length} looks</span>
             </div>
           </div>
@@ -327,15 +301,10 @@ function HomePageInner() {
                 <span className="text-2xl">👗</span>
               </div>
               <h3 className="font-semibold mb-2">No looks found</h3>
-              <p className="text-muted-foreground text-sm mb-4">
-                {selectedTag
-                  ? `No looks found for #${selectedTag}`
-                  : "No looks from people you follow"}
-              </p>
+              <p className="text-muted-foreground text-sm mb-4">No looks from people you follow</p>
               <Button
                 variant="outline"
                 onClick={() => {
-                  setSelectedTag(null);
                   setFeedType("foryou");
                 }}
               >
@@ -382,4 +351,4 @@ export default function HomePage() {
 }
 
 // Ensure the home route is never statically cached
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";

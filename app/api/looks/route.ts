@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const tag = searchParams.get("tag");
     const following = searchParams.get("following") === "1";
     const limit = Number.parseInt(searchParams.get("limit") || "20", 10);
 
@@ -12,16 +11,7 @@ export async function GET(req: Request) {
     const currentUserId = searchParams.get("userId") || undefined;
 
     const looks = await prisma.look.findMany({
-      where: {
-        isPublic: true,
-        ...(tag
-          ? {
-              tags: {
-                has: tag,
-              },
-            }
-          : {}),
-      },
+      where: { isPublic: true },
       orderBy: { createdAt: "desc" },
       take: Math.min(Math.max(limit, 1), 50),
       include: {
@@ -49,9 +39,6 @@ export async function GET(req: Request) {
         caption: l.caption ?? "",
         description: l.description ?? "",
         imageUrls: l.imageUrls,
-        tags: l.tags,
-        brands: l.brands,
-        location: l.location ?? "",
         createdAt: l.createdAt,
         updatedAt: l.updatedAt,
         isPublic: l.isPublic,
@@ -85,18 +72,12 @@ export async function POST(req: Request) {
       caption,
       description,
       imageUrls,
-      tags,
-      brands,
-      location,
       isPublic,
     } = body as {
       authorId: string;
       caption?: string;
       description?: string;
       imageUrls: string[];
-      tags: string[];
-      brands: string[];
-      location?: string;
       isPublic?: boolean;
     };
 
@@ -125,9 +106,6 @@ export async function POST(req: Request) {
         caption,
         description,
         imageUrls,
-        tags,
-        brands,
-        location,
         isPublic: !!isPublic,
       },
     });

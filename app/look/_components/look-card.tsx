@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { Heart, DollarSign, Share2, MapPin, Clock, Plus } from "lucide-react";
+import { Heart, DollarSign, Share2, Clock, Plus } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { Card } from "@/app/_components/ui/card";
 import {
@@ -82,15 +82,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
         />
         {/* Overlay with location and time */}
         <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
-          {look.location && (
-            <Badge
-              variant="secondary"
-              className="bg-black/50 text-white border-0 backdrop-blur-sm"
-            >
-              <MapPin className="w-3 h-3 mr-1" />
-              {look.location}
-            </Badge>
-          )}
+          {/* Location removed in simplified model */}
           <Badge
             variant="secondary"
             className="bg-black/50 text-white border-0 backdrop-blur-sm"
@@ -127,38 +119,7 @@ export function LookCard({ look, onTip, onCollect }: LookCardProps) {
           </p>
         </div>
 
-        {/* Tags and Brands */}
-        <div className="flex flex-wrap gap-2">
-          {look.tags.slice(0, 3).map((tag) => (
-            <Badge
-              key={tag}
-              variant="secondary"
-              className="text-xs font-medium"
-            >
-              #{tag}
-            </Badge>
-          ))}
-          {look.tags.length > 3 && (
-            <Badge variant="outline" className="text-xs">
-              +{look.tags.length - 3} more
-            </Badge>
-          )}
-        </div>
-
-        {/* Brands */}
-        {look.brands.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {look.brands.map((brand) => (
-              <Badge
-                key={brand}
-                variant="outline"
-                className="text-xs font-medium"
-              >
-                {brand}
-              </Badge>
-            ))}
-          </div>
-        )}
+        {/* Tags/Brands removed in simplified model */}
 
         {/* Stats */}
         <div className="flex items-center gap-4 text-sm text-muted-foreground pt-1">

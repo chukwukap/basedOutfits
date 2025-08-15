@@ -1,6 +1,15 @@
-import { Look, Lookbook } from "./generated/prisma";
+import { Lookbook } from "./generated/prisma";
 
-export type LookFetchPayload = Look & {
+// Keep frontend payload simple and decoupled from Prisma model
+export type LookFetchPayload = {
+  id: string;
+  caption: string;
+  description: string;
+  imageUrls: string[];
+  isPublic: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  authorId: string;
   tips: number;
   collections: number;
   author: {

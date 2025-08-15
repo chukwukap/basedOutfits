@@ -9,7 +9,7 @@ import { Textarea } from "@/app/_components/ui/textarea";
 import { Label } from "@/app/_components/ui/label";
 import { Card } from "@/app/_components/ui/card";
 import { Badge } from "@/app/_components/ui/badge";
-import { Upload, X, Camera, MapPin, Tag, Sparkles } from "lucide-react";
+import { Upload, X, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LookFetchPayload } from "@/lib/types";
 import Image from "next/image";
@@ -31,54 +31,12 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
   const [images, setImages] = useState<ImageFile[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
-  const [brands, setBrands] = useState<string[]>([]);
-  const [brandInput, setBrandInput] = useState("");
-  const [location, setLocation] = useState("");
   const [posting, setPosting] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Popular tags for suggestions
-  const popularTags = [
-    "summer",
-    "winter",
-    "casual",
-    "formal",
-    "streetwear",
-    "vintage",
-    "minimalist",
-    "colorful",
-    "evening",
-    "work",
-    "weekend",
-    "date",
-    "party",
-    "travel",
-    "cozy",
-    "chic",
-  ];
-
-  // Popular brands for suggestions
-  const popularBrands = [
-    "Zara",
-    "H&M",
-    "Nike",
-    "Adidas",
-    "Uniqlo",
-    "Mango",
-    "COS",
-    "Everlane",
-    "Levi's",
-    "Converse",
-    "Vans",
-    "Supreme",
-    "Off-White",
-    "Patagonia",
-    "Lululemon",
-  ];
+  // simplified: no tags/brands/location
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -163,43 +121,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     });
   };
 
-  const addTag = (tag: string) => {
-    const trimmedTag = tag.trim().toLowerCase();
-    if (trimmedTag && !tags.includes(trimmedTag) && tags.length < 8) {
-      setTags((prev) => [...prev, trimmedTag]);
-      setTagInput("");
-    }
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    setTags((prev) => prev.filter((tag) => tag !== tagToRemove));
-  };
-
-  const addBrand = (brand: string) => {
-    const trimmedBrand = brand.trim();
-    if (trimmedBrand && !brands.includes(trimmedBrand) && brands.length < 5) {
-      setBrands((prev) => [...prev, trimmedBrand]);
-      setBrandInput("");
-    }
-  };
-
-  const removeBrand = (brandToRemove: string) => {
-    setBrands((prev) => prev.filter((brand) => brand !== brandToRemove));
-  };
-
-  const handleTagKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      addTag(tagInput);
-    }
-  };
-
-  const handleBrandKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      addBrand(brandInput);
-    }
-  };
+  // simplified: no tags/brands handlers
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -226,9 +148,6 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
           caption: title.trim(),
           description: description.trim(),
           imageUrls: images.map((img) => img.preview),
-          tags,
-          brands,
-          location: location.trim(),
           isPublic: true,
         }),
       });
@@ -238,9 +157,6 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
           caption?: string;
           description?: string;
           imageUrls: string[];
-          tags: string[];
-          brands: string[];
-          location?: string;
           createdAt: string;
           updatedAt: string;
           isPublic: boolean;
@@ -251,9 +167,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
           caption: created.caption ?? "",
           description: created.description ?? "",
           imageUrls: created.imageUrls,
-          tags: created.tags,
-          brands: created.brands,
-          location: created.location ?? "",
+          isPublic: created.isPublic,
           author: {
             name: "You",
             avatarUrl: "/diverse-group-profile.png",
@@ -264,7 +178,6 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
           collections: 0,
           createdAt: new Date(created.createdAt),
           updatedAt: new Date(created.updatedAt),
-          isPublic: created.isPublic,
           authorId: created.authorId,
         };
         onSuccess(lookData);
@@ -273,13 +186,10 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
       setPosting(false);
     }
 
-    // Reset form
+    // simplified reset
     setImages([]);
     setTitle("");
     setDescription("");
-    setTags([]);
-    setBrands([]);
-    setLocation("");
   };
 
   const isFormValid =
@@ -423,59 +333,16 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
           </p>
 
           {/* Current tags */}
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className="text-sm px-3 py-1"
-                >
-                  #{tag}
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="ml-2 h-auto p-0 hover:bg-transparent"
-                    onClick={() => removeTag(tag)}
-                  >
-                    <X className="w-3 h-3" />
-                  </Button>
-                </Badge>
-              ))}
-            </div>
-          )}
+          {/* simplified: no tags/brands handlers */}
 
           {/* Tag input */}
-          <Input
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={handleTagKeyPress}
-            placeholder="Type a tag and press Enter..."
-            className="mt-3"
-            disabled={tags.length >= 8}
-          />
+          {/* simplified: no tags/brands handlers */}
 
           {/* Popular tags */}
           <div className="mt-3">
             <p className="text-xs text-muted-foreground mb-2">Popular tags:</p>
             <div className="flex flex-wrap gap-2">
-              {popularTags
-                .filter((tag) => !tags.includes(tag))
-                .slice(0, 8)
-                .map((tag) => (
-                  <Button
-                    key={tag}
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="text-xs h-7 bg-transparent"
-                    onClick={() => addTag(tag)}
-                    disabled={tags.length >= 8}
-                  >
-                    #{tag}
-                  </Button>
-                ))}
+              {/* simplified: no tags/brands suggestions */}
             </div>
           </div>
         </div>
@@ -491,38 +358,10 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
           </p>
 
           {/* Current brands */}
-          {brands.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {brands.map((brand) => (
-                <Badge
-                  key={brand}
-                  variant="outline"
-                  className="text-sm px-3 py-1"
-                >
-                  {brand}
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="ml-2 h-auto p-0 hover:bg-transparent"
-                    onClick={() => removeBrand(brand)}
-                  >
-                    <X className="w-3 h-3" />
-                  </Button>
-                </Badge>
-              ))}
-            </div>
-          )}
+          {/* simplified: no tags/brands handlers */}
 
           {/* Brand input */}
-          <Input
-            value={brandInput}
-            onChange={(e) => setBrandInput(e.target.value)}
-            onKeyDown={handleBrandKeyPress}
-            placeholder="Type a brand and press Enter..."
-            className="mt-3"
-            disabled={brands.length >= 5}
-          />
+          {/* simplified: no tags/brands handlers */}
 
           {/* Popular brands */}
           <div className="mt-3">
@@ -530,22 +369,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
               Popular brands:
             </p>
             <div className="flex flex-wrap gap-2">
-              {popularBrands
-                .filter((brand) => !brands.includes(brand))
-                .slice(0, 8)
-                .map((brand) => (
-                  <Button
-                    key={brand}
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="text-xs h-7 bg-transparent"
-                    onClick={() => addBrand(brand)}
-                    disabled={brands.length >= 5}
-                  >
-                    {brand}
-                  </Button>
-                ))}
+              {/* simplified: no tags/brands suggestions */}
             </div>
           </div>
         </div>
