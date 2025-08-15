@@ -21,38 +21,24 @@ export async function GET(req: Request) {
       },
     });
 
-    const followingIds: Set<string> = new Set();
-    if (following && currentUserId) {
-      const follows = await prisma.follow.findMany({
-        where: { followerId: currentUserId },
-        select: { followingId: true },
-      });
-      follows.forEach((f) => followingIds.add(f.followingId));
-    }
-
-    const payload = looks
-      .filter((l) =>
-        following && currentUserId ? followingIds.has(l.authorId) : true,
-      )
-      .map((l) => ({
-        id: l.id,
-        caption: l.caption ?? "",
-        description: l.description ?? "",
-        imageUrls: l.imageUrls,
-        createdAt: l.createdAt,
-        updatedAt: l.updatedAt,
-        isPublic: l.isPublic,
-        authorId: l.authorId,
-        tips: l.tips.length,
-        collections: l.saves.length,
-        author: {
-          isFollowing:
-            following && currentUserId ? followingIds.has(l.authorId) : false,
-          avatarUrl: l.author.avatarUrl ?? "",
-          fid: l.author.fid ?? l.author.username,
-          name: l.author.name ?? l.author.username,
-        },
-      }));
+    const payload = looks.map((l) => ({
+      id: l.id,
+      caption: l.caption ?? "",
+      description: l.description ?? "",
+      imageUrls: l.imageUrls,
+      createdAt: l.createdAt,
+      updatedAt: l.updatedAt,
+      isPublic: l.isPublic,
+      authorId: l.authorId,
+      tips: l.tips.length,
+      collections: l.saves.length,
+      author: {
+        isFollowing: false,
+        avatarUrl: l.author.avatarUrl ?? "",
+        fid: l.author.fid ?? l.author.username,
+        name: l.author.name ?? l.author.username,
+      },
+    }));
 
     return NextResponse.json(payload);
   } catch (error) {
@@ -67,13 +53,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const {
-      authorId,
-      caption,
-      description,
-      imageUrls,
-      isPublic,
-    } = body as {
+    const { authorId, caption, description, imageUrls, isPublic } = body as {
       authorId: string;
       caption?: string;
       description?: string;
