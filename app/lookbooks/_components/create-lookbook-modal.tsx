@@ -13,6 +13,7 @@ import { Textarea } from "@/app/_components/ui/textarea";
 import { Label } from "@/app/_components/ui/label";
 import { Switch } from "@/app/_components/ui/switch";
 import { Upload, ImageIcon } from "lucide-react";
+import Image from "next/image";
 // Passing a minimal lookbook payload upward; parent composes full object
 type NewLookbookPayload = {
   name: string;
@@ -131,14 +132,18 @@ export function CreateLookbookModal({
                   added
                 </p>
                 {coverImage && (
-                  <img
+                  <Image
                     src={coverImage}
                     alt="Cover preview"
                     className="mt-2 h-24 w-24 object-cover rounded"
+                    width={96}
+                    height={96}
                   />
                 )}
                 {uploading && (
-                  <div className="text-xs text-muted-foreground">Uploading…</div>
+                  <div className="text-xs text-muted-foreground">
+                    Uploading…
+                  </div>
                 )}
                 <Button
                   variant="outline"
