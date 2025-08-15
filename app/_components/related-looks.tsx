@@ -34,7 +34,9 @@ const relatedLooksData = [
   },
 ];
 
-interface RelatedLooksProps { currentLookId: string }
+interface RelatedLooksProps {
+  currentLookId: string;
+}
 
 export function RelatedLooks({ currentLookId }: RelatedLooksProps) {
   // Filter out current look only
@@ -85,17 +87,7 @@ export function RelatedLooks({ currentLookId }: RelatedLooksProps) {
                 <p className="text-xs text-muted-foreground mb-2">
                   by {look.author}
                 </p>
-                <div className="flex flex-wrap gap-1">
-                  {look.tags.slice(0, 2).map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant="secondary"
-                      className="text-xs px-2 py-0 h-4"
-                    >
-                      #{tag}
-                    </Badge>
-                  ))}
-                </div>
+                {/* Tags removed in simplified model */}
               </div>
             </Card>
           </Link>
