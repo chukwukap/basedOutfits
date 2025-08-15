@@ -1,4 +1,66 @@
 import { NextResponse } from "next/server";
+import { PrismaClient } from "@/lib/generated/prisma";
+
+const prisma = new PrismaClient();
+
+export async function GET() {
+  try {
+    const lookbooks = await prisma.lookbook.findMany({
+      orderBy: { updatedAt: "desc" },
+    });
+    return NextResponse.json(lookbooks, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Unknown error" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      ownerId,
+      name,
+      description,
+      isPublic,
+      coverImage,
+    }: {
+      ownerId: string;
+      name: string;
+      description?: string;
+      isPublic?: boolean;
+      coverImage?: string;
+    } = body;
+
+    if (!ownerId || !name) {
+      return NextResponse.json(
+        { error: "ownerId and name are required" },
+        { status: 400 },
+      );
+    }
+
+    const created = await prisma.lookbook.create({
+      data: {
+        ownerId,
+        name,
+        description: description ?? null,
+        isPublic: isPublic ?? true,
+        coverImage: coverImage ?? null,
+      },
+    });
+
+    return NextResponse.json(created, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Unknown error" },
+      { status: 500 },
+    );
+  }
+}
+
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 export async function GET(req: Request) {

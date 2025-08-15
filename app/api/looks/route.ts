@@ -57,6 +57,8 @@ export async function POST(req: Request) {
       isPublic?: boolean;
     };
 
+    console.log("body", body);
+
     if (!authorId || !imageUrls?.length) {
       return NextResponse.json(
         { error: "authorId and imageUrls required" },

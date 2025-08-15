@@ -1,38 +1,34 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
+import useSWR from "swr";
 import { BottomNav } from "./_components/bottom-nav";
 import { LookCard } from "./look/_components/look-card";
 import { LookCardSkeleton } from "./look/_components/look-card-skeleton";
 import { TipModal } from "./_components/tip-modal";
 import { CollectModal } from "./_components/collect-modal";
 import { OnboardingTutorial } from "./_components/onboarding-tutorial";
-// Removed TrendingTags in simplified model
 import { DiscoverCreators } from "./discover/_components/discover-creators";
-import { RefreshCw, Users, Globe } from "lucide-react";
-import { Button } from "./_components/ui/button";
 import { LookFetchPayload } from "@/lib/types";
-// import { useSearchParams } from "next/navigation";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useAccount } from "wagmi";
 import Image from "next/image";
+import { useTheme } from "@/contexts/theme-context";
 
-async function fetchLooks(params: { following?: boolean }) {
-  const qs = new URLSearchParams();
-  if (params.following) qs.set("following", "1");
-  const res = await fetch(`/api/looks?${qs.toString()}`, { cache: "no-store" });
+/**
+ * Fetches looks from the API securely.
+ * @returns Array of LookFetchPayload.
+ */
+const fetcher = async (url: string): Promise<LookFetchPayload[]> => {
+  // Security: Always use no-store to avoid leaking sensitive data in cache
+  const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to load looks");
   return (await res.json()) as LookFetchPayload[];
-}
+};
 
 function HomePageInner() {
-  // const searchParams = useSearchParams();
   const { context } = useMiniKit();
   const { address: walletAddress } = useAccount();
-  const [looks, setLooks] = useState<LookFetchPayload[]>([]);
-  const [filteredLooks, setFilteredLooks] = useState<LookFetchPayload[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [selectedLook, setSelectedLook] = useState<LookFetchPayload | null>(
     null,
   );
@@ -40,16 +36,17 @@ function HomePageInner() {
   const [showCollectModal, setShowCollectModal] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
-
-  // Tags removed from simplified model
-  const [feedType, setFeedType] = useState<"foryou" | "following">("foryou");
-
+  const { setModalOpen } = useTheme();
+  // Scroll state
   const [, setScrollY] = useState(0);
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
+  /**
+   * Checks if the user is a first-time visitor and shows onboarding if needed.
+   */
   const checkFirstTimeUser = () => {
     const hasSeenOnboarding = localStorage.getItem(
       "looks_onboarding_completed",
@@ -64,90 +61,79 @@ function HomePageInner() {
     checkFirstTimeUser();
   }, []);
 
-  // Load feed
-  useEffect(() => {
-    const loadFeed = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchLooks({
-          following: feedType === "following",
-        });
-        setLooks(data);
-      } catch {
-        setLooks([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Use SWR for fetching looks with auto-refresh every 30 seconds
+  const {
+    data: looks = [],
 
-    if (onboardingChecked) loadFeed();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onboardingChecked, feedType]);
+    isLoading,
+    mutate: mutateLooks,
+  } = useSWR(onboardingChecked ? "/api/looks" : null, fetcher, {
+    refreshInterval: 30000, // 30 seconds
+    revalidateOnFocus: true, // Security: always revalidate on focus
+    shouldRetryOnError: true,
+  });
 
-  useEffect(() => {
-    let filtered = looks;
-
-    // Filter by feed type (following vs all)
-    if (feedType === "following") {
-      filtered = filtered.filter((look) => look.author.isFollowing);
-    }
-
-    // No tag filtering in simplified model
-
-    setFilteredLooks(filtered);
-  }, [looks, feedType]);
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    try {
-      const data = await fetchLooks({
-        following: feedType === "following",
-      });
-      setLooks(data);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
+  /**
+   * Handles tipping a look.
+   * @param look - The look to tip.
+   */
   const handleTip = (look: LookFetchPayload) => {
     setSelectedLook(look);
     setShowTipModal(true);
   };
 
+  /**
+   * Handles collecting a look.
+   * @param look - The look to collect.
+   */
   const handleCollect = (look: LookFetchPayload) => {
     setSelectedLook(look);
     setShowCollectModal(true);
   };
 
-  const handleTipComplete = (amount: number) => {
-    console.log("handleTipComplete", amount);
+  /**
+   * Handles completion of a tip.
+   */
+  const handleTipComplete = () => {
+    // Optimistically update tip count in SWR cache
     if (selectedLook) {
-      // Update tip count optimistically
-      setLooks((prev) =>
-        prev.map((look) =>
-          look.id === selectedLook.id ? { ...look, tips: look.tips + 1 } : look,
-        ),
+      mutateLooks(
+        (prev: LookFetchPayload[] = []) =>
+          prev.map((look) =>
+            look.id === selectedLook.id
+              ? { ...look, tips: look.tips + 1 }
+              : look,
+          ),
+        false, // Do not revalidate immediately
       );
     }
     setShowTipModal(false);
     setSelectedLook(null);
   };
 
+  /**
+   * Handles completion of a collect.
+   */
   const handleCollectComplete = () => {
+    // Optimistically update collection count in SWR cache
     if (selectedLook) {
-      // Update collection count optimistically
-      setLooks((prev) =>
-        prev.map((look) =>
-          look.id === selectedLook.id
-            ? { ...look, collections: look.collections + 1 }
-            : look,
-        ),
+      mutateLooks(
+        (prev: LookFetchPayload[] = []) =>
+          prev.map((look) =>
+            look.id === selectedLook.id
+              ? { ...look, collections: look.collections + 1 }
+              : look,
+          ),
+        false, // Do not revalidate immediately
       );
     }
     setShowCollectModal(false);
     setSelectedLook(null);
   };
 
+  /**
+   * Handles completion of onboarding.
+   */
   const handleOnboardingComplete = () => {
     localStorage.setItem("looks_onboarding_completed", "true");
     setShowOnboarding(false);
@@ -171,15 +157,12 @@ function HomePageInner() {
           }),
         });
       }
-    } catch {}
+    } catch {
+      // Fail silently for onboarding user creation
+    }
   };
 
-  // No tag selection
-
-  const handleFeedToggle = () => {
-    setFeedType(feedType === "foryou" ? "following" : "foryou");
-  };
-
+  // Scroll direction logic
   const updateScrollDirection = useCallback(() => {
     const scrollY = window.scrollY;
     const direction = scrollY > lastScrollY.current ? "down" : "up";
@@ -237,55 +220,25 @@ function HomePageInner() {
           </div>
 
           {/* Middle cleared in simplified model */}
-          <div className="flex-1 min-w-0" />
-
-          {/* Right: Feed Toggle & Actions */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant={feedType === "following" ? "default" : "ghost"}
-              size="sm"
-              onClick={handleFeedToggle}
-              className="p-2"
-            >
-              {feedType === "following" ? (
-                <Users className="w-4 h-4" />
-              ) : (
-                <Globe className="w-4 h-4" />
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleRefresh}
-              disabled={refreshing}
-              className="p-2"
-            >
-              <RefreshCw
-                className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
-              />
-            </Button>
-          </div>
+          <div className="flex-1 min-w-0 " />
+          <button
+            onClick={() => setModalOpen(true)}
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Themes
+          </button>
         </div>
       </header>
 
       <div className="pt-[73px]">
-        {feedType === "following" && (
-          <div className="px-4 py-2 bg-muted/50 border-b">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>Following</span>
-              <span>• {filteredLooks.length} looks</span>
-            </div>
-          </div>
-        )}
-
         {/* Feed */}
         <main className="px-4 py-6 space-y-6">
-          {loading
+          {isLoading
             ? // Loading skeletons
               Array.from({ length: 3 }).map((_, i) => (
                 <LookCardSkeleton key={i} />
               ))
-            : filteredLooks.map((look) => (
+            : looks.map((look) => (
                 <LookCard
                   key={look.id}
                   look={look}
@@ -294,28 +247,20 @@ function HomePageInner() {
                 />
               ))}
 
-          {!loading && filteredLooks.length === 0 && (
+          {!isLoading && looks.length === 0 && (
             <div className="text-center py-12">
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">👗</span>
               </div>
               <h3 className="font-semibold mb-2">No looks found</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                No looks from people you follow
+                No looks available at the moment.
               </p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setFeedType("foryou");
-                }}
-              >
-                View All Looks
-              </Button>
             </div>
           )}
         </main>
 
-        {!loading && filteredLooks.length > 0 && <DiscoverCreators />}
+        {!isLoading && looks.length > 0 && <DiscoverCreators />}
       </div>
 
       {/* Modals */}
@@ -348,6 +293,3 @@ export default function HomePage() {
     </Suspense>
   );
 }
-
-// Ensure the home route is never statically cached
-// export const dynamic = "force-dynamic";

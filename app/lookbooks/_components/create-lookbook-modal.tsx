@@ -37,22 +37,48 @@ export function CreateLookbookModal({
   const [isPublic, setIsPublic] = useState(false);
   const [coverImage, setCoverImage] = useState("");
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim()) return;
 
-    onSave({
-      name: name.trim(),
-      description: description.trim(),
-      isPublic,
-      coverImage: coverImage || "/placeholder.svg",
-    });
+    // Owner is required by schema; take from local storage or fallback
+    const ownerId =
+      localStorage.getItem("current_user_id") || "demo-user";
 
-    // Reset form and close
-    setName("");
-    setDescription("");
-    setIsPublic(false);
-    setCoverImage("");
-    onOpenChange(false);
+    try {
+      // Persist server-side
+      const res = await fetch("/api/lookbooks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ownerId,
+          name: name.trim(),
+          description: description.trim(),
+          isPublic,
+          coverImage: coverImage || "/placeholder.svg",
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to create lookbook");
+      }
+
+      const created = await res.json();
+      onSave({
+        name: created.name,
+        description: created.description ?? "",
+        isPublic: created.isPublic,
+        coverImage: created.coverImage ?? "/placeholder.svg",
+      });
+
+      // Reset form and close
+      setName("");
+      setDescription("");
+      setIsPublic(false);
+      setCoverImage("");
+      onOpenChange(false);
+    } catch (e) {
+      // No-op UI error surface (could add toast)
+    }
   };
 
   const handleClose = () => {

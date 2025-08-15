@@ -5,7 +5,7 @@ import { GeistMono } from "geist/font/mono";
 // import { OnboardingReset } from "@/components/onboarding-reset";
 import { Providers } from "./providers";
 import { ThemeProvider } from "@/contexts/theme-context";
-import { ThemeSettingsModal } from "./_components/theme-settings-modal";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -44,13 +44,7 @@ html {
       </head>
       <body>
         <ThemeProvider>
-          <Providers>
-            {children}
-            {/* Floating Theme Selector (mobile-first) */}
-            <div className="fixed bottom-20 right-4 z-50 md:bottom-6">
-              <ThemeSettingsModal />
-            </div>
-          </Providers>
+          <Providers>{children}</Providers>
         </ThemeProvider>
         {/* <OnboardingReset /> */}
       </body>

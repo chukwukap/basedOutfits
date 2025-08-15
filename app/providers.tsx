@@ -5,6 +5,7 @@ import { base } from "wagmi/chains";
 import { MiniKitProvider, useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
+import { ThemeSelector } from "./_components/theme-selector";
 
 export function Providers(props: { children: ReactNode }) {
   return (
@@ -21,6 +22,7 @@ export function Providers(props: { children: ReactNode }) {
       }}
     >
       <MiniKitBootstrap />
+      <ThemeSelector />
       {props.children}
     </MiniKitProvider>
   );

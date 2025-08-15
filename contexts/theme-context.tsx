@@ -7,6 +7,8 @@ import { type Theme, themes, defaultTheme } from "@/lib/themes";
 interface ThemeContextType {
   currentTheme: Theme;
   setTheme: (themeId: string) => void;
+  modalOpen: boolean;
+  setModalOpen: (open: boolean) => void;
   themes: Theme[];
 }
 
@@ -26,6 +28,7 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [currentTheme, setCurrentTheme] = useState<Theme>(defaultTheme);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Load theme from localStorage on mount
   useEffect(() => {
@@ -55,7 +58,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   };
 
   return (
-    <ThemeContext.Provider value={{ currentTheme, setTheme, themes }}>
+    <ThemeContext.Provider
+      value={{ currentTheme, setTheme, themes, modalOpen, setModalOpen }}
+    >
       {children}
     </ThemeContext.Provider>
   );
