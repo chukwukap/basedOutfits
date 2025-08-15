@@ -5,98 +5,98 @@
       "fid": "1000",
       "name": "Demo User",
       "avatarUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "lagos_style",
       "fid": "2001",
       "name": "Aisha",
       "avatarUrl": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "tokyo_minimal",
       "fid": "2002",
       "name": "Kenji",
       "avatarUrl": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "paris_chic",
       "fid": "2003",
       "name": "Camille",
       "avatarUrl": "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "mumbai_festive",
       "fid": "2004",
       "name": "Arjun",
       "avatarUrl": "https://images.unsplash.com/photo-1554080353-a576cf803bda?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "seoul_street",
       "fid": "2005",
       "name": "Minji",
       "avatarUrl": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "nairobi_tailor",
       "fid": "2006",
       "name": "Kioni",
       "avatarUrl": "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "nyc_vintage",
       "fid": "2007",
       "name": "Jules",
       "avatarUrl": "https://images.unsplash.com/photo-1520975594081-7a019c1e66f2?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "cph_functional",
       "fid": "2008",
       "name": "Soren",
       "avatarUrl": "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "rio_carnival",
       "fid": "2009",
       "name": "Luna",
       "avatarUrl": "https://images.unsplash.com/photo-1527980965255-8b31d10f7b8e?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "beijing_modern",
       "fid": "2010",
       "name": "Wei",
       "avatarUrl": "https://images.unsplash.com/photo-1511485977113-f34c92461ad9?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "casablanca_elegance",
       "fid": "2011",
       "name": "Yasmine",
       "avatarUrl": "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "capetown_coastal",
       "fid": "2012",
       "name": "Theo",
       "avatarUrl": "https://images.unsplash.com/photo-1546456073-6712f79251bb?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     },
     {
       "username": "igbo_senator",
       "fid": "2013",
       "name": "Chukwu",
       "avatarUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&q=60",
-      "walletAddress": null
+      "walletAddress": "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7"
     }
   ],
   "looks": [
@@ -104,253 +104,399 @@
       "authorUsername": "demo",
       "caption": "Lagos Street Style",
       "description": "Bold Ankara patterns with modern sneakers.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1553514029-1318c9127859?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["African", "Ankara", "Streetwear"],
       "brands": ["Local Tailor"],
       "location": "Lagos",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "casual",
+      "colors": ["red", "black"],
+      "details": {
+        "items": [
+          { "type": "top", "name": "Ankara shirt" },
+          { "type": "bottom", "name": "Slim trousers" },
+          { "type": "shoes", "name": "Sneakers" }
+        ]
+      }
     },
     {
       "authorUsername": "demo",
       "caption": "Kitenge Elegance",
       "description": "Contemporary Kitenge suit for evening events.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["African", "Kitenge", "Formal"],
       "brands": ["Custom"],
       "location": "Nairobi",
-      "isPublic": true
+      "isPublic": true,
+      "season": "fall",
+      "occasion": "formal",
+      "colors": ["blue", "white"],
+      "details": {
+        "items": [
+          { "type": "suit", "name": "Kitenge suit" },
+          { "type": "shoes", "name": "Oxford shoes" }
+        ]
+      }
     },
     {
       "authorUsername": "tokyo_minimal",
       "caption": "Tokyo Minimalist",
       "description": "Clean lines, neutral palette, understated layers.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1517940310602-75bc0f6798e0?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Asian", "Minimalist", "Urban"],
       "brands": ["Uniqlo", "Comme des Garçons"],
       "location": "Tokyo",
-      "isPublic": true
+      "isPublic": true,
+      "season": "spring",
+      "occasion": "casual",
+      "colors": ["black", "white"],
+      "details": {
+        "items": [
+          { "type": "coat", "name": "Minimal overcoat" },
+          { "type": "top", "name": "Monochrome tee" },
+          { "type": "bottom", "name": "Tailored pants" }
+        ]
+      }
     },
     {
       "authorUsername": "tokyo_minimal",
       "caption": "Hanbok Fusion",
       "description": "Classic hanbok silhouette with modern fabrics.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1578926374373-46b6b5a4513d?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Asian", "Traditional", "Fusion"],
       "brands": ["Independent"],
       "location": "Seoul",
-      "isPublic": true
+      "isPublic": true,
+      "season": "spring",
+      "occasion": "festive",
+      "colors": ["beige", "white"],
+      "details": {
+        "items": [
+          { "type": "dress", "name": "Modern hanbok" },
+          { "type": "shoes", "name": "Flats" }
+        ]
+      }
     },
     {
       "authorUsername": "demo",
       "caption": "NYC Street Classic",
       "description": "Denim, tees, and high-tops—timeless combo.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["American", "Streetwear", "Denim"],
       "brands": ["Levi's", "Converse"],
       "location": "New York",
-      "isPublic": true
+      "isPublic": true,
+      "season": "fall",
+      "occasion": "casual",
+      "colors": ["blue", "white"],
+      "details": {
+        "items": [
+          { "type": "jacket", "name": "Denim jacket" },
+          { "type": "shoes", "name": "High-top sneakers" }
+        ]
+      }
     },
     {
       "authorUsername": "paris_chic",
       "caption": "LA Red Carpet Ready",
       "description": "Elegant evening dress with metallic accents.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["American", "Evening", "Elegant"],
       "brands": ["Vintage", "Mango"],
       "location": "Los Angeles",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "evening",
+      "colors": ["black"],
+      "details": {
+        "items": [
+          { "type": "dress", "name": "Evening gown" },
+          { "type": "bag", "name": "Clutch" }
+        ]
+      }
     },
     {
       "authorUsername": "paris_chic",
       "caption": "Parisian Chic",
       "description": "Trench coat, tailored trousers, silk scarf.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["European", "Chic", "Trench"],
       "brands": ["Burberry", "COS"],
       "location": "Paris",
-      "isPublic": true
+      "isPublic": true,
+      "season": "fall",
+      "occasion": "formal",
+      "colors": ["beige", "white"],
+      "details": {
+        "items": [
+          { "type": "coat", "name": "Trench coat" },
+          { "type": "scarf", "name": "Silk scarf" }
+        ]
+      }
     },
     {
       "authorUsername": "mumbai_festive",
       "caption": "Festive Sari Glow",
       "description": "Traditional sari with contemporary drape.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1596464716121-e1ee26cfe7f6?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Indian", "Festive", "Traditional"],
       "brands": ["Local Designer"],
       "location": "Mumbai",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "festive",
+      "colors": ["red", "gold"],
+      "details": {
+        "items": [
+          { "type": "dress", "name": "Sari" },
+          { "type": "jewelry", "name": "Gold bangles" }
+        ]
+      }
     },
     {
       "authorUsername": "demo",
       "caption": "Desert Modern",
       "description": "Flowing silhouettes and refined neutrals.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1503342217505-b0a15cf70489?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["MiddleEast", "Modern", "Neutrals"],
       "brands": ["Independent"],
       "location": "Dubai",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "formal",
+      "colors": ["beige", "white"],
+      "details": {
+        "items": [{ "type": "dress", "name": "Flowing maxi" }]
+      }
     },
     {
       "authorUsername": "lagos_style",
       "caption": "São Paulo Colors",
       "description": "Vibrant prints with relaxed tailoring.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1516826957135-700dedea698c?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Latin", "Vibrant", "Casual"],
       "brands": ["H&M", "Zara"],
       "location": "São Paulo",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "casual",
+      "colors": ["green", "red", "yellow"],
+      "details": {
+        "items": [
+          { "type": "top", "name": "Vibrant shirt" },
+          { "type": "bottom", "name": "Relaxed trousers" }
+        ]
+      }
     },
     {
       "authorUsername": "paris_chic",
       "caption": "Scandi Minimal",
       "description": "Monochrome layers with functional design.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1514809811547-777d130a4211?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Scandinavian", "Minimalist", "Functional"],
       "brands": ["Acne Studios", "Arket"],
       "location": "Copenhagen",
-      "isPublic": true
+      "isPublic": true,
+      "season": "winter",
+      "occasion": "casual",
+      "colors": ["black", "white"],
+      "details": {
+        "items": [
+          { "type": "jacket", "name": "Functional shell" },
+          { "type": "bottom", "name": "Cargo pants" }
+        ]
+      }
     },
     {
       "authorUsername": "seoul_street",
       "caption": "Seoul Night Layers",
       "description": "Oversized blazer with cropped top and wide pants.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1520975594081-7a019c1e66f2?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Asian", "Streetwear", "Oversized"],
       "brands": ["ADER error", "Gentle Monster"],
       "location": "Seoul",
-      "isPublic": true
+      "isPublic": true,
+      "season": "spring",
+      "occasion": "casual",
+      "colors": ["black"],
+      "details": {
+        "items": [
+          { "type": "blazer", "name": "Oversized blazer" },
+          { "type": "top", "name": "Cropped top" },
+          { "type": "bottom", "name": "Wide-leg pants" }
+        ]
+      }
     },
     {
       "authorUsername": "nairobi_tailor",
       "caption": "Tailored Ankara Suit",
       "description": "Fitted blazer and tapered trousers in Ankara.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["African", "Tailored", "Ankara"],
       "brands": ["Custom"],
       "location": "Nairobi",
-      "isPublic": true
+      "isPublic": true,
+      "season": "fall",
+      "occasion": "formal",
+      "colors": ["blue"],
+      "details": {
+        "items": [
+          { "type": "suit", "name": "Ankara suit" },
+          { "type": "shoes", "name": "Derby shoes" }
+        ]
+      }
     },
     {
       "authorUsername": "nyc_vintage",
       "caption": "Vintage Denim Mix",
       "description": "Patchwork jacket with thrifted finds.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Vintage", "Denim", "American"],
       "brands": ["Levi's"],
       "location": "New York",
-      "isPublic": true
+      "isPublic": true,
+      "season": "fall",
+      "occasion": "casual",
+      "colors": ["blue", "brown"],
+      "details": {
+        "items": [
+          { "type": "jacket", "name": "Patchwork denim" },
+          { "type": "top", "name": "Graphic tee" }
+        ]
+      }
     },
     {
       "authorUsername": "cph_functional",
       "caption": "Functional Monochrome",
       "description": "Weatherproof outerwear with minimalist silhouette.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Scandinavian", "Functional", "Minimalist"],
       "brands": ["RAINS", "Arket"],
       "location": "Copenhagen",
-      "isPublic": true
+      "isPublic": true,
+      "season": "winter",
+      "occasion": "casual",
+      "colors": ["black", "white"],
+      "details": {
+        "items": [
+          { "type": "jacket", "name": "Waterproof shell" },
+          { "type": "bottom", "name": "Technical pants" }
+        ]
+      }
     },
     {
       "authorUsername": "rio_carnival",
       "caption": "Carnival Spark",
       "description": "Sequins, feathers, and vibrant hues.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Latin", "Festival", "Vibrant"],
       "brands": ["Handmade"],
       "location": "Rio de Janeiro",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "festive",
+      "colors": ["red", "green", "yellow"],
+      "details": {
+        "items": [
+          { "type": "top", "name": "Sequin top" },
+          { "type": "accessory", "name": "Feathers" }
+        ]
+      }
     },
     {
       "authorUsername": "beijing_modern",
       "caption": "Beijing Techwear",
       "description": "Urban techwear with modular pockets.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1511485977113-f34c92461ad9?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Asian", "Techwear", "Urban"],
       "brands": ["Stone Island", "Nike ACG"],
       "location": "Beijing",
-      "isPublic": true
+      "isPublic": true,
+      "season": "fall",
+      "occasion": "casual",
+      "colors": ["black"],
+      "details": {
+        "items": [
+          { "type": "jacket", "name": "Modular shell" },
+          { "type": "bag", "name": "Crossbody" }
+        ]
+      }
     },
     {
       "authorUsername": "casablanca_elegance",
       "caption": "Medina Elegance",
       "description": "Flowing kaftan in soft earth tones.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["MiddleEast", "Traditional", "Elegant"],
       "brands": ["Artisan"],
       "location": "Casablanca",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "festive",
+      "colors": ["beige"],
+      "details": {
+        "items": [{ "type": "dress", "name": "Kaftan" }]
+      }
     },
     {
       "authorUsername": "capetown_coastal",
       "caption": "Coastal Ease",
       "description": "Linen shirt, shorts, and sandals.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1546456073-6712f79251bb?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["African", "Coastal", "Casual"],
       "brands": ["Local"],
       "location": "Cape Town",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "casual",
+      "colors": ["white", "beige"],
+      "details": {
+        "items": [
+          { "type": "top", "name": "Linen shirt" },
+          { "type": "bottom", "name": "Linen shorts" },
+          { "type": "shoes", "name": "Sandals" }
+        ]
+      }
     },
     {
       "authorUsername": "igbo_senator",
       "caption": "Igbo Senator - Navy",
       "description": "Classic senator wear in deep navy with embroidered neckline.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Nigerian", "Igbo", "Senator", "Traditional"],
       "brands": ["Local Tailor"],
       "location": "Enugu",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "festive",
+      "colors": ["navy", "red"],
+      "details": {
+        "items": [
+          { "type": "two-piece", "name": "Senator set" },
+          { "type": "cap", "name": "Red cap" }
+        ]
+      }
     },
     {
       "authorUsername": "igbo_senator",
       "caption": "Igbo Senator - Cream",
       "description": "Cream senator set with red cap and beaded accessories.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1516826957135-700dedea698c?auto=format&fit=crop&w=1080&q=80"
-      ],
+      "imageUrls": ["/looks/placeholder.png"],
       "tags": ["Nigerian", "Igbo", "Senator", "Traditional"],
       "brands": ["Artisan"],
       "location": "Lagos",
-      "isPublic": true
+      "isPublic": true,
+      "season": "summer",
+      "occasion": "festive",
+      "colors": ["cream", "red"],
+      "details": {
+        "items": [
+          { "type": "two-piece", "name": "Senator set" },
+          { "type": "accessory", "name": "Beaded necklace" },
+          { "type": "cap", "name": "Red cap" }
+        ]
+      }
     }
   ],
   "lookbooks": [
