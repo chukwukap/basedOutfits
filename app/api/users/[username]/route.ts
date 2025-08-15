@@ -14,8 +14,6 @@ export async function GET(req: Request) {
           orderBy: { updatedAt: "desc" },
         },
         looks: true,
-        followers: true,
-        following: true,
       },
     });
 
@@ -27,8 +25,8 @@ export async function GET(req: Request) {
       name: user.name ?? user.username,
       avatar: user.avatarUrl ?? "",
       bio: user.bio ?? "",
-      followers: user.followers.length,
-      following: user.following.length,
+      followers: 0,
+      following: 0,
       totalLooks: user.looks.length,
       joinedDate: user.createdAt.toISOString(),
       isFollowing: false,
