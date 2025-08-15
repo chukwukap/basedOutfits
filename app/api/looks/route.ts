@@ -4,11 +4,7 @@ import { prisma } from "@/lib/db";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const following = searchParams.get("following") === "1";
     const limit = Number.parseInt(searchParams.get("limit") || "20", 10);
-
-    // TODO: replace with real current user context
-    const currentUserId = searchParams.get("userId") || undefined;
 
     const looks = await prisma.look.findMany({
       where: { isPublic: true },

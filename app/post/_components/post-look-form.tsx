@@ -48,15 +48,18 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
 
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFiles(Array.from(e.dataTransfer.files));
-    }
-  }, [handleFiles]);
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFiles(Array.from(e.dataTransfer.files));
+      }
+    },
+    [handleFiles],
+  );
 
   const uploadFile = async (file: File): Promise<string> => {
     const fd = new FormData();
@@ -67,7 +70,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     return data.url;
   };
 
-  const handleFiles = (files: File[]) => {
+  const handleFiles = useCallback((files: File[]) => {
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
 
     // Enforce up to 5 images total
@@ -102,7 +105,7 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
         }
       })();
     });
-  };
+  }, [images]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
