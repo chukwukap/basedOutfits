@@ -48,6 +48,57 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     }
   }, []);
 
+  const uploadFile = async (file: File): Promise<string> => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: fd });
+    if (!res.ok) throw new Error("Upload failed");
+    const data = (await res.json()) as { url: string };
+    return data.url;
+  };
+
+  const handleFiles = useCallback(
+    (files: File[]) => {
+      const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+
+      // Enforce up to 5 images total
+      const availableSlots = Math.max(0, 5 - images.length);
+      const filesToAdd = imageFiles.slice(0, availableSlots);
+
+      filesToAdd.forEach((file) => {
+        const id = Math.random().toString(36).substr(2, 9);
+        const preview = URL.createObjectURL(file);
+
+        setImages((prev) => [
+          ...prev,
+          {
+            id,
+            file,
+            preview,
+            uploading: true,
+          },
+        ]);
+
+        // Upload to backend
+        (async () => {
+          try {
+            const url = await uploadFile(file);
+            setImages((prev) =>
+              prev.map((img) =>
+                img.id === id
+                  ? { ...img, uploading: false, preview: url }
+                  : img,
+              ),
+            );
+          } catch {
+            setImages((prev) => prev.filter((img) => img.id !== id));
+          }
+        })();
+      });
+    },
+    [images],
+  );
+
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
@@ -60,52 +111,6 @@ export function PostLookForm({ onSuccess }: PostLookFormProps) {
     },
     [handleFiles],
   );
-
-  const uploadFile = async (file: File): Promise<string> => {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: fd });
-    if (!res.ok) throw new Error("Upload failed");
-    const data = (await res.json()) as { url: string };
-    return data.url;
-  };
-
-  const handleFiles = useCallback((files: File[]) => {
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-
-    // Enforce up to 5 images total
-    const availableSlots = Math.max(0, 5 - images.length);
-    const filesToAdd = imageFiles.slice(0, availableSlots);
-
-    filesToAdd.forEach((file) => {
-      const id = Math.random().toString(36).substr(2, 9);
-      const preview = URL.createObjectURL(file);
-
-      setImages((prev) => [
-        ...prev,
-        {
-          id,
-          file,
-          preview,
-          uploading: true,
-        },
-      ]);
-
-      // Upload to backend
-      (async () => {
-        try {
-          const url = await uploadFile(file);
-          setImages((prev) =>
-            prev.map((img) =>
-              img.id === id ? { ...img, uploading: false, preview: url } : img,
-            ),
-          );
-        } catch {
-          setImages((prev) => prev.filter((img) => img.id !== id));
-        }
-      })();
-    });
-  }, [images]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
