@@ -20,7 +20,8 @@ import { CreateLookbookModal } from "@/app/lookbooks/_components/create-lookbook
 import Image from "next/image";
 import { LookFetchPayload } from "@/lib/types";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
-import { BasePayButton } from "@base-org/account-ui/react"; // Import BasePayButton
+import { BasePayButton } from "@base-org/account-ui/react";
+import { pay } from "@base-org/account";
 
 interface Lookbook {
   id: string;
@@ -60,6 +61,7 @@ export function AddToLookbookSheet({
   open,
   onOpenChange,
   look,
+  onComplete,
 }: AddToLookbookSheetProps) {
   const { context } = useMiniKit();
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -68,6 +70,7 @@ export function AddToLookbookSheet({
   const [selectedLookbook, setSelectedLookbook] = useState<Lookbook | null>(
     null,
   );
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   useEffect(() => {
     const c = context || null;
@@ -77,69 +80,79 @@ export function AddToLookbookSheet({
       .catch(() => setLookbooks([]));
   }, [context]);
 
-  /**
-   * Handles the selection of a lookbook and transitions to payment state.
-   * @param lookbook The selected lookbook.
-   */
   const handleLookbookSelect = (lookbook: Lookbook) => {
     setSelectedLookbook(lookbook);
     setPaymentState("payment");
+    setPaymentError(null);
   };
 
-  /**
-   * Handles the result of the BasePay payment.
-   * On success, adds the look to the lookbook via API and transitions to success state.
-   * On failure, shows error state.
-   * @param result The result object from BasePayButton.
-   */
-  // const handleBasePayResult = async (result) => {
-  //   if (result.success) {
-  //     setPaymentState("processing");
-  //     setPaymentError("");
-  //     try {
-  //       // Security: Only allow adding to lookbook after successful payment
-  //       const c =
-  //         (context as unknown as { user?: { username?: string } } | null) ||
-  //         null;
-  //       const currentUserId = c?.user?.username || "";
-  //       const res = await fetch(
-  //         `/api/lookbooks/${selectedLookbook?.id}/items`,
-  //         {
-  //           method: "POST",
-  //           headers: { "Content-Type": "application/json" },
-  //           body: JSON.stringify({ lookId: look.id, addedById: currentUserId }),
-  //         },
-  //       );
-  //       if (!res.ok) throw new Error("Failed to add to lookbook");
+  const handleBasePay = async () => {
+    if (!selectedLookbook) {
+      setPaymentError("No lookbook selected.");
+      return;
+    }
+    setPaymentState("processing");
+    setPaymentError(null);
 
-  //       setPaymentState("success");
-  //       if (selectedLookbook) {
-  //         setLookbooks(
-  //           lookbooks.map((lb) =>
-  //             lb.id === selectedLookbook.id
-  //               ? { ...lb, lookCount: lb.lookCount + 1 }
-  //               : lb,
-  //           ),
-  //         );
-  //       }
-  //     } catch {
-  //       setPaymentState("error");
-  //     }
-  //   } else {
-  //     setPaymentState("error");
-  //   }
-  // };
+    try {
+      // You may want to make this dynamic in the future
+      const amount = "1";
+      // The recipient should be the app's treasury or a configured address
+      // For demo, we'll use a placeholder address (replace with your real one)
+      const recipient =
+        process.env.NEXT_PUBLIC_BASEPAY_RECIPIENT_ADDRESS ||
+        "0x0000000000000000000000000000000000000000";
+      const { success } = await pay({
+        amount,
+        to: recipient,
+        testnet:
+          process.env.NEXT_PUBLIC_BASEPAY_TESTNET === "true" ? true : false,
+      });
+      if (success) {
+        // After payment, add the look to the lookbook
+        const c =
+          (context as unknown as { user?: { username?: string } } | null) ||
+          null;
+        const currentUserId = c?.user?.username || "";
+        const res = await fetch(`/api/lookbooks/${selectedLookbook.id}/items`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lookId: look.id, addedById: currentUserId }),
+        });
+        if (!res.ok) throw new Error("Failed to add to lookbook");
 
-  // const handlePaymentSuccess = () => {
-  //   if (selectedLookbook) {
-  //     onComplete(selectedLookbook.name);
-  //   }
-  //   handleClose();
-  // };
+        setPaymentState("success");
+        setLookbooks(
+          lookbooks.map((lb) =>
+            lb.id === selectedLookbook.id
+              ? { ...lb, lookCount: lb.lookCount + 1 }
+              : lb,
+          ),
+        );
+        setTimeout(() => {
+          if (selectedLookbook) {
+            onComplete(selectedLookbook.name);
+          }
+          handleClose();
+        }, 1200);
+      } else {
+        setPaymentState("error");
+        setPaymentError("Payment failed: No transaction ID returned.");
+      }
+    } catch (error: unknown) {
+      setPaymentState("error");
+      if (error instanceof Error) {
+        setPaymentError(error.message);
+      } else {
+        setPaymentError("An unknown error occurred");
+      }
+    }
+  };
 
   const handleClose = () => {
     setPaymentState("selecting");
     setSelectedLookbook(null);
+    setPaymentError(null);
     onOpenChange(false);
   };
 
@@ -147,8 +160,10 @@ export function AddToLookbookSheet({
     if (paymentState === "payment") {
       setPaymentState("selecting");
       setSelectedLookbook(null);
+      setPaymentError(null);
     } else if (paymentState === "error") {
       setPaymentState("payment");
+      setPaymentError(null);
     }
   };
 
@@ -164,6 +179,7 @@ export function AddToLookbookSheet({
     setShowCreateModal(false);
     setSelectedLookbook(lookbook);
     setPaymentState("payment");
+    setPaymentError(null);
   };
 
   const getTitle = () => {
@@ -329,12 +345,19 @@ export function AddToLookbookSheet({
               {paymentState === "payment" && (
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                   <div className="w-full">
-                    {/* Security: Only allow payment to the intended recipient */}
-                    <BasePayButton colorScheme="light" />
+                    <BasePayButton
+                      colorScheme="light"
+                      onClick={handleBasePay}
+                    />
                   </div>
                   <p className="text-xs text-muted-foreground text-center">
-                    You will pay {1} USDC to add this look to your lookbook.
+                    You will pay 1 USDC to add this look to your lookbook.
                   </p>
+                  {paymentError && (
+                    <div className="text-destructive text-xs flex items-center gap-2 mt-2">
+                      {paymentError}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -351,8 +374,25 @@ export function AddToLookbookSheet({
                 </div>
               )}
 
+              {/* Success State */}
+              {paymentState === "success" && (
+                <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <span className="text-2xl">✅</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-green-600">
+                      Payment Successful
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Look added to your lookbook!
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Error State */}
-              {/* {paymentState === "error" && (
+              {paymentState === "error" && (
                 <div className="text-center py-8 space-y-4">
                   <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
                     <span className="text-2xl">❌</span>
@@ -363,11 +403,24 @@ export function AddToLookbookSheet({
                       {paymentError || "Please try again."}
                     </p>
                   </div>
-                  <Button onClick={handleBack} className="w-full">
+                  <Button
+                    onClick={() => {
+                      pay({
+                        amount: "1.00",
+                        to: "0x0000000000000000000000000000000000000000",
+                        testnet:
+                          process.env.NEXT_PUBLIC_BASEPAY_TESTNET === "true"
+                            ? true
+                            : false,
+                      });
+                      setPaymentError(null);
+                    }}
+                    className="w-full"
+                  >
                     Try Again
                   </Button>
                 </div>
-              )} */}
+              )}
             </div>
           )}
         </SheetContent>

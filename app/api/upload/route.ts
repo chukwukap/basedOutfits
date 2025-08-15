@@ -22,8 +22,7 @@ export async function POST(req: Request) {
     }
 
     // 10MB limit
-    // @ts-expect-error size exists on web File
-    if ((file as any).size && (file as any).size > 10 * 1024 * 1024) {
+    if (file.size && file.size > 10 * 1024 * 1024) {
       return NextResponse.json(
         { error: "File too large (max 10MB)" },
         { status: 413 },
@@ -33,7 +32,7 @@ export async function POST(req: Request) {
     const uploadsDir = path.join(process.cwd(), "public", "uploads");
     await mkdir(uploadsDir, { recursive: true });
 
-    const name = (file as unknown as { name?: string }).name || "";
+    const name = file?.name || "";
     const ext = path.extname(name).toLowerCase() || ".jpg";
     const safeExt = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext)
       ? ext
@@ -44,6 +43,12 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     await writeFile(filepath, buffer);
+
+    console.log("POST /api/upload success", {
+      filename,
+      filepath,
+      size: file.size,
+    });
 
     return NextResponse.json({ url: `/uploads/${filename}` }, { status: 201 });
   } catch (error) {
