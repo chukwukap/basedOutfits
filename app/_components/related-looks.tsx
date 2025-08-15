@@ -1,7 +1,6 @@
 "use client";
 
 import { Card } from "@/app/_components/ui/card";
-import { Badge } from "@/app/_components/ui/badge";
 import { Heart, DollarSign } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
