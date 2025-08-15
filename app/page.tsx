@@ -380,3 +380,6 @@ export default function HomePage() {
     </Suspense>
   );
 }
+
+// Ensure the home route is never statically cached
+export const dynamic = "force-dynamic";
