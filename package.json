@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:seed": "node --enable-source-maps prisma/seed.mjs"
+    "db:seed": "node --enable-source-maps prisma/seed.mjs",
+    "postinstall": "pnpm prisma generate"
   },
   "dependencies": {
     "@base-org/account": "^2.0.1",
