@@ -1,11 +1,21 @@
 import LookbookDetailsPageClient from "./_components/post-details-page-client";
-import { Metadata } from "next";
 import { prisma } from "@/lib/db";
-import type { PageProps } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 
-export async function generateMetadata({ params }: PageProps<{ id: string }>): Promise<Metadata> {
-  const id = params?.id;
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { id } = await params;
   if (!id) return {};
+
+  const previousImages = (await parent).openGraph?.images || [];
+
   try {
     const lb = await prisma.lookbook.findUnique({ where: { id } });
     if (!lb) return {};
@@ -20,18 +30,18 @@ export async function generateMetadata({ params }: PageProps<{ id: string }>): P
       title: lb.name,
       description: lb.description || "",
       openGraph: {
-        images: image ? [image] : [],
+        images: image ? [image, ...previousImages] : previousImages || [],
       },
       other: {
         "fc:frame": JSON.stringify({
           version: "next",
           imageUrl: image,
           button: {
-            title: `Open ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
+            title: `View ${lb.name} outfit!`,
             action: {
               type: "launch_frame",
               name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-              url: host,
+              url: `${host}/lookbooks/${id}`,
               splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
               splashBackgroundColor:
                 process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,

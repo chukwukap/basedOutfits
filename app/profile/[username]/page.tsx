@@ -27,7 +27,7 @@ export async function generateMetadata(
       : process.env.NEXT_PUBLIC_APP_HERO_IMAGE;
 
     return {
-      title: user.name || `@${user.username}`,
+      title: user.name || `@${user.username} profile`,
       description: user.bio || "",
       openGraph: {
         images: image ? [image, ...previousImages] : previousImages || [],
@@ -37,11 +37,11 @@ export async function generateMetadata(
           version: "next",
           imageUrl: image,
           button: {
-            title: `View @${user.username}`,
+            title: `View @${user.username}'s profile`,
             action: {
               type: "launch_frame",
               name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-              url: host,
+              url: `${host}/profile/${user.username}`,
               splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
               splashBackgroundColor:
                 process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
