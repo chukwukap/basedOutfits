@@ -21,14 +21,13 @@ export function Providers(props: { children: ReactNode }) {
         },
       }}
     >
-      <MiniKitBootstrap />
+      <MiniKitBootstrap>{props.children}</MiniKitBootstrap>
       <ThemeSelector />
-      {props.children}
     </MiniKitProvider>
   );
 }
 
-function MiniKitBootstrap() {
+function MiniKitBootstrap({ children }: { children: ReactNode }) {
   const { isFrameReady, setFrameReady } = useMiniKit();
   useUser();
 
@@ -36,5 +35,5 @@ function MiniKitBootstrap() {
     if (!isFrameReady) setFrameReady();
   }, [isFrameReady, setFrameReady]);
 
-  return null;
+  return <>{children}</>;
 }
