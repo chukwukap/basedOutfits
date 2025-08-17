@@ -29,7 +29,7 @@ interface ImageFile {
 
 export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
   const { context } = useMiniKit();
-  const { mini, db } = useUser();
+  const { mini, db, sync } = useUser();
   const [images, setImages] = useState<ImageFile[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -167,8 +167,15 @@ export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
         (context as unknown as {
           user?: { username?: string; fid?: number | string };
         } | null) || null;
-      const currentUserId =
-        db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
+      // Ensure the user exists in DB to avoid FK issues
+      if (!db && mini.username && mini.fid) {
+        try {
+          await sync();
+        } catch {
+          // non-fatal; server will still try to resolve by fid/username
+        }
+      }
+      const currentUserId = db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
       if (!currentUserId) {
         throw new Error("You must be signed in to post an outfit.");
       }
