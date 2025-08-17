@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/app/_components/ui/button";
 import {
   Avatar,
@@ -9,66 +9,92 @@ import {
 } from "@/app/_components/ui/avatar";
 import { Card } from "@/app/_components/ui/card";
 
-const suggestedCreators = [
-  {
-    id: "1",
-    name: "Emma Style",
-    username: "@emmastyle",
-    avatar: "/diverse-group-profile.png",
-    followers: "12.5K",
-    isFollowing: false,
-  },
-  {
-    id: "2",
-    name: "Min Chen",
-    username: "@minimalmin",
-    avatar: "/diverse-group-profile.png",
-    followers: "8.2K",
-    isFollowing: false,
-  },
-  {
-    id: "3",
-    name: "Alex Urban",
-    username: "@alexurban",
-    avatar: "/diverse-group-profile.png",
-    followers: "15.1K",
-    isFollowing: false,
-  },
-  {
-    id: "4",
-    name: "Sofia Chic",
-    username: "@sofiachic",
-    avatar: "/diverse-group-profile.png",
-    followers: "9.8K",
-    isFollowing: false,
-  },
-  {
-    id: "5",
-    name: "Rio Street",
-    username: "@riostreet",
-    avatar: "/diverse-group-profile.png",
-    followers: "11.3K",
-    isFollowing: false,
-  },
-];
-
 type DiscoverCreatorsProps = object;
 
 export function DiscoverCreators({}: DiscoverCreatorsProps) {
-  const [followingStates, setFollowingStates] = useState<
-    Record<string, boolean>
-  >({});
+  // Local type to keep the UI strongly typed and readable
+  type DiscoverCreator = {
+    id: string;
+    username: string;
+    name: string;
+    avatar: string;
+    followers: number;
+    isFollowing: boolean;
+  };
 
-  const filteredCreators = suggestedCreators;
+  const [creators, setCreators] = useState<DiscoverCreator[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [followingStates, setFollowingStates] = useState<Record<string, boolean>>({});
+
+  // Security: use no-store and defensive parsing
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch("/api/users/suggested?limit=10", { cache: "no-store" });
+        if (!res.ok) throw new Error("Failed to load creators");
+        const data = (await res.json()) as Array<{
+          id: string;
+          username: string;
+          name: string;
+          avatar: string;
+          followers: number;
+          isFollowing: boolean;
+        }>;
+        if (cancelled) return;
+        setCreators(
+          data.map((c) => ({
+            id: String(c.id),
+            username: c.username.startsWith("@") ? c.username : `@${c.username}`,
+            name: c.name,
+            avatar: c.avatar,
+            followers: Number.isFinite(c.followers) ? c.followers : 0,
+            isFollowing: Boolean(c.isFollowing),
+          })),
+        );
+        // Seed local follow state from server payload (optimistic updates later)
+        setFollowingStates(
+          data.reduce<Record<string, boolean>>((acc, c) => {
+            acc[String(c.id)] = Boolean(c.isFollowing);
+            return acc;
+          }, {}),
+        );
+      } catch (e) {
+        if (!cancelled) setError((e as Error).message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleFollow = (creatorId: string) => {
+    // Optimistic local toggle; TODO: integrate with real follow API when available
     setFollowingStates((prev) => ({
       ...prev,
       [creatorId]: !prev[creatorId],
     }));
   };
 
-  if (filteredCreators.length === 0) return null;
+  const formatFollowers = (n: number) => {
+    try {
+      if (n >= 1000000) return `${(n / 1000000).toFixed(1).replace(/\.0$/, "")}M`;
+      if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K`;
+      return n.toLocaleString();
+    } catch {
+      return String(n);
+    }
+  };
+
+  if (loading) return null;
+  if (error) return null;
+  if (creators.length === 0) return null;
 
   return (
     <div className="px-4 py-6 border-t bg-muted/20">
@@ -80,7 +106,7 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
       </div>
 
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-        {filteredCreators.map((creator) => (
+        {creators.map((creator) => (
           <Card key={creator.id} className="flex-shrink-0 w-40 p-4 text-center">
             <Avatar className="w-12 h-12 mx-auto mb-3">
               <AvatarImage
@@ -97,7 +123,7 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
               {creator.username}
             </p>
             <p className="text-xs text-muted-foreground mb-3">
-              {creator.followers} followers
+              {formatFollowers(creator.followers)} followers
             </p>
 
             <Button
