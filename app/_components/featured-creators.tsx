@@ -25,29 +25,28 @@ type FeaturedCreator = {
 };
 
 async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
-  // For now, derive from recent public users via wardrobes/outfits counts
-  const usernames = ["demo"]; // TODO: replace with real featured logic
-  const results: FeaturedCreator[] = [];
-  for (const username of usernames) {
-    const res = await fetch(`/api/users/${encodeURIComponent(username)}`, {
-      cache: "no-store",
-    });
-    if (res.ok) {
-      const u = await res.json();
-      results.push({
-        username: u.username,
-        name: u.name,
-        avatar: u.avatar,
-        bio: u.bio,
-        followers: u.followers,
-        wardrobesCount: u.publicWardrobes.length,
-        totalOutfits: u.totalOutfits,
-        isFollowing: false,
-        isFeatured: true,
-      });
-    }
-  }
-  return results;
+  // Use suggested users as provisional featured creators
+  const res = await fetch(`/api/users/suggested?limit=6`, { cache: "no-store" });
+  if (!res.ok) return [];
+  const data = (await res.json()) as Array<{
+    username: string;
+    name: string;
+    avatar: string;
+    followers: number;
+    wardrobesCount: number;
+    totalOutfits: number;
+    isFollowing: boolean;
+  }>;
+  return data.map((u) => ({
+    username: u.username,
+    name: u.name,
+    avatar: u.avatar,
+    followers: u.followers,
+    wardrobesCount: u.wardrobesCount,
+    totalOutfits: u.totalOutfits,
+    isFollowing: u.isFollowing,
+    isFeatured: true,
+  }));
 }
 
 export function FeaturedCreators() {
