@@ -30,7 +30,6 @@ export function Providers(props: { children: ReactNode }) {
 
 function MiniKitBootstrap() {
   const { isFrameReady, setFrameReady } = useMiniKit();
-  // Initialize and auto-sync user via hook
   useUser();
 
   useEffect(() => {

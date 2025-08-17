@@ -159,7 +159,7 @@ export default function WardrobeDetailsPageClient() {
 
   const handleOutfitClick = (outfit: OutfitItem) => {
     // Navigate to outfit details
-    window.location.href = `/outfit/${outfit.id}`;
+    window.location.href = `/outfits/${outfit.id}`;
   };
 
   const handleTipOutfit = (outfit: OutfitItem) => {

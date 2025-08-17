@@ -56,21 +56,21 @@ export function OutfitDetailModal({
         await navigator.share({
           title: outfit.title,
           text: `Check out this outfit from my closet: ${outfit.title}`,
-          url: `${window.location.origin}/outfit/${outfit.id}`,
+          url: `${window.location.origin}/outfits/${outfit.id}`,
         });
       } catch {
         console.log("Share cancelled");
       }
     } else {
       navigator.clipboard.writeText(
-        `${window.location.origin}/outfit/${outfit.id}`,
+        `${window.location.origin}/outfits/${outfit.id}`,
       );
     }
   };
 
   const handleViewOriginal = () => {
     // Navigate to original outfit page
-    window.location.href = `/outfit/${outfit.id}`;
+    window.location.href = `/outfits/${outfit.id}`;
   };
 
   return (

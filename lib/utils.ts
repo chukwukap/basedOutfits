@@ -50,4 +50,4 @@ export function formatDate(inputDate: Date | string): string {
 }
 
 export const APP_URL =
-  process.env.NEXT_PUBLIC_URL || "https://basedOutfits.vercel.app";
+  process.env.NEXT_PUBLIC_URL || "https://Outfitly.vercel.app";

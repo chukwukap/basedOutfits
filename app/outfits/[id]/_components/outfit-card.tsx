@@ -32,7 +32,7 @@ export function OutfitCard({ outfit, onTip, onCollect }: OutfitCardProps) {
   const { composeCast } = useComposeCast();
 
   const handleCardClick = () => {
-    router.push(`/outfit/${outfit.id}`);
+    router.push(`/outfits/${outfit.id}`);
   };
 
   const handleTip = async (e: React.MouseEvent) => {
@@ -56,7 +56,7 @@ export function OutfitCard({ outfit, onTip, onCollect }: OutfitCardProps) {
     e.stopPropagation();
     composeCast({
       text: `I just discovered "${outfit.caption || "this outfit"}" on Outfitly! #Outfitly`,
-      embeds: [`${window.location.origin}/outfit/${outfit.id}`],
+      embeds: [`${window.location.origin}/outfits/${outfit.id}`],
     });
   };
 

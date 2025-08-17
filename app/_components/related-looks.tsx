@@ -68,7 +68,7 @@ export function RelatedOutfits({ currentOutfitId }: RelatedOutfitsProps) {
       <h3 className="font-semibold text-lg mb-4">Related Outfits</h3>
       <div className="grid grid-cols-2 gap-3">
         {relatedOutfits.map((outfit) => (
-          <Link key={outfit.id} href={`/outfit/${outfit.id}`}>
+          <Link key={outfit.id} href={`/outfits/${outfit.id}`}>
             <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
               <div className="relative aspect-square">
                 <Image

@@ -11,99 +11,106 @@
   "outfits": [
     {
       "authorUsername": "chukwukauba",
-      "caption": "Lagos Street Style",
-      "description": "Bold Ankara patterns with my favorite sneakers—repping Lagos energy.",
-      "imageUrls": [
-        "https://images.unsplash.com/photo-1532332248682-206cc786359f"
-      ],
-      "tags": ["African", "Ankara", "Streetwear"],
-      "brands": ["Local Tailor"],
-      "location": "Lagos",
+      "caption": "Summer Vibes",
+      "description": "Perfect outfit for a sunny day in the city. Love mixing casual pieces with statement accessories!",
+      "imageUrls": ["/fashionable-summer-outfit.png"],
+      "tags": ["SummerFits", "Streetwear", "Accessories"],
+      "brands": ["Zara", "Nike"],
+      "location": "New York",
       "isPublic": true,
       "season": "summer",
       "occasion": "casual",
-      "colors": ["red", "black"],
+      "colors": [],
       "details": {
         "items": [
-          { "type": "top", "name": "Ankara shirt" },
-          { "type": "bottom", "name": "Slim trousers" },
-          { "type": "shoes", "name": "Sneakers" }
+          { "type": "top", "name": "Casual T-shirt" },
+          { "type": "bottom", "name": "Denim Shorts" },
+          { "type": "accessory", "name": "Statement Sunglasses" }
         ]
       }
     },
     {
       "authorUsername": "chukwukauba",
-      "caption": "Kitenge Elegance",
-      "description": "Suiting up in Kitenge—feels sharp, grounded, and ready for the night.",
-      "imageUrls": ["/outfits/kitenge-elegance.png"],
-      "tags": ["African", "Kitenge", "Formal"],
-      "brands": ["Custom"],
-      "location": "Nairobi",
+      "caption": "Evening Elegance",
+      "description": "Sophisticated look for dinner dates. This dress makes me feel confident and beautiful.",
+      "imageUrls": ["/elegant-evening-dress.png"],
+      "tags": ["OfficeChic", "Minimalist", "DateNight"],
+      "brands": ["H&M", "Mango"],
+      "location": "Paris",
+      "isPublic": true,
+      "season": "spring",
+      "occasion": "formal",
+      "colors": [],
+      "details": {
+        "items": [
+          { "type": "dress", "name": "Elegant Evening Dress" },
+          { "type": "shoes", "name": "Heels" },
+          { "type": "accessory", "name": "Clutch Bag" }
+        ]
+      }
+    },
+    {
+      "authorUsername": "chukwukauba",
+      "caption": "Street Style Maven",
+      "description": "Channeling my inner street style photographer today. Bold colors and patterns are my thing!",
+      "imageUrls": ["/street-style-outfit.png"],
+      "tags": ["Streetwear", "Bold", "Urban"],
+      "brands": ["Supreme", "Off-White", "Converse"],
+      "location": "Tokyo",
       "isPublic": true,
       "season": "fall",
-      "occasion": "formal",
-      "colors": ["blue", "white"],
+      "occasion": "casual",
+      "colors": [],
       "details": {
         "items": [
-          { "type": "suit", "name": "Kitenge suit" },
-          { "type": "shoes", "name": "Oxford shoes" }
+          { "type": "top", "name": "Graphic Hoodie" },
+          { "type": "bottom", "name": "Patterned Pants" },
+          { "type": "shoes", "name": "Converse Sneakers" }
         ]
       }
     },
     {
       "authorUsername": "chukwukauba",
-      "caption": "Igbo Senator - Navy",
-      "description": "Classic senator in deep navy—royal vibes with bold red cap.",
-      "imageUrls": ["/outfits/igbo-senator-navy.png"],
-      "tags": ["Nigerian", "Igbo", "Senator", "Traditional"],
-      "brands": ["Local Tailor"],
-      "location": "Enugu",
+      "caption": "Business Casual Chic",
+      "description": "Work from home but make it fashion. Comfortable yet professional for video calls.",
+      "imageUrls": ["/business-casual-outfit.png"],
+      "tags": ["OfficeChic", "Professional", "WFH"],
+      "brands": ["Uniqlo", "Everlane"],
+      "location": "San Francisco",
       "isPublic": true,
-      "season": "summer",
-      "occasion": "festive",
-      "colors": ["navy", "red"],
+      "season": "winter",
+      "occasion": "work",
+      "colors": [],
       "details": {
         "items": [
-          { "type": "two-piece", "name": "Senator set" },
-          { "type": "cap", "name": "Red cap" }
+          { "type": "top", "name": "Button-down Shirt" },
+          { "type": "bottom", "name": "Tailored Pants" },
+          { "type": "accessory", "name": "Minimalist Watch" }
         ]
       }
     },
     {
       "authorUsername": "chukwukauba",
-      "caption": "Igbo Senator - Cream",
-      "description": "Cream senator fit with red cap—heritage and heat in one outfit.",
-      "imageUrls": ["/outfits/igbo-senator-cream.png"],
-      "tags": ["Nigerian", "Igbo", "Senator", "Traditional"],
-      "brands": ["Artisan"],
-      "location": "Lagos",
+      "caption": "Cozy Weekend Vibes",
+      "description": "Perfect lazy Sunday outfit. Comfort is key but still want to look put together.",
+      "imageUrls": ["/summer-fashion-outfit.png"],
+      "tags": ["Weekend", "Minimalist", "Comfort"],
+      "brands": ["Lululemon", "Patagonia"],
+      "location": "Los Angeles",
       "isPublic": true,
       "season": "summer",
-      "occasion": "festive",
-      "colors": ["cream", "red"],
+      "occasion": "casual",
+      "colors": [],
       "details": {
         "items": [
-          { "type": "two-piece", "name": "Senator set" },
-          { "type": "accessory", "name": "Beaded necklace" },
-          { "type": "cap", "name": "Red cap" }
+          { "type": "top", "name": "Comfy Sweatshirt" },
+          { "type": "bottom", "name": "Joggers" },
+          { "type": "shoes", "name": "Slides" }
         ]
       }
-    },
-    {
-      "authorUsername": "chukwukauba",
-      "caption": "Senator Saturday",
-      "description": "Saturday owambe—senator set pressed, beads on, smile ready.",
-      "imageUrls": ["/outfits/senator-saturday.png"],
-      "tags": ["Nigerian", "Igbo", "Senator", "Festive"],
-      "brands": ["Local Tailor"],
-      "location": "Lagos",
-      "isPublic": true,
-      "season": "summer",
-      "occasion": "festive",
-      "colors": ["navy", "red"],
-      "details": { "items": [{ "type": "two-piece", "name": "Senator set" }] }
     }
   ],
+
   "wardrobes": [
     {
       "ownerUsername": "chukwukauba",

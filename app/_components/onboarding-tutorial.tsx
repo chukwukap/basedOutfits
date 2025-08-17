@@ -65,7 +65,7 @@ const tutorialSteps = [
     title: "Share Your Outfits",
     subtitle: "Express Your Style",
     description:
-      "Post your outfits directly to BasedOutfits. Inspire others, get tipped, and grow your digital fashion presence inside the BaseApp.",
+      "Post your outfits directly to Outfitly. Inspire others, get tipped, and grow your digital fashion presence inside the BaseApp.",
     color: "bg-purple-500",
     features: [
       "Easily upload outfit photos",
@@ -143,7 +143,7 @@ export function OnboardingTutorial({
               currentStepData.color,
             )}
           />
-          <span className="font-semibold">Welcome to BasedOutfits</span>
+          <span className="font-semibold">Welcome to Outfitly</span>
         </div>
         <Badge variant="outline" className="text-xs">
           {currentStep + 1} of {tutorialSteps.length}

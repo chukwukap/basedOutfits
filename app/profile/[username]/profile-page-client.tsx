@@ -107,7 +107,7 @@ export default function UserProfilePageClient() {
       {/* Share profile */}
       <div className="px-4 -mt-2">
         <ComposeCastButton
-          text={`Viewing @${user.username}'s profile on BasedOutfits`}
+          text={`Viewing @${user.username}'s profile on Outfitly`}
           label="Share Profile"
           variant="outline"
           size="sm"

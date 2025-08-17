@@ -53,7 +53,7 @@ export function TrendingWardrobes({
   // Follow feature removed
 
   const handleWardrobeClick = (wardrobe: TrendingWardrobe) => {
-    window.location.href = `/profile/${wardrobe.creator.username}/wardrobe/${wardrobe.id}`;
+    window.location.href = `/profile/${wardrobe.creator.username}/wardrobes/${wardrobe.id}`;
   };
 
   const handleCreatorClick = (e: React.MouseEvent, username: string) => {

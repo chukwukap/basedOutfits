@@ -70,11 +70,7 @@ export async function POST(req: Request) {
     let resolvedAuthorId = authorId;
     const author = await prisma.user.findFirst({
       where: {
-        OR: [
-          { id: authorId },
-          { username: authorId },
-          { fid: authorId },
-        ],
+        OR: [{ id: authorId }, { username: authorId }, { fid: authorId }],
       },
       select: { id: true },
     });

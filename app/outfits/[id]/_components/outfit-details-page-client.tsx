@@ -226,7 +226,7 @@ export default function OutfitDetailPageClient() {
             <div
               key={i}
               className="flex-shrink-0 w-32 cursor-pointer"
-              onClick={() => router.push(`/outfit/${i + 10}`)}
+              onClick={() => router.push(`/outfits/${i + 10}`)}
             >
               <div className="aspect-square bg-muted rounded-lg mb-2 overflow-hidden">
                 <picture>

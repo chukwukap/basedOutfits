@@ -175,7 +175,8 @@ export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
           // non-fatal; server will still try to resolve by fid/username
         }
       }
-      const currentUserId = db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
+      const currentUserId =
+        db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
       if (!currentUserId) {
         throw new Error("You must be signed in to post an outfit.");
       }

@@ -22,7 +22,7 @@ export async function generateMetadata(
     if (!outfit) return {};
     const host = process.env.NEXT_PUBLIC_URL || "";
     const appName =
-      process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
+      process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Outfitly";
     const splashImageUrl =
       process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/splash.png`;
     const splashBackgroundColor =

@@ -227,9 +227,10 @@ function HomePageInner() {
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">👕</span>
               </div>
-              <h3 className="font-semibold mb-2">No outfits found</h3>
+              <h3 className="font-semibold mb-2">No outfits yet!</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                No outfits available at the moment.
+                Be the first to inspire the community—share your style or check
+                back soon for fresh looks!
               </p>
             </div>
           )}

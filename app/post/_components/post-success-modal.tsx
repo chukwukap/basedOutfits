@@ -27,13 +27,13 @@ export function PostSuccessModal({
     // Prefer MiniKit compose flow with embed
     try {
       composeCast({
-        text: `I just posted a new outfit on Outfitly! ${outfit.caption ?? ""} #Outfitly`,
-        embeds: [`${window.location.origin}/outfit/${outfit.id}`],
+        text: `I just posted a new outfit on Outfitly! Check it out!`,
+        embeds: [`${window.location.origin}/outfits/${outfit.id}`],
       });
     } catch {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(
-        `Check out my outfit: ${outfit.caption} - ${window.location.origin}/outfit/${outfit.id}`,
+        `Check out my outfit: ${outfit.caption} - ${window.location.origin}/outfits/${outfit.id}`,
       );
     }
   };

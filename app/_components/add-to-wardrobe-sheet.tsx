@@ -105,7 +105,7 @@ export function AddToWardrobeSheet({
       // The recipient should be the app's treasury or a configured address
       // For demo, we'll use a placeholder address (replace with your real one)
       const recipient =
-        selectedWardrobe.owner.walletAddress ||
+        selectedWardrobe?.owner?.walletAddress ||
         "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7";
       const { success } = await pay({
         amount,
@@ -423,7 +423,7 @@ export function AddToWardrobeSheet({
                         composeCast({
                           text: `I just added a new outfit to my Wardrobe on Wardrobes! #Wardrobes`,
                           embeds: [
-                            `${typeof window !== "undefined" ? window.location.origin : ""}/outfit/${outfit.id}`,
+                            `${typeof window !== "undefined" ? window.location.origin : ""}/outfits/${outfit.id}`,
                           ],
                         });
                       } catch {}
@@ -449,9 +449,9 @@ export function AddToWardrobeSheet({
                   <Button
                     onClick={() => {
                       pay({
-                        amount: "0.50",
+                        amount: "0.5",
                         to:
-                          selectedWardrobe?.owner.walletAddress ||
+                          selectedWardrobe?.owner?.walletAddress ||
                           "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7",
                         testnet:
                           process.env.NEXT_PUBLIC_BASEPAY_TESTNET === "true"
