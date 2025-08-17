@@ -101,7 +101,7 @@ export function AddToWardrobeSheet({
 
     try {
       // You may want to make this dynamic in the future
-      const amount = "1";
+      const amount = "0.5";
       // The recipient should be the app's treasury or a configured address
       // For demo, we'll use a placeholder address (replace with your real one)
       const recipient =
@@ -353,8 +353,10 @@ export function AddToWardrobeSheet({
                   {/* Payment Summary */}
                   <div className="rounded-lg border bg-card p-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Total</span>
-                      <span className="font-semibold">1 USDC</span>
+                      <span className="text-sm text-muted-foreground">
+                        Total
+                      </span>
+                      <span className="font-semibold">0.5 USDC</span>
                     </div>
                     <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
                       <Lock className="w-3 h-3" />
@@ -371,10 +373,13 @@ export function AddToWardrobeSheet({
                   {/* Sticky action bar for payment */}
                   <div className="sticky bottom-0 left-0 right-0 bg-background/80 backdrop-blur border-t p-4 -mx-4 sm:mx-0">
                     <div className="w-full">
-                      <BasePayButton colorScheme="light" onClick={handleBasePay} />
+                      <BasePayButton
+                        colorScheme="light"
+                        onClick={handleBasePay}
+                      />
                     </div>
                     <p className="mt-2 text-xs text-muted-foreground text-center">
-                      You will pay 1 USDC to add this outfit to your wardrobe.
+                      You will pay 0.5 USDC to add this outfit to your wardrobe.
                     </p>
                   </div>
                 </div>
@@ -444,7 +449,7 @@ export function AddToWardrobeSheet({
                   <Button
                     onClick={() => {
                       pay({
-                        amount: "1.00",
+                        amount: "0.50",
                         to:
                           selectedWardrobe?.owner.walletAddress ||
                           "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7",
