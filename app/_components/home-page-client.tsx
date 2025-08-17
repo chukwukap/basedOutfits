@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, Suspense } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import useSWR from "swr";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { TipModal } from "@/app/_components/tip-modal";
@@ -263,9 +263,5 @@ function HomePageInner() {
 }
 
 export default function HomePageClient() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-background" />}>
-      <HomePageInner />
-    </Suspense>
-  );
+  return <HomePageInner />;
 }
