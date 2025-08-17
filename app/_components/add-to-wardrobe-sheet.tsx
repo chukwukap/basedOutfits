@@ -24,7 +24,7 @@ import { pay } from "@base-org/account";
 import { useUser } from "@/hooks/useUser";
 import { useComposeCast } from "@coinbase/onchainkit/minikit";
 
-interface Outfitly {
+interface Wardrobe {
   id: string;
   name: string;
   description: string;
@@ -50,7 +50,7 @@ type PaymentState =
   | "success"
   | "error";
 
-async function fetchUserWardrobes(ownerId: string): Promise<Outfitly[]> {
+async function fetchUserWardrobes(ownerId: string): Promise<Wardrobe[]> {
   const res = await fetch(
     `/api/wardrobes?ownerId=${encodeURIComponent(ownerId)}&public=0`,
     {
@@ -69,9 +69,9 @@ export function AddToWardrobeSheet({
 }: AddToWardrobeSheetProps) {
   const { mini } = useUser();
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [wardrobes, setWardrobes] = useState<Outfitly[]>([]);
+  const [wardrobes, setWardrobes] = useState<Wardrobe[]>([]);
   const [paymentState, setPaymentState] = useState<PaymentState>("selecting");
-  const [selectedWardrobe, setSelectedWardrobe] = useState<Outfitly | null>(
+  const [selectedWardrobe, setSelectedWardrobe] = useState<Wardrobe | null>(
     null,
   );
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -85,7 +85,7 @@ export function AddToWardrobeSheet({
       .catch(() => setWardrobes([]));
   }, [mini.username, mini.fid]);
 
-  const handleWardrobeSelect = (wardrobe: Outfitly) => {
+  const handleWardrobeSelect = (wardrobe: Wardrobe) => {
     setSelectedWardrobe(wardrobe);
     setPaymentState("payment");
     setPaymentError(null);
@@ -174,7 +174,7 @@ export function AddToWardrobeSheet({
   };
 
   const handleCreateWardrobe = (
-    newWardrobe: Omit<Outfitly, "id" | "wardrobeCount">,
+    newWardrobe: Omit<Wardrobe, "id" | "wardrobeCount">,
   ) => {
     const wardrobe = {
       ...newWardrobe,
@@ -191,7 +191,7 @@ export function AddToWardrobeSheet({
   const getTitle = () => {
     switch (paymentState) {
       case "selecting":
-        return "Add to Outfitly";
+        return "Add to Wardrobe";
       case "payment":
         return `Add to ${selectedWardrobe?.name}`;
       case "processing":
@@ -201,7 +201,7 @@ export function AddToWardrobeSheet({
       case "error":
         return "Payment Failed";
       default:
-        return "Add to Outfitly";
+        return "Add to Wardrobe";
     }
   };
 
@@ -226,7 +226,7 @@ export function AddToWardrobeSheet({
             </SheetTitle>
           </SheetHeader>
 
-          {/* Outfitly Selection */}
+          {/* Wardrobe Selection */}
           {paymentState === "selecting" && (
             <div className="space-y-4">
               {/* Outfit Preview */}
@@ -245,7 +245,7 @@ export function AddToWardrobeSheet({
                 </div>
               </div>
 
-              {/* Create New Outfitly */}
+              {/* Create New Wardrobe */}
               <Button
                 variant="outline"
                 className="w-full justify-start h-auto p-4 bg-primary/5 border-primary/20 hover:bg-primary/10"
@@ -256,7 +256,7 @@ export function AddToWardrobeSheet({
                     <Plus className="w-6 h-6 text-primary" />
                   </div>
                   <div className="text-left">
-                    <p className="font-medium text-sm">Create New Outfitly</p>
+                    <p className="font-medium text-sm">Create New Wardrobe</p>
                     <p className="text-xs text-muted-foreground">
                       Start a new collection
                     </p>
@@ -325,7 +325,7 @@ export function AddToWardrobeSheet({
             paymentState === "success" ||
             paymentState === "error") && (
             <div className="space-y-4">
-              {/* Selected Outfitly Preview */}
+              {/* Selected Wardrobe Preview */}
               {selectedWardrobe && (
                 <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                   <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
@@ -349,21 +349,34 @@ export function AddToWardrobeSheet({
 
               {/* Payment Form: Only BasePay is supported */}
               {paymentState === "payment" && (
-                <div className="flex flex-col items-center justify-center py-8 space-y-4">
-                  <div className="w-full">
-                    <BasePayButton
-                      colorScheme="light"
-                      onClick={handleBasePay}
-                    />
+                <div className="py-4 space-y-4">
+                  {/* Payment Summary */}
+                  <div className="rounded-lg border bg-card p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Total</span>
+                      <span className="font-semibold">1 USDC</span>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+                      <Lock className="w-3 h-3" />
+                      <span>Secured by BasePay</span>
+                    </div>
                   </div>
-                  <p className="text-xs text-muted-foreground text-center">
-                    You will pay 1 USDC to add this outfit to your wardrobe.
-                  </p>
+
                   {paymentError && (
-                    <div className="text-destructive text-xs flex items-center gap-2 mt-2">
+                    <div className="text-destructive text-xs flex items-center gap-2">
                       {paymentError}
                     </div>
                   )}
+
+                  {/* Sticky action bar for payment */}
+                  <div className="sticky bottom-0 left-0 right-0 bg-background/80 backdrop-blur border-t p-4 -mx-4 sm:mx-0">
+                    <div className="w-full">
+                      <BasePayButton colorScheme="light" onClick={handleBasePay} />
+                    </div>
+                    <p className="mt-2 text-xs text-muted-foreground text-center">
+                      You will pay 1 USDC to add this outfit to your wardrobe.
+                    </p>
+                  </div>
                 </div>
               )}
 
@@ -403,7 +416,7 @@ export function AddToWardrobeSheet({
                       try {
                         // Lazy import to avoid SSR issues
                         composeCast({
-                          text: `I just added a new outfit to my Outfitly on Wardrobes! #Wardrobes`,
+                          text: `I just added a new outfit to my Wardrobe on Wardrobes! #Wardrobes`,
                           embeds: [
                             `${typeof window !== "undefined" ? window.location.origin : ""}/outfit/${outfit.id}`,
                           ],
@@ -453,7 +466,7 @@ export function AddToWardrobeSheet({
         </SheetContent>
       </Sheet>
 
-      {/* Create Outfitly Modal */}
+      {/* Create Wardrobe Modal */}
       <CreateWardrobeModal
         open={showCreateModal}
         onOpenChange={setShowCreateModal}
