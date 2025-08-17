@@ -66,17 +66,25 @@ export async function POST(req: Request) {
       );
     }
 
-    // Resolve placeholder usernames to real ids (e.g., "demo")
+    // Resolve author by DB id, username, or fid
     let resolvedAuthorId = authorId;
-    const authorById = await prisma.user.findUnique({
-      where: { id: authorId },
+    const author = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { id: authorId },
+          { username: authorId },
+          { fid: authorId },
+        ],
+      },
+      select: { id: true },
     });
-    if (!authorById) {
-      const authorByUsername = await prisma.user.findUnique({
-        where: { username: authorId },
-      });
-      if (authorByUsername) resolvedAuthorId = authorByUsername.id;
+    if (!author) {
+      return NextResponse.json(
+        { error: "Author not found. Please sign in first." },
+        { status: 400 },
+      );
     }
+    resolvedAuthorId = author.id;
 
     const created = await prisma.outfit.create({
       data: {
