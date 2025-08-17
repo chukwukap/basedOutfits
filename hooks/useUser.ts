@@ -100,7 +100,16 @@ export function useUser(): UseUserResult {
       }
     };
     if (key) void autoCreate();
-  }, [mini.fid, mini.username, mini.name, mini.avatarUrl, mini.walletAddress, key, data, mutate]);
+  }, [
+    mini.fid,
+    mini.username,
+    mini.name,
+    mini.avatarUrl,
+    mini.walletAddress,
+    key,
+    data,
+    mutate,
+  ]);
 
   return {
     loading: isLoading,
