@@ -9,6 +9,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { UserProfile, UserWardrobe } from "@/lib/types";
 import { ComposeCastButton } from "@/app/_components/compose-cast-button";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
 
 async function fetchUserProfile(username: string) {
   const res = await fetch(`/api/users/${encodeURIComponent(username)}`, {
@@ -24,6 +25,12 @@ export default function UserProfilePageClient() {
 
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { isFrameReady, setFrameReady } = useMiniKit();
+
+  useEffect(() => {
+    if (!isFrameReady) setFrameReady();
+  }, [isFrameReady, setFrameReady]);
 
   useEffect(() => {
     (async () => {

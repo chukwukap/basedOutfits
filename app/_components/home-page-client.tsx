@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useTheme } from "@/contexts/theme-context";
 import { OutfitCardSkeleton } from "@/app/outfits/[id]/_components/outfit-card-skeleton";
 import { OutfitCard } from "@/app/outfits/[id]/_components/outfit-card";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
 
 /**
  * Fetches outfits from the API securely.
@@ -40,6 +41,12 @@ function HomePageInner() {
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
+
+  const { isFrameReady, setFrameReady } = useMiniKit();
+
+  useEffect(() => {
+    if (!isFrameReady) setFrameReady();
+  }, [isFrameReady, setFrameReady]);
 
   /**
    * Checks if the user is a first-time visitor and shows onboarding if needed.
