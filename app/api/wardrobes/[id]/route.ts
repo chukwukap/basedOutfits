@@ -12,7 +12,14 @@ export async function GET(req: Request) {
     if (!id) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     const wb = await prisma.wardrobe.findUnique({
       where: { id },
-      include: { items: { include: { outfit: true } }, owner: true },
+      include: {
+        items: {
+          include: {
+            outfit: { include: { author: true, tips: true, saves: true } },
+          },
+        },
+        owner: true,
+      },
     });
     if (!wb) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(wb);

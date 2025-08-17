@@ -5,6 +5,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
 import { Card } from "@/app/_components/ui/card";
 import { Wallet, CheckCircle, AlertCircle } from "lucide-react";
+import { useUser } from "@/hooks/useUser";
 
 interface WalletConnectionProps {
   onConnectionChange: (connected: boolean, address?: string) => void;
@@ -13,51 +14,30 @@ interface WalletConnectionProps {
 export function WalletConnection({
   onConnectionChange,
 }: WalletConnectionProps) {
-  const [isConnected, setIsConnected] = useState(false);
-  const [address, setAddress] = useState("");
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState("");
+  const { mini, db, loading } = useUser();
 
   useEffect(() => {
-    // Check if wallet is already connected
-    checkWalletConnection();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const checkWalletConnection = async () => {
-    try {
-      // Simulate checking existing wallet connection
-      const savedAddress = localStorage.getItem("wallet_address");
-      if (savedAddress) {
-        setAddress(savedAddress);
-        setIsConnected(true);
-        onConnectionChange(true, savedAddress);
-      }
-    } catch (err) {
-      console.log("No existing wallet connection", err);
+    if (mini.walletAddress) {
+      onConnectionChange(true, mini.walletAddress);
     }
-  };
+  }, [mini.walletAddress, onConnectionChange]);
 
   const connectWallet = async () => {
     setConnecting(true);
     setError("");
 
     try {
-      // Simulate wallet connection
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() > 0.1) {
-            const mockAddress = "0x" + Math.random().toString(16).substr(2, 8);
-            setAddress(mockAddress);
-            setIsConnected(true);
-            localStorage.setItem("wallet_address", mockAddress);
-            onConnectionChange(true, mockAddress);
-            resolve(true);
-          } else {
-            reject(new Error("User rejected connection"));
-          }
-        }, 2000);
-      });
+      // Try EIP-1193 provider if available
+      const eth = (globalThis as any).ethereum;
+      if (!eth || typeof eth.request !== "function") {
+        throw new Error("No EVM wallet detected in this browser");
+      }
+      const accounts = (await eth.request({ method: "eth_requestAccounts" })) as string[];
+      const account = accounts?.[0];
+      if (!account) throw new Error("Wallet connection failed");
+      onConnectionChange(true, account);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to connect wallet");
     } finally {
@@ -66,13 +46,10 @@ export function WalletConnection({
   };
 
   const disconnectWallet = () => {
-    setIsConnected(false);
-    setAddress("");
-    localStorage.removeItem("wallet_address");
     onConnectionChange(false);
   };
 
-  if (isConnected) {
+  if (!loading && mini.walletAddress) {
     return (
       <Card className="p-3 bg-green-50 border-green-200">
         <div className="flex items-center justify-between">
@@ -81,7 +58,7 @@ export function WalletConnection({
             <span className="text-sm font-medium">Wallet Connected</span>
           </div>
           <Badge variant="outline" className="text-xs font-mono">
-            {address.slice(0, 6)}...{address.slice(-4)}
+            {mini.walletAddress.slice(0, 6)}...{mini.walletAddress.slice(-4)}
           </Badge>
         </div>
         <Button

@@ -4,44 +4,60 @@ import { Card } from "@/app/_components/ui/card";
 import { Heart, DollarSign } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-// Mock related outfits data (kept minimal, no tags filtering)
-const relatedOutfitsData = [
-  {
-    id: "3",
-    title: "Street Style Maven",
-    imageUrl: "/street-style-outfit.png",
-    author: "Jordan Kim",
-    tips: 18,
-    collections: 22,
-  },
-  {
-    id: "4",
-    title: "Business Casual Chic",
-    imageUrl: "/business-casual-outfit.png",
-    author: "Taylor Swift",
-    tips: 9,
-    collections: 12,
-  },
-  {
-    id: "5",
-    title: "Cozy Weekend",
-    imageUrl: "/summer-fashion-outfit.png",
-    author: "Maya Patel",
-    tips: 15,
-    collections: 7,
-  },
-];
+type RelatedOutfit = {
+  id: string;
+  title: string;
+  imageUrl: string;
+  author: string;
+  tips: number;
+  collections: number;
+};
 
 interface RelatedOutfitsProps {
   currentOutfitId: string;
 }
 
 export function RelatedOutfits({ currentOutfitId }: RelatedOutfitsProps) {
-  // Filter out current outfit only
-  const relatedOutfits = relatedOutfitsData
-    .filter((outfit) => outfit.id !== currentOutfitId)
-    .slice(0, 3);
+  const [relatedOutfits, setRelatedOutfits] = useState<RelatedOutfit[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/outfits?limit=6", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as Array<{
+          id: string;
+          caption?: string;
+          imageUrls: string[];
+          author: { name: string };
+          tips: number;
+          collections: number;
+        }>;
+        if (cancelled) return;
+        const mapped: RelatedOutfit[] = data
+          .filter((o) => o.id !== currentOutfitId)
+          .slice(0, 3)
+          .map((o) => ({
+            id: o.id,
+            title: o.caption || "",
+            imageUrl: o.imageUrls?.[0] || "",
+            author: o.author?.name || "",
+            tips: o.tips ?? 0,
+            collections: o.collections ?? 0,
+          }));
+        setRelatedOutfits(mapped);
+      } catch {
+        setRelatedOutfits([]);
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [currentOutfitId]);
 
   if (relatedOutfits.length === 0) {
     return null;

@@ -13,134 +13,37 @@ import { CollectModal } from "@/app/_components/collect-modal";
 import type { OutfitFetchPayload } from "@/lib/types";
 import { EditWardrobeModal } from "../../_components/edit-wardrobe-modal";
 import { DeleteWardrobeDialog } from "../../_components/delete-wardrobe-dialog";
-
-// Mock wardrobe data
-const mockWardrobes = {
-  "1": {
-    id: "1",
-    name: "Summer Vibes",
-    description:
-      "Light and breezy outfits for hot days. Perfect for beach trips, casual outings, and sunny adventures.",
-    coverImage: "/summer-fashion-outfit.png",
-    outfitCount: 12,
-    isPublic: true,
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-20",
-    author: {
-      name: "You",
-      avatar: "/diverse-group-profile.png",
-    },
-    outfits: [
-      {
-        id: "outfit-1",
-        title: "Beach Day Casual",
-        description: "Perfect for a day by the ocean",
-        imageUrl: "/summer-fashion-outfit.png",
-        author: {
-          name: "Sarah Chen",
-          avatar: "/diverse-group-profile.png",
-          fid: "sarahc",
-        },
-        // simplified: no tags/brands
-        tips: 15,
-        collections: 8,
-        // simplified: no location
-        createdAt: "2 days ago",
-        addedAt: "2024-01-20",
-      },
-      {
-        id: "outfit-2",
-        title: "Sunny Brunch Outfit",
-        description: "Bright and cheerful for weekend brunches",
-        imageUrl: "/fashionable-summer-outfit.png",
-        author: {
-          name: "Alex Rivera",
-          avatar: "/diverse-group-profile.png",
-          fid: "alexr",
-        },
-        // simplified: no tags/brands
-        tips: 22,
-        collections: 12,
-        // simplified: no location
-        createdAt: "3 days ago",
-        addedAt: "2024-01-19",
-      },
-      {
-        id: "outfit-3",
-        title: "Festival Ready",
-        description: "Boho vibes for music festivals",
-        imageUrl: "/street-style-outfit.png",
-        author: {
-          name: "Jordan Kim",
-          avatar: "/diverse-group-profile.png",
-          fid: "jordank",
-        },
-        // simplified: no tags/brands
-        tips: 18,
-        collections: 15,
-        // simplified: no location
-        createdAt: "1 week ago",
-        addedAt: "2024-01-18",
-      },
-    ],
-  },
-  "2": {
-    id: "2",
-    name: "Work Wardrobe",
-    description: "Professional outfits for the office and business meetings.",
-    coverImage: "/business-casual-outfit.png",
-    outfitCount: 8,
-    isPublic: false,
-    createdAt: "2024-01-10",
-    updatedAt: "2024-01-18",
-    author: {
-      name: "You",
-      avatar: "/diverse-group-profile.png",
-    },
-    outfits: [
-      {
-        id: "outfit-4",
-        title: "Monday Meeting",
-        description: "Sharp and professional for important meetings",
-        imageUrl: "/business-casual-outfit.png",
-        author: {
-          name: "Taylor Swift",
-          avatar: "/diverse-group-profile.png",
-          fid: "tswift",
-        },
-        // simplified: no tags/brands
-        tips: 9,
-        collections: 12,
-        // simplified: no location
-        createdAt: "5 days ago",
-        addedAt: "2024-01-16",
-      },
-      {
-        id: "outfit-5",
-        title: "Casual Friday",
-        description: "Relaxed but still office-appropriate",
-        imageUrl: "/elegant-evening-dress.png",
-        author: {
-          name: "Maya Patel",
-          avatar: "/diverse-group-profile.png",
-          fid: "mayap",
-        },
-        // simplified: no tags/brands
-        tips: 14,
-        collections: 7,
-        // simplified: no location
-        createdAt: "1 week ago",
-        addedAt: "2024-01-15",
-      },
-    ],
-  },
-};
+// Remove mocks: fetch real wardrobe + items from API
 
 export default function WardrobeDetailsPageClient() {
   const params = useParams();
   const wardrobeId = params.id as string;
 
-  type Wardrobe = (typeof mockWardrobes)[keyof typeof mockWardrobes];
+  type Wardrobe = {
+    id: string;
+    name: string;
+    description: string;
+    coverImage: string;
+    outfitCount: number;
+    isPublic: boolean;
+    createdAt: string;
+    updatedAt: string;
+    author: {
+      name: string;
+      avatar: string;
+    };
+    outfits: Array<{
+      id: string;
+      title: string;
+      description: string;
+      imageUrl: string;
+      author: { name: string; avatar: string; fid: string };
+      tips: number;
+      collections: number;
+      createdAt: string;
+      addedAt: string;
+    }>;
+  };
   type OutfitItem = GridOutfit;
   const [wardrobe, setWardrobe] = useState<Wardrobe | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -151,13 +54,75 @@ export default function WardrobeDetailsPageClient() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading
-    setTimeout(() => {
-      const foundWardrobe =
-        mockWardrobes[wardrobeId as keyof typeof mockWardrobes];
-      setWardrobe(foundWardrobe || null);
-      setLoading(false);
-    }, 500);
+    let cancelled = false;
+    const load = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/wardrobes/${encodeURIComponent(wardrobeId)}`, {
+          cache: "no-store",
+        });
+        if (!res.ok) throw new Error("Failed to load wardrobe");
+        const raw = await res.json();
+        if (cancelled) return;
+        // Map API shape to UI shape
+        type RawWardrobeItem = {
+          createdAt: string | Date;
+          outfit: {
+            id: string;
+            caption?: string | null;
+            description?: string | null;
+            imageUrls: string[];
+            createdAt: string | Date;
+            author?: {
+              name?: string | null;
+              username?: string | null;
+              avatarUrl?: string | null;
+              fid?: string | null;
+            } | null;
+            tips?: unknown[] | null;
+            saves?: unknown[] | null;
+          };
+        };
+        const mapped: Wardrobe = {
+          id: raw.id,
+          name: raw.name,
+          description: raw.description ?? "",
+          coverImage: raw.coverImage ?? "",
+          outfitCount: Array.isArray(raw.items) ? raw.items.length : 0,
+          isPublic: Boolean(raw.isPublic),
+          createdAt: new Date(raw.createdAt).toISOString(),
+          updatedAt: new Date(raw.updatedAt).toISOString(),
+          author: {
+            name: raw.owner?.name ?? raw.owner?.username ?? "Unknown",
+            avatar: raw.owner?.avatarUrl ?? "",
+          },
+          outfits: (raw.items as RawWardrobeItem[] | undefined || []).map((it) => ({
+            id: it.outfit.id,
+            title: it.outfit.caption ?? "",
+            description: it.outfit.description ?? "",
+            imageUrl: (it.outfit.imageUrls && it.outfit.imageUrls[0]) || "",
+            author: {
+              name: it.outfit.author?.name ?? it.outfit.author?.username ?? "",
+              avatar: it.outfit.author?.avatarUrl ?? "",
+              fid: it.outfit.author?.fid ?? it.outfit.author?.username ?? "",
+            },
+            tips: (it.outfit.tips || []).length,
+            collections: (it.outfit.saves || []).length,
+            createdAt: new Date(it.outfit.createdAt).toISOString(),
+            addedAt: new Date(it.createdAt).toISOString(),
+          })),
+        };
+        setWardrobe(mapped);
+      } catch {
+        setWardrobe(null);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
   }, [wardrobeId]);
 
   const handleEditWardrobe = () => {
