@@ -24,7 +24,7 @@ export async function generateMetadata(
     const appName =
       process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
     const splashImageUrl =
-      process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/icon.jpg`;
+      process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/splash.png`;
     const splashBackgroundColor =
       process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#ffffff";
     const image = outfit.imageUrls?.[0]
@@ -44,7 +44,7 @@ export async function generateMetadata(
           version: "1",
           imageUrl: image,
           button: {
-            title: "Open BasedOutfits",
+            title: "View Outfit 🔥",
             action: {
               type: "launch_miniapp",
               name: appName,

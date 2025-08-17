@@ -20,9 +20,12 @@ export async function generateMetadata(
     const user = await prisma.user.findUnique({ where: { username } });
     if (!user) return {};
     const host = process.env.NEXT_PUBLIC_URL || "";
-    const appName = process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
-    const splashImageUrl = process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/icon.jpg`;
-    const splashBackgroundColor = process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#000000";
+    const appName =
+      process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
+    const splashImageUrl =
+      process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/splash.png`;
+    const splashBackgroundColor =
+      process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#ffffff";
     const image = user.avatarUrl
       ? user.avatarUrl.startsWith("http")
         ? user.avatarUrl
@@ -40,7 +43,7 @@ export async function generateMetadata(
           version: "1",
           imageUrl: image,
           button: {
-            title: "Open BasedOutfits",
+            title: "View Profile 🔥",
             action: {
               type: "launch_miniapp",
               name: appName,

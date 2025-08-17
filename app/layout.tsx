@@ -11,10 +11,13 @@ import { OnboardingReset } from "./_components/onboarding-reset";
 
 export async function generateMetadata(): Promise<Metadata> {
   const URL = process.env.NEXT_PUBLIC_URL || "";
-  const appName = process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
-  const imageUrl = `${URL}/og.jpg`;
-  const splashImageUrl = process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${URL}/icon.jpg`;
-  const splashBackgroundColor = process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#000000";
+  const appName =
+    process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
+  const imageUrl = `${URL}/hero.png`;
+  const splashImageUrl =
+    process.env.NEXT_PUBLIC_APP_HERO_IMAGE || `${URL}/splash.png`;
+  const splashBackgroundColor =
+    process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#ffffff";
 
   const miniappEmbed = {
     version: "1",
