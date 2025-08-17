@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { OutfitFetchPayload } from "@/lib/types";
 import Image from "next/image";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { useUser } from "@/hooks/useUser";
 
 interface PostOutfitFormProps {
   onSuccess: (outfitData: OutfitFetchPayload) => void;
@@ -28,6 +29,7 @@ interface ImageFile {
 
 export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
   const { context } = useMiniKit();
+  const { mini, db } = useUser();
   const [images, setImages] = useState<ImageFile[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -161,12 +163,13 @@ export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
 
     try {
       setPosting(true);
-      const c =
-        (context as unknown as {
-          user?: { username?: string; fid?: number | string };
-        } | null) || null;
-      const currentUserId =
-        (c?.user?.username || c?.user?.fid?.toString()) ?? "";
+      const c = (context as unknown as {
+        user?: { username?: string; fid?: number | string };
+      } | null) || null;
+      const currentUserId = db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
+      if (!currentUserId) {
+        throw new Error("You must be signed in to post an outfit.");
+      }
       const res = await fetch("/api/outfits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -196,9 +199,9 @@ export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
           imageUrls: created.imageUrls,
           isPublic: created.isPublic,
           author: {
-            name: "You",
-            avatarUrl: "/diverse-group-profile.png",
-            fid: "demo",
+            name: db?.name || mini.name || (c?.user?.username ?? ""),
+            avatarUrl: db?.avatarUrl || mini.avatarUrl || "",
+            fid: mini.fid || (c?.user?.username?.toString() ?? ""),
             isFollowing: false,
           },
           tips: 0,
