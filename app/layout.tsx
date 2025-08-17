@@ -9,23 +9,50 @@ import { ThemeProvider } from "@/contexts/theme-context";
 import "./globals.css";
 import { OnboardingReset } from "./_components/onboarding-reset";
 
-export const metadata: Metadata = {
-  title: "Outfitly - Share & Collect Inspiring Fashion",
-  description:
-    "Explore trending styles, share your own outfits, tip your favorite creators, and build your personal Outfitly. All powered by Farcaster & Base.",
-  keywords: [
-    "fashion",
-    "style",
-    "outfits",
-    "outfits",
-    "outfit",
-    "collect",
-    "tip creators",
-    "Base",
-    "Farcaster",
-    "web3 social",
-  ],
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const URL = process.env.NEXT_PUBLIC_URL || "";
+  const appName = process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
+  const imageUrl = `${URL}/og.jpg`;
+  const splashImageUrl = process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${URL}/icon.jpg`;
+  const splashBackgroundColor = process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#000000";
+
+  const miniappEmbed = {
+    version: "1",
+    imageUrl,
+    button: {
+      title: `Launch ${appName}`,
+      action: {
+        type: "launch_miniapp" as const,
+        name: appName,
+        url: URL,
+        splashImageUrl,
+        splashBackgroundColor,
+      },
+    },
+  };
+
+  return {
+    title: appName,
+    description: "Discover, post, and collect outfits.",
+    other: {
+      "fc:miniapp": JSON.stringify(miniappEmbed),
+      "fc:frame": JSON.stringify({
+        version: "1",
+        imageUrl,
+        button: {
+          title: `Launch ${appName}`,
+          action: {
+            type: "launch_frame",
+            name: appName,
+            url: URL,
+            splashImageUrl,
+            splashBackgroundColor,
+          },
+        },
+      }),
+    },
+  };
+}
 
 export default function RootLayout({
   children,
