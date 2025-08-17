@@ -53,7 +53,7 @@ export const themes: Theme[] = [
   },
   {
     id: "minimal",
-    name: "Minimal",
+    name: "Minimal Blue",
     colors: {
       // Updated to a soft blue-accent minimal palette
       primary: "221.2 83.2% 53.3%", // blue-500
