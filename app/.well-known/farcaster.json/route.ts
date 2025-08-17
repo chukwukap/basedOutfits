@@ -21,7 +21,7 @@ export async function GET() {
     frame: withValidProperties({
       version: "1",
       name: "Outfitly",
-      subtitle: "Discover, post, and collect outfits.",
+      subtitle: "Your onchain wardrobe",
       description: "Discover, post, and collect outfits.",
       screenshotUrls: [
         `https://basedoutfits.vercel.app/screenshots/1.png`,
@@ -35,10 +35,10 @@ export async function GET() {
       splashBackgroundColor: "#ffffff",
       homeUrl: "https://basedoutfits.vercel.app",
       webhookUrl: `https://basedoutfits.vercel.app/api/webhook`,
-      primaryCategory: "fashion",
+      primaryCategory: "social",
       tags: ["fashion", "outfit", "wardrobe", "collect", "tip"],
       heroImageUrl: `https://basedoutfits.vercel.app/hero.png`,
-      tagline: "Discover, post, and collect outfits.",
+      tagline: "Your onchain wardrobe",
       ogTitle: "Outfitly",
       ogDescription: "Discover, post, and collect outfits.",
       ogImageUrl: `https://basedoutfits.vercel.app/hero.png`,
