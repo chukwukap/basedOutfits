@@ -198,11 +198,6 @@ export function OnboardingTutorial({
 
                   {step.id === lastStepId ? (
                     <div className="mt-auto">
-                      <div className="flex items-center justify-center mb-6">
-                        <div className="relative w-14 h-14 rounded-full bg-green-500/10">
-                          <div className="absolute inset-0 rounded-full animate-ping bg-green-500/20" />
-                        </div>
-                      </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <Button
                           onClick={onComplete}
@@ -222,10 +217,6 @@ export function OnboardingTutorial({
                           Share Your First Outfit
                         </Button>
                       </div>
-                      <p className="mt-4 text-center text-xs text-muted-foreground">
-                        One tap to post. No setup screens. You can tweak
-                        settings later.
-                      </p>
                     </div>
                   ) : (
                     <div className="mt-auto">
