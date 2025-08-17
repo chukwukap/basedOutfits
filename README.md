@@ -22,8 +22,7 @@ Users can browse outfits, collect their favorites into personal Wardrobes, and t
   - Share Wardrobes via Farcaster cast.
 
 - **Style-Track System**
-  - Contextual follow feature just for fashion content.
-  - Track outfits from creators without following all their Farcaster posts.
+  - Track outfits from creators by liking their Outfitly posts.
   - Personal “Style Feed” based on tracked creators.
 
 - **Add to Wardrobe**

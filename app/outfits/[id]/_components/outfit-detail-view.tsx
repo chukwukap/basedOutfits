@@ -10,7 +10,7 @@ import {
 import { Badge } from "@/app/_components/ui/badge";
 import { Card } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";
-import { Heart, DollarSign, Calendar, Users } from "lucide-react";
+import { Heart, DollarSign, Calendar } from "lucide-react";
 
 interface Outfit {
   id: string;
@@ -77,13 +77,13 @@ export function OutfitDetailView({ outfit }: OutfitDetailViewProps) {
                 {outfit.author.bio}
               </p>
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1">
+                {/* <span className="flex items-center gap-1">
                   <Users className="w-3 h-3" />
                   {outfit.author.followers.toLocaleString()} followers
                 </span>
                 <span>
                   {outfit.author.following.toLocaleString()} following
-                </span>
+                </span> */}
               </div>
             </div>
           </div>
