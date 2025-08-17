@@ -3,77 +3,56 @@
 import type React from "react";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  DollarSign,
-  Heart,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Heart, Unlock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface OnboardingTutorialProps {
   onComplete: () => void;
+  onCreateFirstLook?: () => void;
 }
 
 const tutorialSteps = [
   {
     id: 1,
-    title: "Discover Looks",
-    subtitle: "Global Fashion Inspiration",
+    title: "See the Vibe",
+    subtitle: "Inside Farcaster, instantly",
     description:
-      "Scroll through an endless feed of fashion looks from creators around the world. Find inspiration for every occasion, season, and style.",
+      "Swipe through global outfits. Tap to like, tip, or collect. You’re home.",
     icon: Eye,
     color: "bg-blue-500",
-    features: [
-      "Browse curated fashion content",
-      "Filter by tags and styles",
-      "Discover new creators",
-      "Get inspired daily",
-    ],
-    mockImage: "/looks/fashionable-summer-outfit.png",
+    mockImage: "/looks/stylish-streetwear-look.png",
   },
   {
     id: 2,
-    title: "Tip Creators",
-    subtitle: "Support Fashion Creators",
+    title: "Own Your Wardrobe",
+    subtitle: "Onchain. Yours.",
     description:
-      "Show appreciation for looks you love by sending small tips directly to creators. Support the fashion community with just a few taps.",
-    icon: DollarSign,
-    color: "bg-green-500",
-    features: [
-      "Send tips starting from $0.50",
-      "Fast payments with Basepay",
-      "Support your favorite creators",
-      "Build community connections",
-    ],
+      "Your wardrobe lives on Base—owned by you. No popups until you act.",
+    icon: Heart,
+    color: "bg-pink-500",
     mockImage: "/looks/elegant-evening-dress.png",
   },
   {
     id: 3,
-    title: "Collect Looks",
-    subtitle: "Build Your Style Collection",
+    title: "You’re In",
+    subtitle: "Starter pack loaded",
     description:
-      "Save your favorite looks to your personal closet for a small fee. Build a curated collection of fashion inspiration you can reference anytime.",
-    icon: Heart,
-    color: "bg-pink-500",
-    features: [
-      "Save looks for $1 each",
-      "Organize in your closet",
-      "Access anytime, anywhere",
-      "Create your style library",
-    ],
+      "We preloaded your feed so it’s never empty. Start browsing or share your first look.",
+    icon: Unlock,
+    color: "bg-green-500",
     mockImage: "/looks/street-style-outfit.png",
   },
 ];
 
-export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
+export function OnboardingTutorial({ onComplete, onCreateFirstLook }: OnboardingTutorialProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const minSwipeDistance = 50;
 
@@ -133,7 +112,7 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
           >
             <Icon className="w-4 h-4 text-white" />
           </div>
-          <span className="font-semibold">Welcome to Looks</span>
+          <span className="font-semibold">Welcome to BasedOutfits</span>
         </div>
         <Badge variant="outline" className="text-xs">
           {currentStep + 1} of {tutorialSteps.length}
@@ -156,111 +135,89 @@ export function OnboardingTutorial({ onComplete }: OnboardingTutorialProps) {
             const StepIcon = step.icon;
             return (
               <div key={step.id} className="w-full flex-shrink-0 flex flex-col">
-                {/* Hero Image */}
-                <div className="relative h-64 bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                  <div className="relative w-48 h-48 rounded-2xl overflow-hidden shadow-2xl">
-                    <img
-                      src={step.mockImage || "/looks/placeholder.png"}
-                      alt={step.title}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/looks/stylish-streetwear-outfit.png";
-                      }}
-                    />
-                    {/* Overlay icon */}
-                    <div
-                      className={cn(
-                        "absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center",
-                        step.color,
-                      )}
-                    >
-                      <StepIcon className="w-4 h-4 text-white" />
-                    </div>
+                {/* Hero (full-bleed) */}
+                <div className="relative h-72 md:h-[420px] bg-gradient-to-br from-muted to-muted/50">
+                  <img
+                    src={step.mockImage || "/looks/placeholder.png"}
+                    alt={step.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/looks/stylish-streetwear-outfit.png";
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
+                  <div className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-md animate-in fade-in zoom-in-90"
+                    style={{ backdropFilter: "blur(6px)" }}
+                  >
+                    <StepIcon className="w-5 h-5 text-white drop-shadow" />
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 p-6 flex flex-col">
                   <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold mb-2">{step.title}</h2>
-                    <p className="text-lg text-primary font-medium mb-3">
-                      {step.subtitle}
-                    </p>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {step.description}
-                    </p>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-2">{step.title}</h2>
+                    <p className="text-base md:text-lg text-primary font-medium mb-3">{step.subtitle}</p>
+                    <p className="text-muted-foreground leading-relaxed">{step.description}</p>
+                    {step.id === 2 && (
+                      <p className="mt-3 text-xs text-muted-foreground">Your wardrobe lives onchain, owned by you.</p>
+                    )}
                   </div>
 
-                  {/* Features */}
-                  <div className="space-y-3 mb-8">
-                    {step.features.map((feature, featureIndex) => (
-                      <div
-                        key={featureIndex}
-                        className="flex items-center gap-3"
-                      >
-                        <div
-                          className={cn(
-                            "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0",
-                            step.color,
-                          )}
-                        >
-                          <span className="text-white text-xs font-bold">
-                            ✓
-                          </span>
+                  {step.id === 3 ? (
+                    <div className="mt-auto">
+                      <div className="flex items-center justify-center mb-6">
+                        <div className="relative w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center">
+                          <div className="absolute inset-0 rounded-full animate-ping bg-green-500/20" />
+                          <Unlock className="w-6 h-6 text-green-600 animate-in zoom-in-95" />
                         </div>
-                        <span className="text-sm">{feature}</span>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Navigation */}
-                  <div className="mt-auto">
-                    {/* Step Indicators */}
-                    <div className="flex justify-center gap-2 mb-6">
-                      {tutorialSteps.map((_, stepIndex) => (
-                        <button
-                          key={stepIndex}
-                          onClick={() => goToStep(stepIndex)}
-                          className={cn(
-                            "w-2 h-2 rounded-full transition-all",
-                            stepIndex === currentStep
-                              ? "bg-primary w-6"
-                              : "bg-muted-foreground/30",
-                          )}
-                        />
-                      ))}
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-3">
-                      {currentStep > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <Button onClick={onComplete} className="h-12 text-base font-semibold">Start Browsing Outfits</Button>
                         <Button
                           variant="outline"
-                          onClick={goToPrevious}
-                          className="flex-1 bg-transparent"
+                          onClick={() => (onCreateFirstLook ? onCreateFirstLook() : router.push("/post"))}
+                          className="h-12 text-base font-semibold"
                         >
-                          <ChevronLeft className="w-4 h-4 mr-2" />
-                          Previous
+                          Share Your First Look
                         </Button>
-                      )}
-
-                      {currentStep < tutorialSteps.length - 1 ? (
+                      </div>
+                      <p className="mt-4 text-center text-xs text-muted-foreground">One tap to post. No setup screens. You can tweak settings later.</p>
+                    </div>
+                  ) : (
+                    <div className="mt-auto">
+                      <div className="flex justify-center gap-2 mb-6">
+                        {tutorialSteps.map((_, stepIndex) => (
+                          <button
+                            key={stepIndex}
+                            onClick={() => goToStep(stepIndex)}
+                            aria-label={`Go to step ${stepIndex + 1}`}
+                            className={cn(
+                              "h-1.5 rounded-full transition-all",
+                              stepIndex === currentStep ? "bg-primary w-6" : "bg-muted-foreground/30 w-2",
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <div className="flex gap-3">
+                        {currentStep > 0 && (
+                          <Button
+                            variant="outline"
+                            onClick={goToPrevious}
+                            className="flex-1 bg-transparent"
+                          >
+                            <ChevronLeft className="w-4 h-4 mr-2" />
+                            Back
+                          </Button>
+                        )}
                         <Button onClick={goToNext} className="flex-1">
                           Next
                           <ChevronRight className="w-4 h-4 ml-2" />
                         </Button>
-                      ) : (
-                        <Button
-                          onClick={onComplete}
-                          className="flex-1"
-                          size="lg"
-                        >
-                          Start Browsing
-                        </Button>
-                      )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             );
