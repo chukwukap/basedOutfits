@@ -231,7 +231,7 @@ export function OnboardingTutorial({
                           }}
                           className="w-full h-12 text-base font-semibold"
                         >
-                          Add to BaseApp
+                          Add to MiniApp
                         </Button>
                       </div>
                     </div>
