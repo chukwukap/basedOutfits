@@ -13,6 +13,7 @@ import { DeleteWardrobeDialog } from "@/app/wardrobe/_components/delete-wardrobe
 import { WardrobeResponse } from "@/lib/types";
 import { WardrobeHeader } from "../[id]/_components/wardrobe-header";
 import { WardrobeCard } from "../[id]/_components/wardrobe-card";
+import { useUser } from "@/hooks/useUser";
 
 type NewWardrobePayload = {
   name: string;
@@ -28,6 +29,7 @@ async function fetchAllWardrobes(): Promise<WardrobeResponse[]> {
 }
 
 export default function WardrobePageClient() {
+  const { db } = useUser();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [sortBy, setSortBy] = useState("recent");
@@ -50,7 +52,11 @@ export default function WardrobePageClient() {
   };
 
   const handleCreateWardrobe = async (newWardrobe: NewWardrobePayload) => {
-    const currentUserId = "demo"; // TODO: replace with real auth context id
+    const currentUserId = db?.id;
+    if (!currentUserId) {
+      alert("Please sign in to create a wardrobe.");
+      return;
+    }
     const res = await fetch("/api/wardrobes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
