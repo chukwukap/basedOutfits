@@ -23,7 +23,7 @@ const tutorialSteps = [
       "Swipe through global outfits. Tap to like, tip, or collect. You’re home.",
     icon: Eye,
     color: "bg-blue-500",
-    mockImage: "/outfits/stylish-streetwear-outfit.png",
+    image: "/outfits/stylish-streetwear-outfit.png",
   },
   {
     id: 2,
@@ -33,7 +33,7 @@ const tutorialSteps = [
       "Your wardrobe lives on Base—owned by you. No popups until you act.",
     icon: Heart,
     color: "bg-pink-500",
-    mockImage: "/outfits/elegant-evening-dress.png",
+    image: "/outfits/elegant-evening-dress.png",
   },
   {
     id: 3,
@@ -43,7 +43,7 @@ const tutorialSteps = [
       "We preloaded your feed so it’s never empty. Start browsing or share your first outfit.",
     icon: Unlock,
     color: "bg-green-500",
-    mockImage: "/outfits/street-style-outfit.png",
+    image: "/outfits/street-style-outfit.png",
   },
 ];
 
@@ -141,7 +141,7 @@ export function OnboardingTutorial({
                 {/* Hero (full-bleed) */}
                 <div className="relative h-72 md:h-[420px] bg-gradient-to-br from-muted to-muted/50">
                   <img
-                    src={step.mockImage || "/outfits/placeholder.png"}
+                    src={step.image || "/outfits/placeholder.png"}
                     alt={step.title}
                     className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
