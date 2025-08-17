@@ -77,6 +77,39 @@ function deriveDetails(look) {
   return { items, brandItems };
 }
 
+// Extract tag-like keywords from a Look record in DB (which lacks a tags column).
+// Uses details.tags when present; falls back to caption/description keyword heuristics.
+function getTagsFromLookRecord(lookRecord) {
+  const tags = [
+    ...((lookRecord.details && Array.isArray(lookRecord.details.tags))
+      ? lookRecord.details.tags
+      : []),
+  ];
+  const text = `${(lookRecord.caption || "").toLowerCase()} ${(lookRecord.description || "").toLowerCase()}`;
+  const addIf = (word, rx) => {
+    if (!tags.map((t) => String(t).toLowerCase()).includes(word) && rx.test(text)) {
+      tags.push(word);
+    }
+  };
+  addIf("minimalist", /minimal/);
+  addIf("scandinavian", /scandi|copenhagen|nordic/);
+  addIf("functional", /functional|technical/);
+  addIf("trench", /trench/);
+  addIf("streetwear", /streetwear|street style|urban/);
+  addIf("denim", /denim/);
+  addIf("ankara", /ankara/);
+  addIf("latin", /são paulo|rio|carnival|latin/);
+  addIf("casual", /casual|weekend|coffee run|cozy/);
+  addIf("traditional", /traditional|kaftan|hanbok|sari|senator/);
+  addIf("festive", /festive|festival|carnival|owambe/);
+  addIf("kitenge", /kitenge/);
+  addIf("indian", /mumbai|indian|sari/);
+  addIf("middleeast", /dubai|casablanca|morocco|medina|middle east/);
+  addIf("igbo", /igbo/);
+  addIf("senator", /senator/);
+  return tags;
+}
+
 async function upsertUsers() {
   const { users: sampleUsers } = readSeedData();
 
@@ -113,10 +146,20 @@ async function seedLooks(users) {
         ? l.imageUrls
         : ["/looks/placeholder.png"]; // Placeholder; replace in JSON later
 
+    // Build details JSON and embed additional metadata that no longer exists as top-level columns
     const season = l.season ?? deriveSeason(l);
     const occasion = l.occasion ?? deriveOccasion(l);
     const colors = l.colors ?? deriveColors(l) ?? [];
-    const details = l.details ?? deriveDetails(l);
+    const baseDetails = l.details ?? deriveDetails(l);
+    const details = {
+      ...baseDetails,
+      ...(l.tags ? { tags: l.tags } : {}),
+      ...(l.brands ? { brands: l.brands } : {}),
+      ...(l.location ? { location: l.location } : {}),
+      ...(season ? { season } : {}),
+      ...(occasion ? { occasion } : {}),
+      ...(colors && colors.length ? { colors } : {}),
+    };
 
     await prisma.look.create({
       data: {
@@ -124,13 +167,7 @@ async function seedLooks(users) {
         caption: l.caption,
         description: l.description,
         imageUrls,
-        tags: l.tags,
-        brands: l.brands,
-        location: l.location,
         isPublic: l.isPublic,
-        season,
-        occasion,
-        colors,
         details,
       },
     });
@@ -203,7 +240,8 @@ async function seedLookbookItems() {
   };
 
   for (const look of looks) {
-    const targets = classify(look.tags);
+    const inferredTags = getTagsFromLookRecord(look);
+    const targets = classify(inferredTags);
     for (const lb of targets) {
       try {
         await prisma.lookbookItem.create({
