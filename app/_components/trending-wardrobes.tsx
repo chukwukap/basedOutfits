@@ -20,7 +20,7 @@ type TrendingWardrobe = {
   description?: string;
   coverImage?: string;
   wardrobeCount: number;
-  creator: { username: string; name: string; avatar?: string };
+  creator?: { username?: string; name?: string; avatar?: string };
   category?: string;
   trending?: boolean;
 };
@@ -53,12 +53,12 @@ export function TrendingWardrobes({
   // Follow feature removed
 
   const handleWardrobeClick = (wardrobe: TrendingWardrobe) => {
-    window.location.href = `/profile/${wardrobe.creator.username}/wardrobes/${wardrobe.id}`;
+    window.location.href = `/profile/${wardrobe?.creator?.username}/wardrobes/${wardrobe.id}`;
   };
 
-  const handleCreatorClick = (e: React.MouseEvent, username: string) => {
+  const handleCreatorClick = (e: React.MouseEvent, username?: string) => {
     e.stopPropagation();
-    window.location.href = `/profile/${username}`;
+    if (username) window.location.href = `/profile/${username}`;
   };
 
   // Filter wardrobes
@@ -70,7 +70,9 @@ export function TrendingWardrobes({
         (wardrobe.description
           ? wardrobe.description.toLowerCase().includes(sq)
           : false) ||
-        wardrobe.creator.name.toLowerCase().includes(sq)
+        (wardrobe.creator?.name
+          ? wardrobe.creator.name.toLowerCase().includes(sq)
+          : false)
       );
     }
     if (selectedCategory !== "all") {
@@ -142,25 +144,29 @@ export function TrendingWardrobes({
                   </p>
                 </div>
 
-                {/* Creator */}
-                <div
-                  className="flex items-center gap-2 cursor-pointer hover:bg-muted/50 rounded p-1 -m-1 transition-colors"
-                  onClick={(e) =>
-                    handleCreatorClick(e, wardrobe.creator.username)
-                  }
-                >
-                  <Avatar className="w-6 h-6">
-                    <AvatarImage
-                      src={wardrobe.creator.avatar || "/placeholder.svg"}
-                    />
-                    <AvatarFallback className="text-xs">
-                      {wardrobe.creator.name[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm text-muted-foreground">
-                    by {wardrobe.creator.name}
-                  </span>
-                </div>
+                {/* Creator (optional) */}
+                {wardrobe.creator?.name ? (
+                  <div
+                    className="flex items-center gap-2 cursor-pointer hover:bg-muted/50 rounded p-1 -m-1 transition-colors"
+                    onClick={(e) =>
+                      wardrobe.creator?.username
+                        ? handleCreatorClick(e, wardrobe.creator.username)
+                        : null
+                    }
+                  >
+                    <Avatar className="w-6 h-6">
+                      <AvatarImage
+                        src={wardrobe.creator?.avatar || "/placeholder.svg"}
+                      />
+                      <AvatarFallback className="text-xs">
+                        {wardrobe.creator?.name?.[0] || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm text-muted-foreground">
+                      by {wardrobe.creator?.name}
+                    </span>
+                  </div>
+                ) : null}
               </div>
             </Card>
           ))}

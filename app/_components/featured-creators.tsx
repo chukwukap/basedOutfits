@@ -37,8 +37,8 @@ async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
   }>;
   return data.map((u) => ({
     username: u.username,
-    name: u.name,
-    avatar: u.avatar,
+    name: u.name || u.username,
+    avatar: u.avatar || "",
     wardrobesCount: u.wardrobesCount,
     totalOutfits: u.totalOutfits,
     isFeatured: true,
@@ -79,7 +79,7 @@ export function FeaturedCreators() {
               <div className="flex items-start gap-3">
                 <Avatar className="w-12 h-12 ring-2 ring-background">
                   <AvatarImage src={creator.avatar || "/placeholder.svg"} />
-                  <AvatarFallback>{creator.name[0]}</AvatarFallback>
+                  <AvatarFallback>{creator.name?.[0] || "U"}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex-1 min-w-0">

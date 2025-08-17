@@ -51,16 +51,6 @@ Users can browse outfits, collect their favorites into personal Wardrobes, and t
 
 ---
 
-## 📦 Installation
-
-```bash
-git clone https://github.com/chukwukap/outfitly.git
-cd outfitly
-npm install
-```
-
----
-
 ## 🎯 User Flows
 
 1. **Onboarding**

@@ -8,6 +8,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface OnboardingTutorialProps {
   onComplete: () => void;
@@ -18,7 +19,6 @@ const tutorialSteps = [
   {
     id: 1,
     title: "Discover Outfits",
-    subtitle: "Global Fashion Inspiration",
     description:
       "Scroll through an endless feed of outfits from creators around the world. Find inspiration for every occasion, season, and style.",
     color: "bg-blue-500",
@@ -129,7 +129,6 @@ export function OnboardingTutorial({
     setCurrentStep(step);
   };
 
-  const currentStepData = tutorialSteps[currentStep];
   const lastStepId = tutorialSteps[tutorialSteps.length - 1]?.id;
 
   return (
@@ -137,12 +136,7 @@ export function OnboardingTutorial({
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-2">
-          <div
-            className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center",
-              currentStepData.color,
-            )}
-          />
+          <Image src="/logo.png" alt="Outfitly Logo" width={32} height={32} />
           <span className="font-semibold">Welcome to Outfitly</span>
         </div>
         <Badge variant="outline" className="text-xs">
@@ -189,9 +183,9 @@ export function OnboardingTutorial({
                     <h2 className="text-2xl md:text-3xl font-bold mb-2">
                       {step.title}
                     </h2>
-                    <p className="text-base md:text-lg text-primary font-medium mb-3">
+                    {/* <p className="text-base md:text-lg text-primary font-medium mb-3">
                       {step.subtitle}
-                    </p>
+                    </p> */}
                     <p className="text-muted-foreground leading-relaxed">
                       {step.description}
                     </p>

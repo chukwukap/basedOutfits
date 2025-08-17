@@ -51,7 +51,12 @@ export function OutfitDetailView({ outfit }: OutfitDetailViewProps) {
         <div>
           <h2 className="text-2xl font-bold mb-3">{outfit.title}</h2>
         </div>
-
+        {/* Full Description */}
+        <div>
+          <p className="text-muted-foreground leading-relaxed text-base">
+            {outfit.description}
+          </p>
+        </div>
         {/* Author Info */}
         <Card className="p-4">
           <div className="flex items-start gap-3">
@@ -86,13 +91,6 @@ export function OutfitDetailView({ outfit }: OutfitDetailViewProps) {
             </Button>
           </div>
         </Card>
-
-        {/* Full Description */}
-        <div>
-          <p className="text-muted-foreground leading-relaxed text-base">
-            {outfit.description}
-          </p>
-        </div>
 
         {/* Meta Info (date only in simplified model) */}
         <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">

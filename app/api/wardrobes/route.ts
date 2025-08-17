@@ -1,12 +1,46 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const ownerId = searchParams.get("ownerId") || undefined;
+    const limit = Number.parseInt(searchParams.get("limit") || "20", 10);
+    const isPublicOnly = searchParams.get("public") !== "0";
+
     const wardrobes = await prisma.wardrobe.findMany({
+      where: {
+        ...(ownerId ? { ownerId } : {}),
+        ...(isPublicOnly ? { isPublic: true } : {}),
+      },
       orderBy: { updatedAt: "desc" },
+      take: Math.min(Math.max(limit, 1), 50),
+      include: {
+        owner: true,
+        items: { select: { id: true } },
+      },
     });
-    return NextResponse.json(wardrobes, { status: 200 });
+
+    const payload = wardrobes.map((wb) => ({
+      id: wb.id,
+      name: wb.name,
+      description: wb.description ?? "",
+      coverImage: wb.coverImage ?? "",
+      isPublic: wb.isPublic,
+      createdAt: wb.createdAt,
+      updatedAt: wb.updatedAt,
+      ownerId: wb.ownerId,
+      wardrobeCount: wb.items.length,
+      creator: wb.owner
+        ? {
+            username: wb.owner.username,
+            name: wb.owner.name ?? wb.owner.username,
+            avatar: wb.owner.avatarUrl ?? "",
+          }
+        : undefined,
+    }));
+
+    return NextResponse.json(payload, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },

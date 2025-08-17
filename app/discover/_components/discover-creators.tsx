@@ -101,13 +101,13 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
             <Avatar className="w-12 h-12 mx-auto mb-3">
               <AvatarImage
                 src={creator.avatar || "/placeholder.svg"}
-                alt={creator.name}
+                alt={creator.name || "Creator"}
               />
-              <AvatarFallback>{creator.name[0]}</AvatarFallback>
+              <AvatarFallback>{creator.name?.[0] || "U"}</AvatarFallback>
             </Avatar>
 
             <h4 className="font-medium text-sm mb-1 truncate">
-              {creator.name}
+              {creator.name || creator.username}
             </h4>
             <p className="text-xs text-muted-foreground mb-1">
               {creator.username}
