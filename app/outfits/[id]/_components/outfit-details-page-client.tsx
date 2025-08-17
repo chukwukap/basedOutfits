@@ -11,7 +11,7 @@ import { Button } from "@/app/_components/ui/button";
 import { ComposeCastButton } from "@/app/_components/compose-cast-button";
 import type { OutfitFetchPayload } from "@/lib/types";
 import { OutfitDetailView } from "./outfit-detail-view";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
+
 // Local type matching the UI detail view's expected shape
 type DetailedOutfit = {
   id: string;
@@ -90,12 +90,6 @@ export default function OutfitDetailPageClient() {
   );
   const [showTipModal, setShowTipModal] = useState(false);
   const [showCollectModal, setShowCollectModal] = useState(false);
-
-  const { isFrameReady, setFrameReady } = useMiniKit();
-
-  useEffect(() => {
-    if (!isFrameReady) setFrameReady();
-  }, [isFrameReady, setFrameReady]);
 
   useEffect(() => {
     const loadOutfit = async () => {

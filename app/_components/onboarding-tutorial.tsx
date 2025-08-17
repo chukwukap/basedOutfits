@@ -29,7 +29,7 @@ const tutorialSteps = [
       "Discover new creators",
       "Get inspired daily",
     ],
-    image: "/fashionable-summer-outfit.png",
+    image: "/outfits/stylish-streetwear-look.png",
   },
   {
     id: 2,
@@ -44,7 +44,7 @@ const tutorialSteps = [
       "Support your favorite creators",
       "Build community connections",
     ],
-    image: "/elegant-evening-dress.png",
+    image: "/outfits/business-casual-outfit.png",
   },
   {
     id: 3,
@@ -59,7 +59,7 @@ const tutorialSteps = [
       "Access anytime, anywhere",
       "Create your style library",
     ],
-    image: "/street-style-outfit.png",
+    image: "/outfits/fashionable-summer-outfit.png",
   },
   {
     id: 4,
@@ -74,7 +74,7 @@ const tutorialSteps = [
       "Reach fashion-focused audiences",
       "Earn tips from your outfits",
     ],
-    image: "/share-your-look.png",
+    image: "/outfits/kitenge-elegance.jpg",
   },
 ];
 

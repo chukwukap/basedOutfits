@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { PostOutfitForm } from "@/app/post/_components/post-outfit-form";
 import { PostSuccessModal } from "@/app/post/_components/post-success-modal";
@@ -8,7 +8,6 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { useRouter } from "next/navigation";
 import { OutfitFetchPayload } from "@/lib/types";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
 
 export default function PostPageClient() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -16,12 +15,6 @@ export default function PostPageClient() {
     null,
   );
   const router = useRouter();
-
-  const { isFrameReady, setFrameReady } = useMiniKit();
-
-  useEffect(() => {
-    if (!isFrameReady) setFrameReady();
-  }, [isFrameReady, setFrameReady]);
 
   const handlePostSuccess = (outfitData: OutfitFetchPayload) => {
     setPostedOutfit(outfitData);

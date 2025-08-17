@@ -21,7 +21,6 @@ import { WardrobeResponse } from "@/lib/types";
 import { WardrobeHeader } from "../[id]/_components/wardrobe-header";
 import { WardrobeCard } from "../[id]/_components/wardrobe-card";
 import { useUser } from "@/hooks/useUser";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
 
 type NewWardrobePayload = {
   name: string;
@@ -49,12 +48,6 @@ export default function WardrobePageClient() {
   const [selectedWardrobe, setSelectedWardrobe] =
     useState<WardrobeResponse | null>(null);
   const [wardrobes, setWardrobes] = useState<WardrobeResponse[]>([]);
-
-  const { isFrameReady, setFrameReady } = useMiniKit();
-
-  useEffect(() => {
-    if (!isFrameReady) setFrameReady();
-  }, [isFrameReady, setFrameReady]);
 
   useEffect(() => {
     fetchAllWardrobes()

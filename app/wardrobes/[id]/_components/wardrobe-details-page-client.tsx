@@ -14,7 +14,6 @@ import type { OutfitFetchPayload } from "@/lib/types";
 import { EditWardrobeModal } from "../../_components/edit-wardrobe-modal";
 import { DeleteWardrobeDialog } from "../../_components/delete-wardrobe-dialog";
 import { ComposeCastButton } from "@/app/_components/compose-cast-button";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
 // Remove mocks: fetch real wardrobe + items from API
 
 export default function WardrobeDetailsPageClient() {
@@ -54,12 +53,6 @@ export default function WardrobeDetailsPageClient() {
   const [showCollectModal, setShowCollectModal] = useState(false);
   const [selectedOutfit, setSelectedOutfit] = useState<OutfitItem | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const { isFrameReady, setFrameReady } = useMiniKit();
-
-  useEffect(() => {
-    if (!isFrameReady) setFrameReady();
-  }, [isFrameReady, setFrameReady]);
 
   useEffect(() => {
     let cancelled = false;

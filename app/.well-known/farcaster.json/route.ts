@@ -12,8 +12,6 @@ function withValidProperties(
 }
 
 export async function GET() {
-  const URL = process.env.NEXT_PUBLIC_URL;
-
   const manifest = {
     accountAssociation: {
       header: process.env.FARCASTER_HEADER,
@@ -22,31 +20,30 @@ export async function GET() {
     },
     frame: withValidProperties({
       version: "1",
-      name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
-      description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
+      name: "Outfitly",
+      subtitle: "Discover, post, and collect outfits.",
+      description: "Discover, post, and collect outfits.",
       screenshotUrls: [
-        `${URL}/screenshots/1.png`,
-        `${URL}/screenshots/2.png`,
-        `${URL}/screenshots/3.png`,
+        `https://basedoutfits.vercel.app/screenshots/1.png`,
+        `https://basedoutfits.vercel.app/screenshots/2.png`,
+        `https://basedoutfits.vercel.app/screenshots/3.png`,
       ],
-      imageUrl: `${URL}${process.env.NEXT_PUBLIC_APP_HERO_IMAGE}`,
+      imageUrl: `https://basedoutfits.vercel.app/hero.png`,
       buttonTitle: "View this outfit",
-      iconUrl: `${URL}${process.env.NEXT_PUBLIC_APP_ICON}`,
-      splashImageUrl: `${URL}${process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE}`,
-      splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
-      homeUrl: URL,
-      webhookUrl: `${URL}/api/webhook`,
-      primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
+      iconUrl: `https://basedoutfits.vercel.app/icon.png`,
+      splashImageUrl: `https://basedoutfits.vercel.app/splash.png`,
+      splashBackgroundColor: "#ffffff",
+      homeUrl: "https://basedoutfits.vercel.app",
+      webhookUrl: `https://basedoutfits.vercel.app/api/webhook`,
+      primaryCategory: "fashion",
       tags: ["fashion", "outfit", "wardrobe", "collect", "tip"],
-      heroImageUrl: `${URL}${process.env.NEXT_PUBLIC_APP_HERO_IMAGE}`,
-      tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
-      ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
-      ogDescription: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
-      ogImageUrl: `${URL}${process.env.NEXT_PUBLIC_APP_OG_IMAGE}`,
-      caseShareUrl: `${URL}`,
+      heroImageUrl: `https://basedoutfits.vercel.app/hero.png`,
+      tagline: "Discover, post, and collect outfits.",
+      ogTitle: "Outfitly",
+      ogDescription: "Discover, post, and collect outfits.",
+      ogImageUrl: `https://basedoutfits.vercel.app/hero.png`,
+      caseShareUrl: `https://basedoutfits.vercel.app`,
     }),
-    noindex: process.env.NEXT_PUBLIC_NOINDEX === "true",
   };
 
   console.log(manifest);
