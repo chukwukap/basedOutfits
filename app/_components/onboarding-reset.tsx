@@ -5,7 +5,7 @@ import { RotateCcw } from "lucide-react";
 
 export function OnboardingReset() {
   const resetOnboarding = () => {
-    localStorage.removeItem("outfitly_onboarding_completed");
+    localStorage.removeItem("outfitly_onboarding_complete");
     window.location.reload();
   };
 

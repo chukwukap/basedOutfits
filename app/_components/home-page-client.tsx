@@ -46,7 +46,7 @@ function HomePageInner() {
    */
   const checkFirstTimeUser = () => {
     const hasSeenOnboarding = localStorage.getItem(
-      "outfitly_onboarding_completed",
+      "outfitly_onboarding_complete",
     );
     if (!hasSeenOnboarding) {
       setShowOnboarding(true);
@@ -131,7 +131,7 @@ function HomePageInner() {
    * Handles completion of onboarding.
    */
   const handleOnboardingComplete = () => {
-    localStorage.setItem("outfitly_onboarding_completed", "true");
+    localStorage.setItem("outfitly_onboarding_complete", "true");
     setShowOnboarding(false);
     // On first-time completion, if context exists, ensure user exists in DB
     // no-op here: user sync handled globally by useUser()
