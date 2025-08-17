@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { TipModal } from "@/app/_components/tip-modal";
 import { CollectModal } from "@/app/_components/collect-modal";
 import { CommentsSection } from "./comments-section";
-import { ArrowLeft, Share2, DollarSign, Heart } from "lucide-react";
+import { ArrowLeft, DollarSign, Heart } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { ComposeCastButton } from "@/app/_components/compose-cast-button";
 import type { OutfitFetchPayload } from "@/lib/types";
@@ -150,24 +150,6 @@ export default function OutfitDetailPageClient() {
     setSelectedOutfit(null);
   };
 
-  const handleShare = async () => {
-    if (!outfit) return;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: outfit.title,
-          text: outfit.description,
-          url: window.location.href,
-        });
-      } catch {
-        console.log("Share cancelled");
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -215,7 +197,11 @@ export default function OutfitDetailPageClient() {
             {outfit.title}
           </h1>
           <ComposeCastButton
-            text={outfit.title ? `Check out this outfit: ${outfit.title}` : "Check out this outfit"}
+            text={
+              outfit.title
+                ? `Check out this outfit: ${outfit.title}`
+                : "Check out this outfit"
+            }
             size="sm"
             variant="ghost"
             className="p-2"
@@ -276,7 +262,11 @@ export default function OutfitDetailPageClient() {
             Collect
           </Button>
           <ComposeCastButton
-            text={outfit.title ? `I found this outfit: ${outfit.title}` : "I found this outfit"}
+            text={
+              outfit.title
+                ? `I found this outfit: ${outfit.title}`
+                : "I found this outfit"
+            }
             size="sm"
             variant="outline"
             className="px-4 bg-transparent"

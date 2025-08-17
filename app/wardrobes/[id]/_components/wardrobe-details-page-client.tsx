@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { WardrobeDetailsHeader } from "@/app/wardrobe/[id]/_components/wardrobe-details-header";
+import { WardrobeDetailsHeader } from "@/app/wardrobes/[id]/_components/wardrobe-details-header";
 import {
   WardrobeOutfitsGrid,
   type Outfit as GridOutfit,
-} from "@/app/wardrobe/[id]/_components/wardrobe-outfits-grid";
+} from "@/app/wardrobes/[id]/_components/wardrobe-outfits-grid";
 import { TipModal } from "@/app/_components/tip-modal";
 import { CollectModal } from "@/app/_components/collect-modal";
 import type { OutfitFetchPayload } from "@/lib/types";

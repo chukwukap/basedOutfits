@@ -204,7 +204,7 @@ export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
             name: db?.name || mini.name || (c?.user?.username ?? ""),
             avatarUrl: db?.avatarUrl || mini.avatarUrl || "",
             fid: mini.fid || (c?.user?.username?.toString() ?? ""),
-            isFollowing: false,
+            // isFollowing: false,
           },
           tips: 0,
           collections: 0,

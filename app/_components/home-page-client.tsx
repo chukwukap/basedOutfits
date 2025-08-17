@@ -11,8 +11,8 @@ import { OutfitFetchPayload } from "@/lib/types";
 import { useUser } from "@/hooks/useUser";
 import Image from "next/image";
 import { useTheme } from "@/contexts/theme-context";
-import { OutfitCardSkeleton } from "@/app/look/[id]/_components/outfit-card-skeleton";
-import { OutfitCard } from "@/app/look/[id]/_components/outfit-card";
+import { OutfitCardSkeleton } from "@/app/outfits/[id]/_components/outfit-card-skeleton";
+import { OutfitCard } from "@/app/outfits/[id]/_components/outfit-card";
 
 /**
  * Fetches outfits from the API securely.

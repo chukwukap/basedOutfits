@@ -3,7 +3,7 @@
 import { Home, Plus, BookOpen, Compass } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { APP_URL, cn } from "@/lib/utils";
 
 interface BottomNavProps {
   scrollDirection?: "up" | "down";
@@ -56,7 +56,7 @@ export function BottomNav({
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={`${APP_URL}${item.href}`}
               className={cn(
                 "flex flex-col items-center gap-1 p-3 rounded-lg transition-colors",
                 item.active

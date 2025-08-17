@@ -16,7 +16,7 @@ import {
 import { Badge } from "@/app/_components/ui/badge";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { Plus, Lock, Globe, ArrowLeft, Share2 } from "lucide-react";
-import { CreateWardrobeModal } from "@/app/wardrobe/_components/create-wardrobe-modal";
+import { CreateWardrobeModal } from "@/app/wardrobes/_components/create-wardrobe-modal";
 import Image from "next/image";
 import { OutfitFetchPayload } from "@/lib/types";
 import { BasePayButton } from "@base-org/account-ui/react";

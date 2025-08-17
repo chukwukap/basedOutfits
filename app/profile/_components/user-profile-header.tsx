@@ -5,9 +5,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/app/_components/ui/avatar";
-import { Button } from "@/app/_components/ui/button";
+// import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
-import { UserPlus, UserCheck, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { UserProfile } from "@/lib/types";
 
 interface UserProfileHeaderProps {

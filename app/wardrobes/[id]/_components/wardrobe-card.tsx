@@ -3,7 +3,7 @@
 import { Card } from "@/app/_components/ui/card";
 import { Badge } from "@/app/_components/ui/badge";
 import { Lock, Globe, Calendar } from "lucide-react";
-import { WardrobeOptionsMenu } from "@/app/wardrobe/[id]/_components/wardrobe-options-menu";
+import { WardrobeOptionsMenu } from "@/app/wardrobes/[id]/_components/wardrobe-options-menu";
 import Image from "next/image";
 import { useState } from "react";
 import { WardrobeResponse } from "@/lib/types";

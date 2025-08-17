@@ -4,7 +4,7 @@ import type React from "react";
 
 import { Card } from "@/app/_components/ui/card";
 import { Badge } from "@/app/_components/ui/badge";
-import { Users, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -15,7 +15,10 @@ interface UserWardrobesGridProps {
   onWardrobeClick: (wardrobe: UserWardrobe) => void;
 }
 
-export function UserWardrobesGrid({ wardrobes, onWardrobeClick }: UserWardrobesGridProps) {
+export function UserWardrobesGrid({
+  wardrobes,
+  onWardrobeClick,
+}: UserWardrobesGridProps) {
   const [imageLoadingStates, setImageLoadingStates] = useState<
     Record<string, boolean>
   >(wardrobes.reduce((acc, wardrobe) => ({ ...acc, [wardrobe.id]: true }), {}));

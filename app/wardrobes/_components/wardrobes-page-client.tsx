@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useDeferredValue, useEffect, useMemo, useState, useTransition } from "react";
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
 
 import { CreateWardrobeFab } from "@/app/wardrobes/_components/create-wardrobe-fab";
@@ -184,17 +191,26 @@ export default function WardrobePageClient() {
   }, [wardrobes, deferredSearchQuery, selectedFilter, sortBy]);
 
   // Transitioned updates to avoid blocking keystrokes on mobile
-  const handleSearchChange = useCallback((q: string) => {
-    startTransition(() => setSearchQuery(q));
-  }, [startTransition]);
+  const handleSearchChange = useCallback(
+    (q: string) => {
+      startTransition(() => setSearchQuery(q));
+    },
+    [startTransition],
+  );
 
-  const handleFilterChange = useCallback((filter: string) => {
-    startTransition(() => setSelectedFilter(filter));
-  }, [startTransition]);
+  const handleFilterChange = useCallback(
+    (filter: string) => {
+      startTransition(() => setSelectedFilter(filter));
+    },
+    [startTransition],
+  );
 
-  const handleSortChange = useCallback((s: string) => {
-    startTransition(() => setSortBy(s));
-  }, [startTransition]);
+  const handleSortChange = useCallback(
+    (s: string) => {
+      startTransition(() => setSortBy(s));
+    },
+    [startTransition],
+  );
 
   return (
     <div className="min-h-screen bg-background pb-20">

@@ -55,10 +55,18 @@ export function WardrobeHeader({
         {/* Title and Search Toggle */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <h1 className="text-lg sm:text-xl font-semibold truncate">My Wardrobes</h1>
-            <Badge variant="secondary" className="text-[10px] sm:text-xs shrink-0">
+            <h1 className="text-lg sm:text-xl font-semibold truncate">
+              My Wardrobes
+            </h1>
+            <Badge
+              variant="secondary"
+              className="text-[10px] sm:text-xs shrink-0"
+            >
               <span className="sm:hidden">{totalWardrobes}</span>
-              <span className="hidden sm:inline">{totalWardrobes} {totalWardrobes === 1 ? "wardrobe" : "wardrobes"}</span>
+              <span className="hidden sm:inline">
+                {totalWardrobes}{" "}
+                {totalWardrobes === 1 ? "wardrobe" : "wardrobes"}
+              </span>
             </Badge>
           </div>
           <Button
@@ -118,7 +126,9 @@ export function WardrobeHeader({
                 className="h-8 px-2 whitespace-nowrap bg-transparent"
               >
                 <SortAsc className="w-4 h-4 mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">{activeSortOption?.label}</span>
+                <span className="hidden sm:inline">
+                  {activeSortOption?.label}
+                </span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

@@ -48,3 +48,6 @@ export function formatDate(inputDate: Date | string): string {
   }
   return date.toLocaleDateString("en-US", options);
 }
+
+export const APP_URL =
+  process.env.NEXT_PUBLIC_URL || "https://basedOutfits.vercel.app";

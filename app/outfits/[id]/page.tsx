@@ -38,7 +38,7 @@ export async function generateMetadata(
           version: "next",
           imageUrl: image,
           button: {
-            title: `Check out this outfit!`,
+            title: `View this outfit`,
             action: {
               type: "launch_frame",
               name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,

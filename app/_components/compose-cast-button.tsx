@@ -25,7 +25,9 @@ export function ComposeCastButton({
   const { composeCast } = useComposeCast();
 
   const onShare = useCallback(() => {
-    const url = embedUrl || (typeof window !== "undefined" ? window.location.href : undefined);
+    const url =
+      embedUrl ||
+      (typeof window !== "undefined" ? window.location.href : undefined);
     composeCast({
       text,
       ...(url ? { embeds: [url] } : {}),
@@ -33,7 +35,12 @@ export function ComposeCastButton({
   }, [composeCast, embedUrl, text]);
 
   return (
-    <Button onClick={onShare} size={size} variant={variant} className={className}>
+    <Button
+      onClick={onShare}
+      size={size}
+      variant={variant}
+      className={className}
+    >
       <Share2 className="w-4 h-4 mr-2" />
       {label}
     </Button>
