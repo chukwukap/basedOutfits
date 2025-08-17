@@ -6,7 +6,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
-import { ChevronLeft, ChevronRight, Eye, Heart, Unlock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Heart, Unlock, DollarSign, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface OnboardingTutorialProps {
@@ -17,33 +17,67 @@ interface OnboardingTutorialProps {
 const tutorialSteps = [
   {
     id: 1,
-    title: "See the Vibe",
-    subtitle: "Inside Farcaster, instantly",
+    title: "Discover Looks",
+    subtitle: "Global Fashion Inspiration",
     description:
-      "Swipe through global outfits. Tap to like, tip, or collect. You’re home.",
+      "Scroll through an endless feed of fashion looks from creators around the world. Find inspiration for every occasion, season, and style.",
     icon: Eye,
     color: "bg-blue-500",
-    image: "/outfits/stylish-streetwear-outfit.png",
+    features: [
+      "Browse curated fashion content",
+      "Filter by tags and styles",
+      "Discover new creators",
+      "Get inspired daily",
+    ],
+    image: "/fashionable-summer-outfit.png",
   },
   {
     id: 2,
-    title: "Own Your Wardrobe",
-    subtitle: "Onchain. Yours.",
+    title: "Tip Creators",
+    subtitle: "Support Fashion Creators",
     description:
-      "Your wardrobe lives on Base—owned by you. No popups until you act.",
-    icon: Heart,
-    color: "bg-pink-500",
-    image: "/outfits/elegant-evening-dress.png",
+      "Show appreciation for looks you love by sending small tips directly to creators. Support the fashion community with just a few taps.",
+    icon: DollarSign,
+    color: "bg-green-500",
+    features: [
+      "Send tips starting from $0.50",
+      "Fast payments with Basepay",
+      "Support your favorite creators",
+      "Build community connections",
+    ],
+    image: "/elegant-evening-dress.png",
   },
   {
     id: 3,
-    title: "You’re In",
-    subtitle: "Starter pack loaded",
+    title: "Collect Looks",
+    subtitle: "Build Your Style Collection",
     description:
-      "We preloaded your feed so it’s never empty. Start browsing or share your first outfit.",
-    icon: Unlock,
-    color: "bg-green-500",
-    image: "/outfits/street-style-outfit.png",
+      "Save your favorite looks to your personal closet for a small fee. Build a curated collection of fashion inspiration you can reference anytime.",
+    icon: Heart,
+    color: "bg-pink-500",
+    features: [
+      "Save looks for $1 each",
+      "Organize in your closet",
+      "Access anytime, anywhere",
+      "Create your style library",
+    ],
+    image: "/street-style-outfit.png",
+  },
+  {
+    id: 4,
+    title: "Share Your Looks",
+    subtitle: "Express Your Style",
+    description:
+      "Post your outfits directly to BasedOutfits. Inspire others, get tipped, and grow your digital fashion presence inside the BaseApp.",
+    icon: Upload,
+    color: "bg-purple-500",
+    features: [
+      "Easily upload outfit photos",
+      "Tag styles and occasions",
+      "Reach fashion-focused audiences",
+      "Earn tips from your looks",
+    ],
+    image: "/share-your-look.png",
   },
 ];
 
@@ -140,15 +174,18 @@ export function OnboardingTutorial({
               <div key={step.id} className="w-full flex-shrink-0 flex flex-col">
                 {/* Hero (full-bleed) */}
                 <div className="relative h-72 md:h-[420px] bg-gradient-to-br from-muted to-muted/50">
-                  <img
-                    src={step.image || "/outfits/placeholder.png"}
-                    alt={step.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/outfits/stylish-streetwear-outfit.png";
-                    }}
-                  />
+                  <picture>
+                    <img
+                      src={step.image || "/outfits/placeholder.png"}
+                      alt={step.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "/outfits/stylish-streetwear-outfit.png";
+                      }}
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
                   <div
                     className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-md animate-in fade-in zoom-in-90"
