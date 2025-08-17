@@ -25,10 +25,10 @@ interface OnboardingTutorialProps {
 const tutorialSteps = [
   {
     id: 1,
-    title: "Discover Looks",
+    title: "Discover Outfits",
     subtitle: "Global Fashion Inspiration",
     description:
-      "Scroll through an endless feed of fashion looks from creators around the world. Find inspiration for every occasion, season, and style.",
+      "Scroll through an endless feed of outfits from creators around the world. Find inspiration for every occasion, season, and style.",
     icon: Eye,
     color: "bg-blue-500",
     features: [
@@ -44,7 +44,7 @@ const tutorialSteps = [
     title: "Tip Creators",
     subtitle: "Support Fashion Creators",
     description:
-      "Show appreciation for looks you love by sending small tips directly to creators. Support the fashion community with just a few taps.",
+      "Show appreciation for outfits you love by sending small tips directly to creators. Support the fashion community with just a few taps.",
     icon: DollarSign,
     color: "bg-green-500",
     features: [
@@ -57,14 +57,14 @@ const tutorialSteps = [
   },
   {
     id: 3,
-    title: "Collect Looks",
+    title: "Collect Outfits",
     subtitle: "Build Your Style Collection",
     description:
-      "Save your favorite looks to your personal closet for a small fee. Build a curated collection of fashion inspiration you can reference anytime.",
+      "Save your favorite outfits to your personal closet for a small fee. Build a curated collection of fashion inspiration you can reference anytime.",
     icon: Heart,
     color: "bg-pink-500",
     features: [
-      "Save looks for $1 each",
+      "Save outfits for $1 each",
       "Organize in your closet",
       "Access anytime, anywhere",
       "Create your style library",
@@ -73,7 +73,7 @@ const tutorialSteps = [
   },
   {
     id: 4,
-    title: "Share Your Looks",
+    title: "Share Your Outfits",
     subtitle: "Express Your Style",
     description:
       "Post your outfits directly to BasedOutfits. Inspire others, get tipped, and grow your digital fashion presence inside the BaseApp.",
@@ -83,7 +83,7 @@ const tutorialSteps = [
       "Easily upload outfit photos",
       "Tag styles and occasions",
       "Reach fashion-focused audiences",
-      "Earn tips from your looks",
+      "Earn tips from your outfits",
     ],
     image: "/share-your-look.png",
   },
