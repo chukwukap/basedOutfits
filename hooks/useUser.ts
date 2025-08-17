@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { User } from "@/lib/generated/prisma";
 import { Context } from "@farcaster/frame-sdk";
 import { useAccount } from "wagmi";
@@ -76,6 +76,31 @@ export function useUser(): UseUserResult {
     });
     await mutate();
   };
+
+  // Auto-create user when MiniKit context becomes available and DB user is missing
+  useEffect(() => {
+    const autoCreate = async () => {
+      try {
+        if (!mini.username || !mini.fid) return;
+        if (data && data.user) return; // already exists
+        await fetch("/api/users/me", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fid: mini.fid,
+            username: mini.username,
+            name: mini.name,
+            avatarUrl: mini.avatarUrl,
+            walletAddress: mini.walletAddress,
+          }),
+        });
+        await mutate();
+      } catch {
+        // no-op
+      }
+    };
+    if (key) void autoCreate();
+  }, [mini.fid, mini.username, mini.name, mini.avatarUrl, mini.walletAddress, key, data, mutate]);
 
   return {
     loading: isLoading,
