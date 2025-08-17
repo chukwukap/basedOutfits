@@ -446,24 +446,36 @@ export function AddToWardrobeSheet({
                       {paymentError || "Please try again."}
                     </p>
                   </div>
-                  <Button
-                    onClick={() => {
-                      pay({
-                        amount: "0.5",
-                        to:
-                          selectedWardrobe?.owner?.walletAddress ||
-                          "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7",
-                        testnet:
-                          process.env.NEXT_PUBLIC_BASEPAY_TESTNET === "true"
-                            ? true
-                            : false,
-                      });
-                      setPaymentError(null);
-                    }}
-                    className="w-full"
-                  >
-                    Try Again
-                  </Button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setPaymentError(null);
+                        handleClose();
+                      }}
+                      className="w-full"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        pay({
+                          amount: "0.5",
+                          to:
+                            selectedWardrobe?.owner?.walletAddress ||
+                            "0x50cCe62142Aa864EE13c9a2b0eEeDb38221CB5E7",
+                          testnet:
+                            process.env.NEXT_PUBLIC_BASEPAY_TESTNET === "true"
+                              ? true
+                              : false,
+                        });
+                        setPaymentError(null);
+                      }}
+                      className="w-full"
+                    >
+                      Try Again
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>
