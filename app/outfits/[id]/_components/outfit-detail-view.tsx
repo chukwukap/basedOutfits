@@ -6,7 +6,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/app/_components/ui/avatar";
-import { Button } from "@/app/_components/ui/button";
+
 import { Badge } from "@/app/_components/ui/badge";
 import { Card } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";
@@ -86,9 +86,6 @@ export function OutfitDetailView({ outfit }: OutfitDetailViewProps) {
                 </span>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="bg-transparent">
-              Follow
-            </Button>
           </div>
         </Card>
 
