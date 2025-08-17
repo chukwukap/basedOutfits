@@ -38,10 +38,24 @@ export async function POST(req: Request) {
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    const isVercel = !!process.env.VERCEL;
+    if (!token && isVercel) {
+      return NextResponse.json(
+        {
+          error:
+            "Uploads are not configured in production. Please set BLOB_READ_WRITE_TOKEN in your Vercel Project settings.",
+        },
+        { status: 500 },
+      );
+    }
+
     // Store in Vercel Blob (public)
     const blob = await put(`uploads/${filename}`, buffer, {
       access: "public",
       contentType: file.type || "application/octet-stream",
+      ...(token ? { token } : {}),
     });
 
     console.log("POST /api/upload success", {
