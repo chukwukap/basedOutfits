@@ -6,7 +6,15 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
-import { ChevronLeft, ChevronRight, Eye, Heart, Unlock, DollarSign, Upload } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  Heart,
+  Unlock,
+  DollarSign,
+  Upload,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface OnboardingTutorialProps {
@@ -135,6 +143,7 @@ export function OnboardingTutorial({
 
   const currentStepData = tutorialSteps[currentStep];
   const Icon = currentStepData.icon;
+  const lastStepId = tutorialSteps[tutorialSteps.length - 1]?.id;
 
   return (
     <div className="fixed inset-0 bg-background z-50 flex flex-col">
@@ -214,7 +223,7 @@ export function OnboardingTutorial({
                     )}
                   </div>
 
-                  {step.id === 3 ? (
+                  {step.id === lastStepId ? (
                     <div className="mt-auto">
                       <div className="flex items-center justify-center mb-6">
                         <div className="relative w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center">
