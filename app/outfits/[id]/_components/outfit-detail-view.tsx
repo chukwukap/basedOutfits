@@ -105,7 +105,7 @@ export function OutfitDetailView({ outfit }: OutfitDetailViewProps) {
           </span>
           <span className="flex items-center gap-2 text-muted-foreground">
             <Heart className="w-4 h-4" />
-            <span className="font-medium">{outfit.collections}</span> collected
+            <span className="font-medium">{outfit.collections}</span> added
           </span>
         </div>
 

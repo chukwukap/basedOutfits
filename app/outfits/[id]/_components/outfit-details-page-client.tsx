@@ -264,9 +264,10 @@ export default function OutfitDetailPageClient() {
             <DollarSign className="w-4 h-4 mr-2" />
             Tip
           </Button>
+          ,s
           <Button onClick={() => handleCollect(outfit)} className="flex-1">
             <Heart className="w-4 h-4 mr-2" />
-            Collect
+            Add
           </Button>
           <ComposeCastButton
             text={

@@ -46,7 +46,7 @@ export function RelatedOutfits({ currentOutfitId }: RelatedOutfitsProps) {
             imageUrl: o.imageUrls?.[0] || "",
             author: o.author?.name || "",
             tips: o.tips ?? 0,
-            collections: o.ions ?? 0,
+            collections: o.collections ?? 0,
           }));
         setRelatedOutfits(mapped);
       } catch {

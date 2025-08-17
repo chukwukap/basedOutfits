@@ -7,6 +7,7 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 import { prisma } from "@/lib/db";
+import { APP_URL } from "@/lib/utils";
 
 export async function generateMetadata(
   { params }: Props,
@@ -20,7 +21,7 @@ export async function generateMetadata(
   try {
     const outfit = await prisma.outfit.findUnique({ where: { id } });
     if (!outfit) return {};
-    const host = process.env.NEXT_PUBLIC_URL || "";
+    const host = APP_URL;
     const appName =
       process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Outfitly";
     const splashImageUrl =
@@ -40,20 +41,6 @@ export async function generateMetadata(
         images: image ? [image, ...previousImages] : previousImages || [],
       },
       other: {
-        "fc:miniapp": JSON.stringify({
-          version: "1",
-          imageUrl: image,
-          button: {
-            title: "View Outfit 🔥",
-            action: {
-              type: "launch_miniapp",
-              name: appName,
-              url: host,
-              splashImageUrl,
-              splashBackgroundColor,
-            },
-          },
-        }),
         "fc:frame": JSON.stringify({
           version: "1",
           imageUrl: image,

@@ -258,7 +258,7 @@ export function AddToWardrobeSheet({
                   <div className="text-left">
                     <p className="font-medium text-sm">Create New Wardrobe</p>
                     <p className="text-xs text-muted-foreground">
-                      Start a new collection
+                      Start a new wardrobe
                     </p>
                   </div>
                 </div>
