@@ -20,6 +20,9 @@ export async function generateMetadata(
     const outfit = await prisma.outfit.findUnique({ where: { id } });
     if (!outfit) return {};
     const host = process.env.NEXT_PUBLIC_URL || "";
+    const appName = process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
+    const splashImageUrl = process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/icon.jpg`;
+    const splashBackgroundColor = process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#000000";
     const image = outfit.imageUrls[0]
       ? outfit.imageUrls[0].startsWith("http")
         ? outfit.imageUrls[0]
@@ -33,18 +36,31 @@ export async function generateMetadata(
         images: image ? [image, ...previousImages] : previousImages || [],
       },
       other: {
+        "fc:miniapp": JSON.stringify({
+          version: "1",
+          imageUrl: image,
+          button: {
+            title: "Open BasedOutfits",
+            action: {
+              type: "launch_miniapp",
+              name: appName,
+              url: host,
+              splashImageUrl,
+              splashBackgroundColor,
+            },
+          },
+        }),
         "fc:frame": JSON.stringify({
-          version: "next",
+          version: "1",
           imageUrl: image,
           button: {
             title: `View ${outfit.caption} outfit!`,
             action: {
               type: "launch_frame",
-              name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-              url: `${host}/wardrobe/${id}`,
-              splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
-              splashBackgroundColor:
-                process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
+              name: appName,
+              url: `${host}/wardrobes/${id}`,
+              splashImageUrl,
+              splashBackgroundColor,
             },
           },
         }),

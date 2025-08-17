@@ -20,6 +20,9 @@ export async function generateMetadata(
     const user = await prisma.user.findUnique({ where: { username } });
     if (!user) return {};
     const host = process.env.NEXT_PUBLIC_URL || "";
+    const appName = process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "BasedOutfits";
+    const splashImageUrl = process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/icon.jpg`;
+    const splashBackgroundColor = process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#000000";
     const image = user.avatarUrl
       ? user.avatarUrl.startsWith("http")
         ? user.avatarUrl
@@ -33,18 +36,31 @@ export async function generateMetadata(
         images: image ? [image, ...previousImages] : previousImages || [],
       },
       other: {
+        "fc:miniapp": JSON.stringify({
+          version: "1",
+          imageUrl: image,
+          button: {
+            title: "Open BasedOutfits",
+            action: {
+              type: "launch_miniapp",
+              name: appName,
+              url: host,
+              splashImageUrl,
+              splashBackgroundColor,
+            },
+          },
+        }),
         "fc:frame": JSON.stringify({
-          version: "next",
+          version: "1",
           imageUrl: image,
           button: {
             title: `View @${user.username}'s profile`,
             action: {
               type: "launch_frame",
-              name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+              name: appName,
               url: `${host}/profile/${user.username}`,
-              splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
-              splashBackgroundColor:
-                process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
+              splashImageUrl,
+              splashBackgroundColor,
             },
           },
         }),
