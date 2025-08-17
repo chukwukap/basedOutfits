@@ -41,7 +41,7 @@ export async function generateMetadata(
             action: {
               type: "launch_frame",
               name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-              url: `${host}/outfits/${id}`,
+              url: `${host}/wardrobe/${id}`,
               splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
               splashBackgroundColor:
                 process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
