@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useAddFrame, useMiniKit } from "@coinbase/onchainkit/minikit";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -86,6 +87,8 @@ export function OnboardingTutorial({
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const addFrame = useAddFrame();
+  const { isFrameReady } = useMiniKit();
 
   const minSwipeDistance = 50;
 
@@ -216,6 +219,27 @@ export function OnboardingTutorial({
                         >
                           Share Your First Outfit
                         </Button>
+                      </div>
+                      <div className="mt-3">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            try {
+                              addFrame();
+                            } catch {
+                              // no-op
+                            }
+                          }}
+                          disabled={!isFrameReady}
+                          className="w-full h-12 text-base font-semibold"
+                        >
+                          Add to Base App
+                        </Button>
+                        {!isFrameReady && (
+                          <p className="mt-2 text-xs text-muted-foreground text-center">
+                            Initializing… try again in a moment.
+                          </p>
+                        )}
                       </div>
                     </div>
                   ) : (
