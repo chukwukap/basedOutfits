@@ -18,14 +18,16 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
     username: string;
     name: string;
     avatar: string;
-    followers: number;
+    totalOutfits: number;
     isFollowing: boolean;
   };
 
   const [creators, setCreators] = useState<DiscoverCreator[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [followingStates, setFollowingStates] = useState<Record<string, boolean>>({});
+  const [followingStates, setFollowingStates] = useState<
+    Record<string, boolean>
+  >({});
 
   // Security: use no-store and defensive parsing
   useEffect(() => {
@@ -34,24 +36,28 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch("/api/users/suggested?limit=10", { cache: "no-store" });
+        const res = await fetch("/api/users/suggested?limit=10", {
+          cache: "no-store",
+        });
         if (!res.ok) throw new Error("Failed to load creators");
         const data = (await res.json()) as Array<{
           id: string;
           username: string;
           name: string;
           avatar: string;
-          followers: number;
+          totalOutfits: number;
           isFollowing: boolean;
         }>;
         if (cancelled) return;
         setCreators(
           data.map((c) => ({
             id: String(c.id),
-            username: c.username.startsWith("@") ? c.username : `@${c.username}`,
+            username: c.username.startsWith("@")
+              ? c.username
+              : `@${c.username}`,
             name: c.name,
             avatar: c.avatar,
-            followers: Number.isFinite(c.followers) ? c.followers : 0,
+            totalOutfits: Number.isFinite(c.totalOutfits) ? c.totalOutfits : 0,
             isFollowing: Boolean(c.isFollowing),
           })),
         );
@@ -82,9 +88,10 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
     }));
   };
 
-  const formatFollowers = (n: number) => {
+  const formatCount = (n: number) => {
     try {
-      if (n >= 1000000) return `${(n / 1000000).toFixed(1).replace(/\.0$/, "")}M`;
+      if (n >= 1000000)
+        return `${(n / 1000000).toFixed(1).replace(/\.0$/, "")}M`;
       if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K`;
       return n.toLocaleString();
     } catch {
@@ -123,7 +130,7 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
               {creator.username}
             </p>
             <p className="text-xs text-muted-foreground mb-3">
-              {formatFollowers(creator.followers)} followers
+              {formatCount(creator.totalOutfits)} outfits
             </p>
 
             <Button

@@ -16,7 +16,6 @@ type FeaturedCreator = {
   name: string;
   avatar?: string;
   bio?: string;
-  followers: number;
   wardrobesCount: number;
   totalOutfits: number;
   isFollowing: boolean;
@@ -26,13 +25,14 @@ type FeaturedCreator = {
 
 async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
   // Use suggested users as provisional featured creators
-  const res = await fetch(`/api/users/suggested?limit=6`, { cache: "no-store" });
+  const res = await fetch(`/api/users/suggested?limit=6`, {
+    cache: "no-store",
+  });
   if (!res.ok) return [];
   const data = (await res.json()) as Array<{
     username: string;
     name: string;
     avatar: string;
-    followers: number;
     wardrobesCount: number;
     totalOutfits: number;
     isFollowing: boolean;
@@ -41,7 +41,6 @@ async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
     username: u.username,
     name: u.name,
     avatar: u.avatar,
-    followers: u.followers,
     wardrobesCount: u.wardrobesCount,
     totalOutfits: u.totalOutfits,
     isFollowing: u.isFollowing,
@@ -65,9 +64,6 @@ export function FeaturedCreators() {
           ? {
               ...creator,
               isFollowing: !creator.isFollowing,
-              followers: creator.isFollowing
-                ? creator.followers - 1
-                : creator.followers + 1,
             }
           : creator,
       ),
@@ -147,7 +143,7 @@ export function FeaturedCreators() {
               </div>
 
               {/* Stats */}
-              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-8 text-xs text-muted-foreground">
                 <div className="text-center">
                   <p className="font-semibold text-foreground">
                     {creator.totalOutfits}
@@ -159,12 +155,6 @@ export function FeaturedCreators() {
                     {creator.wardrobesCount}
                   </p>
                   <p>Wardrobes</p>
-                </div>
-                <div className="text-center">
-                  <p className="font-semibold text-foreground">
-                    {creator.followers.toLocaleString()}
-                  </p>
-                  <p>Followers</p>
                 </div>
               </div>
 
