@@ -8,6 +8,7 @@ import { UserWardrobesGrid } from "@/app/profile/_components/user-wardrobes-grid
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { UserProfile, UserWardrobe } from "@/lib/types";
+import { ComposeCastButton } from "@/app/_components/compose-cast-button";
 
 async function fetchUserProfile(username: string) {
   const res = await fetch(`/api/users/${encodeURIComponent(username)}`, {
@@ -110,6 +111,16 @@ export default function UserProfilePageClient() {
 
       {/* User Profile Header */}
       <UserProfileHeader user={user} onFollowUser={handleFollowUser} />
+
+      {/* Share profile */}
+      <div className="px-4 -mt-2">
+        <ComposeCastButton
+          text={`Viewing @${user.username}'s profile on BasedOutfits`}
+          label="Share Profile"
+          variant="outline"
+          size="sm"
+        />
+      </div>
 
       {/* Public Wardrobes */}
       <main className="p-4">

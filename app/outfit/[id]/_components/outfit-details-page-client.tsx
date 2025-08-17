@@ -8,6 +8,7 @@ import { CollectModal } from "@/app/_components/collect-modal";
 import { CommentsSection } from "./comments-section";
 import { ArrowLeft, Share2, DollarSign, Heart } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
+import { ComposeCastButton } from "@/app/_components/compose-cast-button";
 import type { OutfitFetchPayload } from "@/lib/types";
 import { OutfitDetailView } from "./outfit-detail-view";
 // Local type matching the UI detail view's expected shape
@@ -213,14 +214,13 @@ export default function OutfitDetailPageClient() {
           <h1 className="text-lg font-semibold truncate flex-1 mx-4">
             {outfit.title}
           </h1>
-          <Button
-            variant="ghost"
+          <ComposeCastButton
+            text={outfit.title ? `Check out this outfit: ${outfit.title}` : "Check out this outfit"}
             size="sm"
-            onClick={handleShare}
+            variant="ghost"
             className="p-2"
-          >
-            <Share2 className="w-5 h-5" />
-          </Button>
+            label="Share"
+          />
         </div>
       </header>
 
@@ -275,13 +275,13 @@ export default function OutfitDetailPageClient() {
             <Heart className="w-4 h-4 mr-2" />
             Collect
           </Button>
-          <Button
+          <ComposeCastButton
+            text={outfit.title ? `I found this outfit: ${outfit.title}` : "I found this outfit"}
+            size="sm"
             variant="outline"
-            onClick={handleShare}
             className="px-4 bg-transparent"
-          >
-            <Share2 className="w-4 h-4" />
-          </Button>
+            label="Share"
+          />
         </div>
       </div>
 

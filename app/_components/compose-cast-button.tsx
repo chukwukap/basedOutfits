@@ -1,30 +1,41 @@
 "use client";
 
-import { Button } from "@/app/_components/ui/button";
+import { useCallback } from "react";
 import { useComposeCast } from "@coinbase/onchainkit/minikit";
+import { Button } from "@/app/_components/ui/button";
+import { Share2 } from "lucide-react";
 
 interface ComposeCastButtonProps {
   text: string;
-  embeds?: string[];
+  embedUrl?: string;
+  size?: "sm" | "default" | "lg" | "icon";
+  variant?: "default" | "secondary" | "outline" | "ghost";
   className?: string;
-  children?: React.ReactNode;
+  label?: string;
 }
 
 export function ComposeCastButton({
   text,
-  embeds,
+  embedUrl,
+  size = "sm",
+  variant = "outline",
   className,
-  children,
+  label = "Cast",
 }: ComposeCastButtonProps) {
   const { composeCast } = useComposeCast();
 
-  const onClick = () => {
-    composeCast({ text, embeds: embeds as [string, string] | undefined });
-  };
+  const onShare = useCallback(() => {
+    const url = embedUrl || (typeof window !== "undefined" ? window.location.href : undefined);
+    composeCast({
+      text,
+      ...(url ? { embeds: [url] } : {}),
+    });
+  }, [composeCast, embedUrl, text]);
 
   return (
-    <Button onClick={onClick} className={className} variant="outline">
-      {children ?? "Share on Farcaster"}
+    <Button onClick={onShare} size={size} variant={variant} className={className}>
+      <Share2 className="w-4 h-4 mr-2" />
+      {label}
     </Button>
   );
 }

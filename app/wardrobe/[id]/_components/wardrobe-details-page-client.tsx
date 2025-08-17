@@ -13,6 +13,7 @@ import { CollectModal } from "@/app/_components/collect-modal";
 import type { OutfitFetchPayload } from "@/lib/types";
 import { EditWardrobeModal } from "../../_components/edit-wardrobe-modal";
 import { DeleteWardrobeDialog } from "../../_components/delete-wardrobe-dialog";
+import { ComposeCastButton } from "@/app/_components/compose-cast-button";
 // Remove mocks: fetch real wardrobe + items from API
 
 export default function WardrobeDetailsPageClient() {
@@ -244,6 +245,16 @@ export default function WardrobeDetailsPageClient() {
           onRemoveOutfit={handleRemoveOutfit}
         />
       </main>
+
+      {/* Share */}
+      <div className="px-4 py-2">
+        <ComposeCastButton
+          text={`Browsing the wardrobe: ${wardrobe.name}`}
+          label="Share Wardrobe"
+          variant="outline"
+          size="sm"
+        />
+      </div>
 
       {/* Modals */}
       <EditWardrobeModal
