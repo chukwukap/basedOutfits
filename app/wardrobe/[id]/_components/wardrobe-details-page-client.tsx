@@ -58,9 +58,12 @@ export default function WardrobeDetailsPageClient() {
     const load = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/wardrobes/${encodeURIComponent(wardrobeId)}`, {
-          cache: "no-store",
-        });
+        const res = await fetch(
+          `/api/wardrobes/${encodeURIComponent(wardrobeId)}`,
+          {
+            cache: "no-store",
+          },
+        );
         if (!res.ok) throw new Error("Failed to load wardrobe");
         const raw = await res.json();
         if (cancelled) return;
@@ -96,21 +99,24 @@ export default function WardrobeDetailsPageClient() {
             name: raw.owner?.name ?? raw.owner?.username ?? "Unknown",
             avatar: raw.owner?.avatarUrl ?? "",
           },
-          outfits: (raw.items as RawWardrobeItem[] | undefined || []).map((it) => ({
-            id: it.outfit.id,
-            title: it.outfit.caption ?? "",
-            description: it.outfit.description ?? "",
-            imageUrl: (it.outfit.imageUrls && it.outfit.imageUrls[0]) || "",
-            author: {
-              name: it.outfit.author?.name ?? it.outfit.author?.username ?? "",
-              avatar: it.outfit.author?.avatarUrl ?? "",
-              fid: it.outfit.author?.fid ?? it.outfit.author?.username ?? "",
-            },
-            tips: (it.outfit.tips || []).length,
-            collections: (it.outfit.saves || []).length,
-            createdAt: new Date(it.outfit.createdAt).toISOString(),
-            addedAt: new Date(it.createdAt).toISOString(),
-          })),
+          outfits: ((raw.items as RawWardrobeItem[] | undefined) || []).map(
+            (it) => ({
+              id: it.outfit.id,
+              title: it.outfit.caption ?? "",
+              description: it.outfit.description ?? "",
+              imageUrl: (it.outfit.imageUrls && it.outfit.imageUrls[0]) || "",
+              author: {
+                name:
+                  it.outfit.author?.name ?? it.outfit.author?.username ?? "",
+                avatar: it.outfit.author?.avatarUrl ?? "",
+                fid: it.outfit.author?.fid ?? it.outfit.author?.username ?? "",
+              },
+              tips: (it.outfit.tips || []).length,
+              collections: (it.outfit.saves || []).length,
+              createdAt: new Date(it.outfit.createdAt).toISOString(),
+              addedAt: new Date(it.createdAt).toISOString(),
+            }),
+          ),
         };
         setWardrobe(mapped);
       } catch {

@@ -5,11 +5,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const URL = process.env.NEXT_PUBLIC_URL;
   return {
     title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-    description: "Your Mini App description here",
+    description: "Share & Collect Inspiring Fashion",
     other: {
       "fc:frame": JSON.stringify({
         version: "next",
-        imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
+        imageUrl: "/hero.png",
         button: {
           title: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME}`,
           action: {

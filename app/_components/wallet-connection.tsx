@@ -34,7 +34,9 @@ export function WalletConnection({
       if (!eth || typeof eth.request !== "function") {
         throw new Error("No EVM wallet detected in this browser");
       }
-      const accounts = (await eth.request({ method: "eth_requestAccounts" })) as string[];
+      const accounts = (await eth.request({
+        method: "eth_requestAccounts",
+      })) as string[];
       const account = accounts?.[0];
       if (!account) throw new Error("Wallet connection failed");
       onConnectionChange(true, account);

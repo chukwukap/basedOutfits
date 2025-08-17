@@ -163,10 +163,12 @@ export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
 
     try {
       setPosting(true);
-      const c = (context as unknown as {
-        user?: { username?: string; fid?: number | string };
-      } | null) || null;
-      const currentUserId = db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
+      const c =
+        (context as unknown as {
+          user?: { username?: string; fid?: number | string };
+        } | null) || null;
+      const currentUserId =
+        db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
       if (!currentUserId) {
         throw new Error("You must be signed in to post an outfit.");
       }
