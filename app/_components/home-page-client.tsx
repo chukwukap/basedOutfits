@@ -44,9 +44,12 @@ function HomePageInner() {
 
   const { isFrameReady, setFrameReady } = useMiniKit();
 
+  // Prepare frame on mount
   useEffect(() => {
-    if (!isFrameReady) setFrameReady();
-  }, [isFrameReady, setFrameReady]);
+    if (!isFrameReady) {
+      setFrameReady();
+    }
+  }, [setFrameReady, isFrameReady]);
 
   /**
    * Checks if the user is a first-time visitor and shows onboarding if needed.

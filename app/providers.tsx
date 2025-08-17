@@ -16,8 +16,8 @@ export function Providers(props: { children: ReactNode }) {
         appearance: {
           mode: "auto",
           theme: "mini-app-theme",
-          name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-          logo: process.env.NEXT_PUBLIC_ICON_URL,
+          name: "Outfitly",
+          logo: "https://basedoutfits.vercel.app/icon.png",
         },
       }}
     >

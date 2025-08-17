@@ -1,6 +1,7 @@
 import UserProfilePageClient from "./profile-page-client";
 import type { Metadata, ResolvingMetadata } from "next";
 import { prisma } from "@/lib/db";
+import { APP_URL } from "@/lib/utils";
 
 type Props = {
   params: Promise<{ username: string }>;
@@ -19,18 +20,15 @@ export async function generateMetadata(
   try {
     const user = await prisma.user.findUnique({ where: { username } });
     if (!user) return {};
-    const host = process.env.NEXT_PUBLIC_URL || "";
-    const appName =
-      process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Outfitly";
-    const splashImageUrl =
-      process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/splash.png`;
+    const appName = "Outfitly";
+    const splashImageUrl = `${APP_URL}/splash.png`;
     const splashBackgroundColor =
       process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#ffffff";
     const image = user.avatarUrl
       ? user.avatarUrl.startsWith("http")
         ? user.avatarUrl
-        : `${host}${user.avatarUrl}`
-      : process.env.NEXT_PUBLIC_APP_HERO_IMAGE;
+        : `${APP_URL}${user.avatarUrl}`
+      : `${APP_URL}${process.env.NEXT_PUBLIC_APP_HERO_IMAGE}`;
 
     return {
       title: user.name || `@${user.username} profile`,
@@ -39,29 +37,15 @@ export async function generateMetadata(
         images: image ? [image, ...previousImages] : previousImages || [],
       },
       other: {
-        "fc:miniapp": JSON.stringify({
-          version: "1",
-          imageUrl: image,
-          button: {
-            title: "View Profile 🔥",
-            action: {
-              type: "launch_miniapp",
-              name: appName,
-              url: host,
-              splashImageUrl,
-              splashBackgroundColor,
-            },
-          },
-        }),
         "fc:frame": JSON.stringify({
-          version: "1",
+          version: "next",
           imageUrl: image,
           button: {
             title: `View @${user.username}'s profile`,
             action: {
               type: "launch_frame",
               name: appName,
-              url: `${host}/profile/${user.username}`,
+              url: APP_URL,
               splashImageUrl,
               splashBackgroundColor,
             },

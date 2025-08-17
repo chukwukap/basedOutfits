@@ -7,49 +7,67 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 import { prisma } from "@/lib/db";
-import { APP_URL } from "@/lib/utils";
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = await params;
-  if (!id) return {};
+  if (!id)
+    return {
+      title: "View Outfit",
+      description: "View Outfit 🔥",
+      openGraph: {
+        images: ["https://basedoutfits.vercel.app/hero.png"],
+      },
+      other: {
+        "fc:frame": JSON.stringify({
+          version: "1",
+          imageUrl: "https://basedoutfits.vercel.app/hero.png",
+          button: {
+            title: `View Outfit 🔥`,
+            action: {
+              type: "launch_frame",
+              name: "Outfitly",
+              url: "https://basedoutfits.vercel.app",
+              splashImageUrl: "https://basedoutfits.vercel.app/splash.png",
+              splashBackgroundColor: "#ffffff",
+            },
+          },
+        }),
+      },
+    };
 
   const previousImages = (await parent).openGraph?.images || [];
 
   try {
     const outfit = await prisma.outfit.findUnique({ where: { id } });
     if (!outfit) return {};
-    const host = APP_URL;
-    const appName =
-      process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Outfitly";
-    const splashImageUrl =
-      process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/splash.png`;
-    const splashBackgroundColor =
-      process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#ffffff";
+    const appName = "Outfitly";
+    const splashImageUrl = `https://basedoutfits.vercel.app/splash.png`;
+    const splashBackgroundColor = "#ffffff";
     const image = outfit.imageUrls?.[0]
       ? outfit.imageUrls[0].startsWith("http")
         ? outfit.imageUrls[0]
-        : `${host}${outfit.imageUrls[0]}`
-      : process.env.NEXT_PUBLIC_APP_HERO_IMAGE;
+        : `https://basedoutfits.vercel.app${outfit?.imageUrls?.[0]}`
+      : `https://basedoutfits.vercel.app/hero.png`;
 
     return {
-      title: outfit.caption || process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      description: outfit.description || "",
+      title: "View Outfit",
+      description: "View Outfit 🔥",
       openGraph: {
         images: image ? [image, ...previousImages] : previousImages || [],
       },
       other: {
         "fc:frame": JSON.stringify({
-          version: "1",
+          version: "next",
           imageUrl: image,
           button: {
-            title: "View this outfit",
+            title: `View Outfit 🔥`,
             action: {
               type: "launch_frame",
               name: appName,
-              url: `${host}/outfits/${id}`,
+              url: "https://basedoutfits.vercel.app",
               splashImageUrl,
               splashBackgroundColor,
             },

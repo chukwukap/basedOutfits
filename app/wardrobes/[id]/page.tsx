@@ -12,56 +12,59 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = await params;
-  if (!id) return {};
+  if (!id)
+    return {
+      title: "View Wardrobe",
+      description: "View Wardrobe 🔥",
+      other: {
+        "fc:frame": JSON.stringify({
+          version: "next",
+          imageUrl: "https://basedoutfits.vercel.app/hero.png",
+          button: {
+            title: `View Wardrobe 🔥`,
+            action: {
+              type: "launch_frame",
+              name: "Outfitly",
+              url: "https://basedoutfits.vercel.app",
+              splashImageUrl: "https://basedoutfits.vercel.app/splash.png",
+              splashBackgroundColor: "#ffffff",
+            },
+          },
+        }),
+      },
+    };
 
   const previousImages = (await parent).openGraph?.images || [];
 
   try {
     const outfit = await prisma.outfit.findUnique({ where: { id } });
     if (!outfit) return {};
-    const host = process.env.NEXT_PUBLIC_URL || "";
-    const appName =
-      process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Outfitly";
-    const splashImageUrl =
-      process.env.NEXT_PUBLIC_SPLASH_IMAGE || `${host}/splash.png`;
-    const splashBackgroundColor =
-      process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#ffffff";
+
+    const appName = "Outfitly";
+    const splashImageUrl = `https://basedoutfits.vercel.app/splash.png`;
+    const splashBackgroundColor = "#ffffff";
     const image = outfit.imageUrls[0]
       ? outfit.imageUrls[0].startsWith("http")
         ? outfit.imageUrls[0]
-        : `${host}${outfit.imageUrls[0]}`
-      : process.env.NEXT_PUBLIC_APP_HERO_IMAGE;
+        : `https://basedoutfits.vercel.app${outfit?.imageUrls?.[0]}`
+      : `https://basedoutfits.vercel.app${process.env.NEXT_PUBLIC_APP_HERO_IMAGE}`;
 
     return {
-      title: outfit.caption || "",
-      description: outfit.description || "",
+      title: "View Wardrobe",
+      description: "View Wardrobe 🔥",
       openGraph: {
         images: image ? [image, ...previousImages] : previousImages || [],
       },
       other: {
-        "fc:miniapp": JSON.stringify({
-          version: "1",
-          imageUrl: image,
-          button: {
-            title: "View Wardrobe 🔥",
-            action: {
-              type: "launch_miniapp",
-              name: appName,
-              url: host,
-              splashImageUrl,
-              splashBackgroundColor,
-            },
-          },
-        }),
         "fc:frame": JSON.stringify({
-          version: "1",
+          version: "next",
           imageUrl: image,
           button: {
-            title: `View ${outfit.caption} outfit!`,
+            title: `View Wardrobe 🔥`,
             action: {
               type: "launch_frame",
               name: appName,
-              url: `${host}/wardrobes/${id}`,
+              url: "https://basedoutfits.vercel.app",
               splashImageUrl,
               splashBackgroundColor,
             },
