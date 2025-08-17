@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
+
+import { put } from "@vercel/blob";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -29,28 +29,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadsDir, { recursive: true });
-
     const name = file?.name || "";
-    const ext = path.extname(name).toLowerCase() || ".jpg";
-    const safeExt = [".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext)
+    const ext = (name.split(".").pop() || "jpg").toLowerCase();
+    const safeExt = ["jpg", "jpeg", "png", "webp", "gif"].includes(ext)
       ? ext
-      : ".jpg";
-    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 12)}${safeExt}`;
-    const filepath = path.join(uploadsDir, filename);
+      : "jpg";
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 12)}.${safeExt}`;
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    await writeFile(filepath, buffer);
+    // Store in Vercel Blob (public)
+    const blob = await put(`uploads/${filename}`, buffer, {
+      access: "public",
+      contentType: file.type || "application/octet-stream",
+    });
 
     console.log("POST /api/upload success", {
       filename,
-      filepath,
+      url: blob.url,
       size: file.size,
     });
 
-    return NextResponse.json({ url: `/uploads/${filename}` }, { status: 201 });
+    return NextResponse.json({ url: blob.url }, { status: 201 });
   } catch (error) {
     console.error("POST /api/upload error", error);
     return NextResponse.json(
