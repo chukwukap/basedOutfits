@@ -3,9 +3,8 @@
 import type React from "react";
 
 import { Card } from "@/app/_components/ui/card";
-import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
-import { Heart, Users, Calendar, HeartOff } from "lucide-react";
+import { Users, Calendar } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -14,14 +13,9 @@ import { UserWardrobe } from "@/lib/types";
 interface UserWardrobesGridProps {
   wardrobes: UserWardrobe[];
   onWardrobeClick: (wardrobe: UserWardrobe) => void;
-  onFollowWardrobe: (wardrobeId: string) => void;
 }
 
-export function UserWardrobesGrid({
-  wardrobes,
-  onWardrobeClick,
-  onFollowWardrobe,
-}: UserWardrobesGridProps) {
+export function UserWardrobesGrid({ wardrobes, onWardrobeClick }: UserWardrobesGridProps) {
   const [imageLoadingStates, setImageLoadingStates] = useState<
     Record<string, boolean>
   >(wardrobes.reduce((acc, wardrobe) => ({ ...acc, [wardrobe.id]: true }), {}));
@@ -30,10 +24,7 @@ export function UserWardrobesGrid({
     setImageLoadingStates((prev) => ({ ...prev, [outfitId]: false }));
   };
 
-  const handleFollowClick = (e: React.MouseEvent, wardrobeId: string) => {
-    e.stopPropagation();
-    onFollowWardrobe(wardrobeId);
-  };
+  // Follow feature removed
 
   if (wardrobes.length === 0) {
     return (
@@ -72,27 +63,7 @@ export function UserWardrobesGrid({
                 onLoad={() => handleImageLoad(wardrobe.id)}
               />
 
-              {/* Follow Button Overlay */}
-              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="bg-black/50 text-white border-0 backdrop-blur-sm hover:bg-black/70"
-                  onClick={(e) => handleFollowClick(e, wardrobe.id)}
-                >
-                  {wardrobe.isFollowing ? (
-                    <>
-                      <HeartOff className="w-3 h-3 mr-1" />
-                      Unfollow
-                    </>
-                  ) : (
-                    <>
-                      <Heart className="w-3 h-3 mr-1" />
-                      Follow
-                    </>
-                  )}
-                </Button>
-              </div>
+              {/* Follow overlay removed */}
 
               {/* Outfit count overlay */}
               <div className="absolute bottom-3 left-3">
@@ -119,20 +90,7 @@ export function UserWardrobesGrid({
 
               {/* Stats and Metadata */}
               <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
-                <div className="flex items-center gap-3">
-                  <span className="flex items-center gap-1">
-                    <Users className="w-3 h-3" />
-                    {wardrobe.followers} followers
-                  </span>
-                  {wardrobe.isFollowing && (
-                    <Badge
-                      variant="secondary"
-                      className="text-xs bg-primary/10 text-primary"
-                    >
-                      Following
-                    </Badge>
-                  )}
-                </div>
+                <div />
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3 h-3" />
                   {new Date(wardrobe.updatedAt).toLocaleDateString("en-US", {

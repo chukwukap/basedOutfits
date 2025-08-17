@@ -12,13 +12,9 @@ import { UserProfile } from "@/lib/types";
 
 interface UserProfileHeaderProps {
   user: UserProfile;
-  onFollowUser: () => void;
 }
 
-export function UserProfileHeader({
-  user,
-  onFollowUser,
-}: UserProfileHeaderProps) {
+export function UserProfileHeader({ user }: UserProfileHeaderProps) {
   return (
     <div className="p-4 space-y-4">
       {/* Avatar and Basic Info */}
@@ -36,24 +32,7 @@ export function UserProfileHeader({
             <p className="text-muted-foreground">@{user.username}</p>
           </div>
 
-          <Button
-            onClick={onFollowUser}
-            variant={user.isFollowing ? "outline" : "default"}
-            size="sm"
-            className="w-full sm:w-auto"
-          >
-            {user.isFollowing ? (
-              <>
-                <UserCheck className="w-4 h-4 mr-2" />
-                Following
-              </>
-            ) : (
-              <>
-                <UserPlus className="w-4 h-4 mr-2" />
-                Follow
-              </>
-            )}
-          </Button>
+          {/* Follow control removed */}
         </div>
       </div>
 
@@ -66,14 +45,7 @@ export function UserProfileHeader({
           <p className="font-semibold">{user.totalOutfits}</p>
           <p className="text-muted-foreground">Wardrobes</p>
         </div>
-        <div className="text-center">
-          <p className="font-semibold">{user.followers.toLocaleString()}</p>
-          <p className="text-muted-foreground">Followers</p>
-        </div>
-        <div className="text-center">
-          <p className="font-semibold">{user.following.toLocaleString()}</p>
-          <p className="text-muted-foreground">Following</p>
-        </div>
+        {/* Followers/Following removed */}
       </div>
 
       {/* Join Date */}

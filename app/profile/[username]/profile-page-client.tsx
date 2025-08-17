@@ -38,17 +38,9 @@ export default function UserProfilePageClient() {
     window.history.back();
   };
 
-  const handleFollowUser = () => {
-    if (user) {
-      setUser({
-        ...user,
-        isFollowing: !user.isFollowing,
-        followers: user.isFollowing ? user.followers - 1 : user.followers + 1,
-      });
-    }
-  };
+  // Follow feature removed
 
-  const handleFollowWardrobe = () => {};
+  // Follow feature removed
 
   const handleWardrobeClick = (wardrobe: UserWardrobe) => {
     window.location.href = `/wardrobes/${wardrobe.id}`;
@@ -110,7 +102,7 @@ export default function UserProfilePageClient() {
       </div>
 
       {/* User Profile Header */}
-      <UserProfileHeader user={user} onFollowUser={handleFollowUser} />
+      <UserProfileHeader user={user} />
 
       {/* Share profile */}
       <div className="px-4 -mt-2">
@@ -127,7 +119,7 @@ export default function UserProfilePageClient() {
         <UserWardrobesGrid
           wardrobes={user.publicWardrobes}
           onWardrobeClick={handleWardrobeClick}
-          onFollowWardrobe={handleFollowWardrobe}
+          // Follow feature removed
         />
       </main>
 

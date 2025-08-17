@@ -8,7 +8,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/app/_components/ui/avatar";
-import { UserPlus, UserCheck, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type FeaturedCreator = {
@@ -18,7 +18,6 @@ type FeaturedCreator = {
   bio?: string;
   wardrobesCount: number;
   totalOutfits: number;
-  isFollowing: boolean;
   isFeatured: boolean;
   // simplified: no tags
 };
@@ -35,7 +34,6 @@ async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
     avatar: string;
     wardrobesCount: number;
     totalOutfits: number;
-    isFollowing: boolean;
   }>;
   return data.map((u) => ({
     username: u.username,
@@ -43,7 +41,6 @@ async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
     avatar: u.avatar,
     wardrobesCount: u.wardrobesCount,
     totalOutfits: u.totalOutfits,
-    isFollowing: u.isFollowing,
     isFeatured: true,
   }));
 }
@@ -57,18 +54,7 @@ export function FeaturedCreators() {
       .catch(() => setCreators([]));
   }, []);
 
-  const handleFollowCreator = (username: string) => {
-    setCreators(
-      creators.map((creator) =>
-        creator.username === username
-          ? {
-              ...creator,
-              isFollowing: !creator.isFollowing,
-            }
-          : creator,
-      ),
-    );
-  };
+  // Follow feature removed
 
   const handleCreatorClick = (username: string) => {
     window.location.href = `/profile/${username}`;
@@ -89,7 +75,7 @@ export function FeaturedCreators() {
             onClick={() => handleCreatorClick(creator.username)}
           >
             <div className="space-y-3">
-              {/* Header with Avatar and Follow Button */}
+              {/* Header with Avatar */}
               <div className="flex items-start gap-3">
                 <Avatar className="w-12 h-12 ring-2 ring-background">
                   <AvatarImage src={creator.avatar || "/placeholder.svg"} />
@@ -119,27 +105,7 @@ export function FeaturedCreators() {
                   </p>
                 </div>
 
-                <Button
-                  variant={creator.isFollowing ? "outline" : "default"}
-                  size="sm"
-                  className="flex-shrink-0"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleFollowCreator(creator.username);
-                  }}
-                >
-                  {creator.isFollowing ? (
-                    <>
-                      <UserCheck className="w-3 h-3 mr-1" />
-                      Following
-                    </>
-                  ) : (
-                    <>
-                      <UserPlus className="w-3 h-3 mr-1" />
-                      Follow
-                    </>
-                  )}
-                </Button>
+                {/* Follow button removed */}
               </div>
 
               {/* Stats */}

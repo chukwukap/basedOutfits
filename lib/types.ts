@@ -13,7 +13,6 @@ export type OutfitFetchPayload = {
   tips: number;
   collections: number;
   author: {
-    isFollowing: boolean;
     avatarUrl: string;
     fid: string;
     name: string;
@@ -30,28 +29,19 @@ export type UserProfile = {
   name?: string;
   avatar: string;
   bio?: string;
-  followers: number;
-  following: number;
   totalOutfits: number;
   joinedDate: string; // ISO date string
-  isFollowing: boolean;
   updatedAt: string;
   publicWardrobes: (Wardrobe & {
     outfitCount: number;
-    isFollowing: boolean;
-    followers: number;
   })[];
 };
 
 export type WardrobeResponse = Wardrobe & {
   outfitCount: number;
-  isFollowing: boolean;
-  followers: number;
 };
 
 // A user-facing outfit structure used in profile pages
 export type UserWardrobe = Wardrobe & {
   outfitCount: number;
-  isFollowing: boolean;
-  followers: number;
 };

@@ -19,15 +19,12 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
     name: string;
     avatar: string;
     totalOutfits: number;
-    isFollowing: boolean;
   };
 
   const [creators, setCreators] = useState<DiscoverCreator[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [followingStates, setFollowingStates] = useState<
-    Record<string, boolean>
-  >({});
+  // Follow feature removed
 
   // Security: use no-store and defensive parsing
   useEffect(() => {
@@ -46,7 +43,6 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
           name: string;
           avatar: string;
           totalOutfits: number;
-          isFollowing: boolean;
         }>;
         if (cancelled) return;
         setCreators(
@@ -58,16 +54,9 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
             name: c.name,
             avatar: c.avatar,
             totalOutfits: Number.isFinite(c.totalOutfits) ? c.totalOutfits : 0,
-            isFollowing: Boolean(c.isFollowing),
           })),
         );
-        // Seed local follow state from server payload (optimistic updates later)
-        setFollowingStates(
-          data.reduce<Record<string, boolean>>((acc, c) => {
-            acc[String(c.id)] = Boolean(c.isFollowing);
-            return acc;
-          }, {}),
-        );
+        // Follow feature removed
       } catch (e) {
         if (!cancelled) setError((e as Error).message);
       } finally {
@@ -80,13 +69,7 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
     };
   }, []);
 
-  const handleFollow = (creatorId: string) => {
-    // Optimistic local toggle; TODO: integrate with real follow API when available
-    setFollowingStates((prev) => ({
-      ...prev,
-      [creatorId]: !prev[creatorId],
-    }));
-  };
+  // Follow feature removed
 
   const formatCount = (n: number) => {
     try {
@@ -133,14 +116,7 @@ export function DiscoverCreators({}: DiscoverCreatorsProps) {
               {formatCount(creator.totalOutfits)} outfits
             </p>
 
-            <Button
-              size="sm"
-              variant={followingStates[creator.id] ? "secondary" : "default"}
-              onClick={() => handleFollow(creator.id)}
-              className="w-full text-xs"
-            >
-              {followingStates[creator.id] ? "Following" : "Follow"}
-            </Button>
+            {/* Follow button removed */}
           </Card>
         ))}
       </div>

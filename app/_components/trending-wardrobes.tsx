@@ -3,14 +3,14 @@
 import type React from "react";
 
 import { Card } from "@/app/_components/ui/card";
-import { Button } from "@/app/_components/ui/button";
+// import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/app/_components/ui/avatar";
-import { Heart, Users, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -20,8 +20,6 @@ type TrendingWardrobe = {
   description?: string;
   coverImage?: string;
   wardrobeCount: number;
-  followers: number;
-  isFollowing: boolean;
   creator: { username: string; name: string; avatar?: string };
   category?: string;
   trending?: boolean;
@@ -52,19 +50,7 @@ export function TrendingWardrobes({
       .catch(() => setWardrobes([]));
   }, []);
 
-  const handleFollowWardrobe = (wardrobeId: string) => {
-    setWardrobes(
-      wardrobes.map((wb) =>
-        wb.id === wardrobeId
-          ? {
-              ...wb,
-              isFollowing: !wb.isFollowing,
-              followers: wb.isFollowing ? wb.followers - 1 : wb.followers + 1,
-            }
-          : wb,
-      ),
-    );
-  };
+  // Follow feature removed
 
   const handleWardrobeClick = (wardrobe: TrendingWardrobe) => {
     window.location.href = `/profile/${wardrobe.creator.username}/wardrobe/${wardrobe.id}`;
@@ -131,23 +117,7 @@ export function TrendingWardrobes({
                   </Badge>
                 </div>
 
-                {/* Follow Button */}
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="bg-black/50 text-white border-0 backdrop-blur-sm hover:bg-black/70"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleFollowWardrobe(wardrobe.id);
-                    }}
-                  >
-                    <Heart
-                      className={`w-3 h-3 mr-1 ${wardrobe.isFollowing ? "fill-current" : ""}`}
-                    />
-                    {wardrobe.isFollowing ? "Following" : "Follow"}
-                  </Button>
-                </div>
+                {/* Follow feature removed */}
 
                 {/* Stats */}
                 <div className="absolute bottom-3 left-3 right-3 flex justify-between">
@@ -157,13 +127,7 @@ export function TrendingWardrobes({
                   >
                     {wardrobe.wardrobeCount} outfits
                   </Badge>
-                  <Badge
-                    variant="secondary"
-                    className="bg-black/50 text-white border-0 backdrop-blur-sm"
-                  >
-                    <Users className="w-3 h-3 mr-1" />
-                    {wardrobe.followers}
-                  </Badge>
+                  {/* Followers removed */}
                 </div>
               </div>
 
