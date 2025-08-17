@@ -6,15 +6,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/app/_components/ui/button";
 import { Badge } from "@/app/_components/ui/badge";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  Heart,
-  Unlock,
-  DollarSign,
-  Upload,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface OnboardingTutorialProps {
@@ -29,7 +21,6 @@ const tutorialSteps = [
     subtitle: "Global Fashion Inspiration",
     description:
       "Scroll through an endless feed of outfits from creators around the world. Find inspiration for every occasion, season, and style.",
-    icon: Eye,
     color: "bg-blue-500",
     features: [
       "Browse curated fashion content",
@@ -45,7 +36,6 @@ const tutorialSteps = [
     subtitle: "Support Fashion Creators",
     description:
       "Show appreciation for outfits you love by sending small tips directly to creators. Support the fashion community with just a few taps.",
-    icon: DollarSign,
     color: "bg-green-500",
     features: [
       "Send tips starting from $0.50",
@@ -61,7 +51,6 @@ const tutorialSteps = [
     subtitle: "Build Your Style Collection",
     description:
       "Save your favorite outfits to your personal closet for a small fee. Build a curated collection of fashion inspiration you can reference anytime.",
-    icon: Heart,
     color: "bg-pink-500",
     features: [
       "Save outfits for $1 each",
@@ -77,7 +66,6 @@ const tutorialSteps = [
     subtitle: "Express Your Style",
     description:
       "Post your outfits directly to BasedOutfits. Inspire others, get tipped, and grow your digital fashion presence inside the BaseApp.",
-    icon: Upload,
     color: "bg-purple-500",
     features: [
       "Easily upload outfit photos",
@@ -142,7 +130,6 @@ export function OnboardingTutorial({
   };
 
   const currentStepData = tutorialSteps[currentStep];
-  const Icon = currentStepData.icon;
   const lastStepId = tutorialSteps[tutorialSteps.length - 1]?.id;
 
   return (
@@ -155,9 +142,7 @@ export function OnboardingTutorial({
               "w-8 h-8 rounded-full flex items-center justify-center",
               currentStepData.color,
             )}
-          >
-            <Icon className="w-4 h-4 text-white" />
-          </div>
+          />
           <span className="font-semibold">Welcome to BasedOutfits</span>
         </div>
         <Badge variant="outline" className="text-xs">
@@ -178,7 +163,6 @@ export function OnboardingTutorial({
           style={{ transform: `translateX(-${currentStep * 100}%)` }}
         >
           {tutorialSteps.map((step) => {
-            const StepIcon = step.icon;
             return (
               <div key={step.id} className="w-full flex-shrink-0 flex flex-col">
                 {/* Hero (full-bleed) */}
@@ -196,12 +180,7 @@ export function OnboardingTutorial({
                     />
                   </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
-                  <div
-                    className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-md animate-in fade-in zoom-in-90"
-                    style={{ backdropFilter: "blur(6px)" }}
-                  >
-                    <StepIcon className="w-5 h-5 text-white drop-shadow" />
-                  </div>
+                  <div className="absolute top-4 right-4 w-10 h-10 rounded-full shadow-md animate-in fade-in zoom-in-90" />
                 </div>
 
                 {/* Content */}
@@ -226,9 +205,8 @@ export function OnboardingTutorial({
                   {step.id === lastStepId ? (
                     <div className="mt-auto">
                       <div className="flex items-center justify-center mb-6">
-                        <div className="relative w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center">
+                        <div className="relative w-14 h-14 rounded-full bg-green-500/10">
                           <div className="absolute inset-0 rounded-full animate-ping bg-green-500/20" />
-                          <Unlock className="w-6 h-6 text-green-600 animate-in zoom-in-95" />
                         </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
