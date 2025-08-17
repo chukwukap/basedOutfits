@@ -63,8 +63,8 @@ export function UserProfileHeader({
       {/* Stats */}
       <div className="flex items-center gap-6 text-sm">
         <div className="text-center">
-          <p className="font-semibold">{user.totalLooks}</p>
-          <p className="text-muted-foreground">Looks</p>
+          <p className="font-semibold">{user.totalOutfits}</p>
+          <p className="text-muted-foreground">Wardrobes</p>
         </div>
         <div className="text-center">
           <p className="font-semibold">{user.followers.toLocaleString()}</p>
@@ -88,12 +88,12 @@ export function UserProfileHeader({
         </span>
       </div>
 
-      {/* Public Lookbooks Section Header */}
+      {/* Public Wardrobes Section Header */}
       <div className="pt-4 border-t">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold">Public Lookbooks</h3>
+          <h3 className="font-semibold">Public Wardrobes</h3>
           <Badge variant="secondary" className="text-xs">
-            {user.publicLookbooks?.length || 0}
+            {user.publicWardrobes?.length || 0}
           </Badge>
         </div>
       </div>

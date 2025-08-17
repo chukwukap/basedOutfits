@@ -1,7 +1,7 @@
-import { Lookbook } from "./generated/prisma";
+import { Wardrobe } from "./generated/prisma";
 
 // Keep frontend payload simple and decoupled from Prisma model
-export type LookFetchPayload = {
+export type OutfitFetchPayload = {
   id: string;
   caption: string;
   description: string;
@@ -32,26 +32,26 @@ export type UserProfile = {
   bio?: string;
   followers: number;
   following: number;
-  totalLooks: number;
+  totalOutfits: number;
   joinedDate: string; // ISO date string
   isFollowing: boolean;
   updatedAt: string;
-  publicLookbooks: (Lookbook & {
-    lookCount: number;
+  publicWardrobes: (Wardrobe & {
+    outfitCount: number;
     isFollowing: boolean;
     followers: number;
   })[];
 };
 
-export type LookbookResponse = Lookbook & {
-  lookCount: number;
+export type WardrobeResponse = Wardrobe & {
+  outfitCount: number;
   isFollowing: boolean;
   followers: number;
 };
 
-// A user-facing lookbook structure used in profile pages
-export type UserLookbook = Lookbook & {
-  lookCount: number;
+// A user-facing outfit structure used in profile pages
+export type UserWardrobe = Wardrobe & {
+  outfitCount: number;
   isFollowing: boolean;
   followers: number;
 };

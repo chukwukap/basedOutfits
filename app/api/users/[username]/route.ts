@@ -8,12 +8,12 @@ export async function GET(req: Request) {
     const user = await prisma.user.findUnique({
       where: { username },
       include: {
-        lookbooks: {
+        wardrobes: {
           where: { isPublic: true },
           include: { items: true },
           orderBy: { updatedAt: "desc" },
         },
-        looks: true,
+        outfits: true,
       },
     });
 
@@ -28,22 +28,22 @@ export async function GET(req: Request) {
       bio: user.bio ?? "",
       followers: 0,
       following: 0,
-      totalLooks: user.looks.length,
+      totalOutfits: user.outfits.length,
       joinedDate: user.createdAt.toISOString(),
       isFollowing: false,
       updatedAt: user.updatedAt.toISOString(),
-      publicLookbooks: user.lookbooks.map((lb) => ({
-        id: lb.id,
-        name: lb.name,
-        description: lb.description ?? "",
-        coverImage: lb.coverImage ?? "",
-        lookCount: lb.items.length,
-        isPublic: lb.isPublic,
+      publicWardrobes: user.wardrobes.map((wb) => ({
+        id: wb.id,
+        name: wb.name,
+        description: wb.description ?? "",
+        coverImage: wb.coverImage ?? "",
+        wardrobeCount: wb.items.length,
+        isPublic: wb.isPublic,
         followers: 0,
         isFollowing: false,
-        updatedAt: lb.updatedAt,
-        ownerId: lb.ownerId,
-        createdAt: lb.createdAt,
+        updatedAt: wb.updatedAt,
+        ownerId: wb.ownerId,
+        createdAt: wb.createdAt,
       })),
     };
 

@@ -17,7 +17,7 @@ import {
 } from "@/app/_components/ui/avatar";
 import { Alert, AlertDescription } from "@/app/_components/ui/alert";
 import { DollarSign, AlertCircle, Loader2 } from "lucide-react";
-import { LookFetchPayload } from "@/lib/types";
+import { OutfitFetchPayload } from "@/lib/types";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { BasePayButton } from "@base-org/account-ui/react";
 import { pay } from "@base-org/account";
@@ -28,7 +28,7 @@ import { pay } from "@base-org/account";
 interface TipModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  look: LookFetchPayload;
+  outfit: OutfitFetchPayload;
   onComplete: (amount: number) => void;
 }
 
@@ -38,13 +38,13 @@ interface TipModalProps {
 type PaymentState = "input" | "processing" | "success" | "error";
 
 /**
- * TipModal component allows users to tip a look author using BasePay.
- * Closely follows the payment flow and state management of AddToLookbookSheet.
+ * TipModal component allows users to tip a outfit author using BasePay.
+ * Closely follows the payment flow and state management of AddToWardrobeSheet.
  */
 export function TipModal({
   open,
   onOpenChange,
-  look,
+  outfit,
   onComplete,
 }: TipModalProps) {
   const { context } = useMiniKit();
@@ -57,7 +57,7 @@ export function TipModal({
 
   /**
    * Handles the BasePay payment process.
-   * Follows the same pattern as AddToLookbookSheet for security and consistency.
+   * Follows the same pattern as AddToWardrobeSheet for security and consistency.
    */
   const handleBasePay = async () => {
     setPaymentState("processing");
@@ -72,7 +72,7 @@ export function TipModal({
         return;
       }
 
-      // The recipient should be the look author's wallet address or a configured address
+      // The recipient should be the outfit author's wallet address or a configured address
       // For demo, we'll use a placeholder address (replace with your real one)
       const recipient =
         process.env.NEXT_PUBLIC_BASEPAY_TIP_RECIPIENT_ADDRESS ||
@@ -94,7 +94,7 @@ export function TipModal({
           } | null) || null;
         const currentUserId =
           (c?.user?.username || c?.user?.fid?.toString()) ?? "";
-        const receiverId = look.authorId;
+        const receiverId = outfit.authorId;
 
         const res = await fetch("/api/tips", {
           method: "POST",
@@ -102,7 +102,7 @@ export function TipModal({
           body: JSON.stringify({
             senderId: currentUserId,
             receiverId,
-            lookId: look.id,
+            outfitId: outfit.id,
             amount: parsedAmount,
             currency: "USDC",
           }),
@@ -155,18 +155,20 @@ export function TipModal({
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Look info */}
+          {/* Outfit info */}
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
             <Avatar className="w-10 h-10">
-              <AvatarImage src={look.author.avatarUrl || "/placeholder.svg"} />
+              <AvatarImage
+                src={outfit.author.avatarUrl || "/placeholder.svg"}
+              />
               <AvatarFallback>
-                {look.author.name ? look.author.name[0] : "?"}
+                {outfit.author.name ? outfit.author.name[0] : "?"}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm">{look.author.name}</p>
+              <p className="font-medium text-sm">{outfit.author.name}</p>
               <p className="text-xs text-muted-foreground truncate">
-                {look.caption}
+                {outfit.caption}
               </p>
             </div>
           </div>
@@ -269,7 +271,7 @@ export function TipModal({
                       Payment Successful
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Tip sent to {look.author.name}!
+                      Tip sent to {outfit.author.name}!
                     </p>
                   </div>
                   <Button onClick={handleClose} className="w-full">

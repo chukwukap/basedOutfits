@@ -2,20 +2,22 @@
 
 import { useState } from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { PostLookForm } from "@/app/post/_components/post-look-form";
+import { PostOutfitForm } from "@/app/post/_components/post-outfit-form";
 import { PostSuccessModal } from "@/app/post/_components/post-success-modal";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { useRouter } from "next/navigation";
-import { LookFetchPayload } from "@/lib/types";
+import { OutfitFetchPayload } from "@/lib/types";
 
 export default function PostPageClient() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [postedLook, setPostedLook] = useState<LookFetchPayload | null>(null);
+  const [postedOutfit, setPostedOutfit] = useState<OutfitFetchPayload | null>(
+    null,
+  );
   const router = useRouter();
 
-  const handlePostSuccess = (lookData: LookFetchPayload) => {
-    setPostedLook(lookData);
+  const handlePostSuccess = (outfitData: OutfitFetchPayload) => {
+    setPostedOutfit(outfitData);
     setShowSuccessModal(true);
   };
 
@@ -37,20 +39,20 @@ export default function PostPageClient() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-xl font-semibold">Post Look</h1>
+          <h1 className="text-xl font-semibold">Post Outfit</h1>
         </div>
       </header>
 
       {/* Form */}
       <main className="p-4">
-        <PostLookForm onSuccess={handlePostSuccess} />
+        <PostOutfitForm onSuccess={handlePostSuccess} />
       </main>
 
       {/* Success Modal */}
       <PostSuccessModal
         open={showSuccessModal}
         onOpenChange={setShowSuccessModal}
-        look={postedLook}
+        outfit={postedOutfit}
         onClose={handleSuccessClose}
       />
 

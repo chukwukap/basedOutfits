@@ -2,22 +2,23 @@ import type React from "react";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-// import { OnboardingReset } from "@/components/onboarding-reset";
+
 import { Providers } from "./providers";
 import { ThemeProvider } from "@/contexts/theme-context";
 
 import "./globals.css";
+import { OnboardingReset } from "./_components/onboarding-reset";
 
 export const metadata: Metadata = {
-  title: "Lookbook - Share & Collect Inspiring Fashion",
+  title: "Outfitly - Share & Collect Inspiring Fashion",
   description:
-    "Explore trending styles, share your own looks, tip your favorite creators, and build your personal Lookbook. All powered by Farcaster & Base.",
+    "Explore trending styles, share your own outfits, tip your favorite creators, and build your personal Outfitly. All powered by Farcaster & Base.",
   keywords: [
     "fashion",
     "style",
     "outfits",
-    "looks",
-    "lookbook",
+    "outfits",
+    "outfit",
     "collect",
     "tip creators",
     "Base",
@@ -46,7 +47,7 @@ html {
         <ThemeProvider>
           <Providers>{children}</Providers>
         </ThemeProvider>
-        {/* <OnboardingReset /> */}
+        <OnboardingReset />
       </body>
     </html>
   );

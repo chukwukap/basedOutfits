@@ -4,18 +4,18 @@ import { prisma } from "@/lib/db";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const lookId = searchParams.get("lookId");
-    if (!lookId) return NextResponse.json([], { status: 200 });
+    const outfitId = searchParams.get("outfitId");
+    if (!outfitId) return NextResponse.json([], { status: 200 });
 
     const comments = await prisma.comment.findMany({
-      where: { lookId },
+      where: { outfitId },
       orderBy: { createdAt: "desc" },
       include: { author: true },
     });
 
     const payload = comments.map((c) => ({
       id: c.id,
-      lookId: c.lookId,
+      outfitId: c.outfitId,
       content: c.content,
       createdAt: c.createdAt,
       author: {
@@ -28,20 +28,23 @@ export async function GET(req: Request) {
     return NextResponse.json(payload);
   } catch (error) {
     console.error("GET /api/comments error", error);
-    return NextResponse.json({ error: "Failed to fetch comments" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch comments" },
+      { status: 500 },
+    );
   }
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { lookId, authorId, content } = body as {
-      lookId: string;
+    const { outfitId, authorId, content } = body as {
+      outfitId: string;
       authorId: string; // may be user id, username, or fid
       content: string;
     };
 
-    if (!lookId || !authorId || !content) {
+    if (!outfitId || !authorId || !content) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
@@ -54,17 +57,21 @@ export async function POST(req: Request) {
     let resolvedAuthorId = authorId;
     const byId = await prisma.user.findUnique({ where: { id: authorId } });
     if (!byId) {
-      const byUsername = await prisma.user.findUnique({ where: { username: authorId } });
+      const byUsername = await prisma.user.findUnique({
+        where: { username: authorId },
+      });
       if (byUsername) resolvedAuthorId = byUsername.id;
       else {
-        const byFid = await prisma.user.findFirst({ where: { fid: authorId } });
+        const byFid = await prisma.user.findFirst({
+          where: { fid: authorId },
+        });
         if (byFid) resolvedAuthorId = byFid.id;
       }
     }
 
     const created = await prisma.comment.create({
       data: {
-        lookId,
+        outfitId,
         authorId: resolvedAuthorId,
         content,
       },
@@ -73,7 +80,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       id: created.id,
-      lookId: created.lookId,
+      outfitId: created.outfitId,
       content: created.content,
       createdAt: created.createdAt,
       author: {
@@ -84,10 +91,11 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("POST /api/comments error", error);
-    return NextResponse.json({ error: "Failed to post comment" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to post comment" },
+      { status: 500 },
+    );
   }
 }
 
 export const dynamic = "force-dynamic";
-
-

@@ -1,11 +1,11 @@
 /*
   Warnings:
 
-  - You are about to drop the column `mediaUrl` on the `Look` table. All the data in the column will be lost.
+  - You are about to drop the column `mediaUrl` on the `Outfit` table. All the data in the column will be lost.
 
 */
 -- AlterTable
-ALTER TABLE "public"."Look" DROP COLUMN "mediaUrl",
+ALTER TABLE "public"."Outfit" DROP COLUMN "mediaUrl",
 ADD COLUMN     "audioUrl" TEXT,
 ADD COLUMN     "brand" TEXT,
 ADD COLUMN     "description" TEXT,

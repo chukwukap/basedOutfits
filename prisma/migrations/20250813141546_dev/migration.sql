@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE "public"."Look" ADD COLUMN     "fid" TEXT;
+ALTER TABLE "public"."Outfit" ADD COLUMN     "fid" TEXT;
 
 -- AlterTable
 ALTER TABLE "public"."User" DROP COLUMN "passwordHash",

@@ -1,4 +1,4 @@
-import LookDetailPageClient from "./_components/look-details-page-client";
+import OutfitDetailPageClient from "./_components/outfit-details-page-client";
 
 import type { Metadata, ResolvingMetadata } from "next";
 
@@ -18,18 +18,18 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   try {
-    const look = await prisma.look.findUnique({ where: { id } });
-    if (!look) return {};
+    const outfit = await prisma.outfit.findUnique({ where: { id } });
+    if (!outfit) return {};
     const host = process.env.NEXT_PUBLIC_URL || "";
-    const image = look.imageUrls?.[0]
-      ? look.imageUrls[0].startsWith("http")
-        ? look.imageUrls[0]
-        : `${host}${look.imageUrls[0]}`
+    const image = outfit.imageUrls?.[0]
+      ? outfit.imageUrls[0].startsWith("http")
+        ? outfit.imageUrls[0]
+        : `${host}${outfit.imageUrls[0]}`
       : process.env.NEXT_PUBLIC_APP_HERO_IMAGE;
 
     return {
-      title: look.caption || process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      description: look.description || "",
+      title: outfit.caption || process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+      description: outfit.description || "",
       openGraph: {
         images: image ? [image, ...previousImages] : previousImages || [],
       },
@@ -56,6 +56,6 @@ export async function generateMetadata(
   }
 }
 
-export default function LookDetailPage() {
-  return <LookDetailPageClient />;
+export default function OutfitDetailPage() {
+  return <OutfitDetailPageClient />;
 }

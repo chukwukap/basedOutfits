@@ -9,7 +9,7 @@ import {
 
 interface Comment {
   id: string;
-  lookId: string;
+  outfitId: string;
   author: {
     name: string;
     avatar: string;
@@ -27,7 +27,7 @@ export function CommentCard({ comment }: CommentCardProps) {
   const router = useRouter();
 
   const handleProfileClick = () => {
-    // Navigate to user's profile/lookbook
+    // Navigate to user's profile/outfit
     router.push(
       `/profile/${comment.author.name.toLowerCase().replace(" ", "")}`,
     );

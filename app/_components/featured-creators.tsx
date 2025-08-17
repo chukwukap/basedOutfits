@@ -17,15 +17,15 @@ type FeaturedCreator = {
   avatar?: string;
   bio?: string;
   followers: number;
-  lookbooksCount: number;
-  totalLooks: number;
+  wardrobesCount: number;
+  totalOutfits: number;
   isFollowing: boolean;
   isFeatured: boolean;
   // simplified: no tags
 };
 
 async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
-  // For now, derive from recent public users via lookbooks/looks counts
+  // For now, derive from recent public users via wardrobes/outfits counts
   const usernames = ["demo"]; // TODO: replace with real featured logic
   const results: FeaturedCreator[] = [];
   for (const username of usernames) {
@@ -40,8 +40,8 @@ async function fetchFeaturedCreators(): Promise<FeaturedCreator[]> {
         avatar: u.avatar,
         bio: u.bio,
         followers: u.followers,
-        lookbooksCount: u.publicLookbooks.length,
-        totalLooks: u.totalLooks,
+        wardrobesCount: u.publicWardrobes.length,
+        totalOutfits: u.totalOutfits,
         isFollowing: false,
         isFeatured: true,
       });
@@ -151,15 +151,15 @@ export function FeaturedCreators() {
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                 <div className="text-center">
                   <p className="font-semibold text-foreground">
-                    {creator.totalLooks}
+                    {creator.totalOutfits}
                   </p>
-                  <p>Looks</p>
+                  <p>Outfits</p>
                 </div>
                 <div className="text-center">
                   <p className="font-semibold text-foreground">
-                    {creator.lookbooksCount}
+                    {creator.wardrobesCount}
                   </p>
-                  <p>Lookbooks</p>
+                  <p>Wardrobes</p>
                 </div>
                 <div className="text-center">
                   <p className="font-semibold text-foreground">

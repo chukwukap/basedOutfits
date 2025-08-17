@@ -4,41 +4,41 @@ import { Dialog, DialogContent } from "@/app/_components/ui/dialog";
 import { Button } from "@/app/_components/ui/button";
 import { CheckCircle, Home, Share2 } from "lucide-react";
 import { useComposeCast } from "@coinbase/onchainkit/minikit";
-import { LookFetchPayload } from "@/lib/types";
+import { OutfitFetchPayload } from "@/lib/types";
 import Image from "next/image";
 
 interface PostSuccessModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  look: LookFetchPayload | null;
+  outfit: OutfitFetchPayload | null;
   onClose: () => void;
 }
 
 export function PostSuccessModal({
   open,
   onOpenChange,
-  look,
+  outfit,
   onClose,
 }: PostSuccessModalProps) {
   const { composeCast } = useComposeCast();
 
   const handleShare = async () => {
-    if (!look) return;
+    if (!outfit) return;
     // Prefer MiniKit compose flow with embed
     try {
       composeCast({
-        text: `I just posted a new look on Looks! ${look.caption ?? ""} #Looks`,
-        embeds: [`${window.location.origin}/look/${look.id}`],
+        text: `I just posted a new outfit on Outfitly! ${outfit.caption ?? ""} #Outfitly`,
+        embeds: [`${window.location.origin}/outfit/${outfit.id}`],
       });
     } catch {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(
-        `Check out my look: ${look.caption} - ${window.location.origin}/look/${look.id}`,
+        `Check out my outfit: ${outfit.caption} - ${window.location.origin}/outfit/${outfit.id}`,
       );
     }
   };
 
-  if (!look) return null;
+  if (!outfit) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -54,28 +54,28 @@ export function PostSuccessModal({
           {/* Success message */}
           <div>
             <h2 className="text-xl font-semibold mb-2">
-              Look Posted Successfully!
+              Outfit Posted Successfully!
             </h2>
             <p className="text-muted-foreground text-sm">
-              Your look is now live and ready to inspire others.
+              Your outfit is now live and ready to inspire others.
             </p>
           </div>
 
-          {/* Look preview */}
+          {/* Outfit preview */}
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
             <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted">
               <Image
-                src={look.imageUrls[0] || "/placeholder.svg"}
+                src={outfit.imageUrls[0] || "/placeholder.svg"}
                 width={48}
                 height={48}
-                alt={look.caption || "Look image"}
+                alt={outfit.caption || "Outfit image"}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="flex-1 text-left">
-              <p className="font-medium text-sm">{look.caption}</p>
+              <p className="font-medium text-sm">{outfit.caption}</p>
               <p className="text-xs text-muted-foreground">
-                by {look.author.name}
+                by {outfit.author.name}
               </p>
             </div>
           </div>
@@ -93,7 +93,7 @@ export function PostSuccessModal({
               size="lg"
             >
               <Share2 className="w-4 h-4 mr-2" />
-              Share Look
+              Share Outfit
             </Button>
           </div>
         </div>

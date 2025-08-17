@@ -19,11 +19,11 @@ model User {
   avatarUrl     String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
-  looks         Look[]
-  lookbooks     Lookbook[]
+  outfits       Outfit[]
+  wardrobes     Wardrobe[]
   likes         Like[]
   comments      Comment[]
-  saves         LookbookItem[]
+  saves         WardrobeItem[]
   tipsSent      Tip[]          @relation("tipsSent")
   tipsReceived  Tip[]          @relation("tipsReceived")
   notifications Notification[]
@@ -31,7 +31,7 @@ model User {
   @@index([username])
 }
 
-model Look {
+model Outfit {
   id          String   @id @default(cuid())
   authorId    String
   author      User     @relation(fields: [authorId], references: [id])
@@ -45,13 +45,13 @@ model Look {
 
   likes    Like[]
   comments Comment[]
-  saves    LookbookItem[]
+  saves    WardrobeItem[]
   tips     Tip[]
 
   @@index([authorId])
 }
 
-model Lookbook {
+model Wardrobe {
   id          String   @id @default(cuid())
   ownerId     String
   owner       User     @relation(fields: [ownerId], references: [id])
@@ -62,45 +62,45 @@ model Lookbook {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  items LookbookItem[]
+  items WardrobeItem[]
 
   @@index([ownerId])
 }
 
-model LookbookItem {
+model WardrobeItem {
   id         String   @id @default(cuid())
-  lookId     String
-  look       Look     @relation(fields: [lookId], references: [id])
-  lookbookId String
-  lookbook   Lookbook @relation(fields: [lookbookId], references: [id])
+  outfitId   String
+  outfit     Outfit   @relation(fields: [outfitId], references: [id])
+  wardrobeId String
+  wardrobe   Wardrobe @relation(fields: [wardrobeId], references: [id])
   addedById  String
   addedBy    User     @relation(fields: [addedById], references: [id])
   createdAt  DateTime @default(now())
 
-  @@unique([lookId, lookbookId])
+  @@unique([outfitId, wardrobeId])
 }
 
 model Like {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  lookId    String
-  look      Look     @relation(fields: [lookId], references: [id])
+  outfitId  String
+  outfit    Outfit   @relation(fields: [outfitId], references: [id])
   createdAt DateTime @default(now())
 
-  @@unique([userId, lookId])
+  @@unique([userId, outfitId])
 }
 
 model Comment {
   id        String   @id @default(cuid())
   authorId  String
   author    User     @relation(fields: [authorId], references: [id])
-  lookId    String
-  look      Look     @relation(fields: [lookId], references: [id])
+  outfitId  String
+  outfit    Outfit   @relation(fields: [outfitId], references: [id])
   content   String
   createdAt DateTime @default(now())
 
-  @@index([lookId])
+  @@index([outfitId])
 }
 
 model Tip {
@@ -109,8 +109,8 @@ model Tip {
   sender     User     @relation("tipsSent", fields: [senderId], references: [id])
   receiverId String
   receiver   User     @relation("tipsReceived", fields: [receiverId], references: [id])
-  lookId     String?
-  look       Look?    @relation(fields: [lookId], references: [id])
+  outfitId   String?
+  outfit     Outfit?  @relation(fields: [outfitId], references: [id])
   amount     Float
   currency   String
   txHash     String?

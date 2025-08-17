@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 interface OnboardingTutorialProps {
   onComplete: () => void;
-  onCreateFirstLook?: () => void;
+  onCreateFirstOutfit?: () => void;
 }
 
 const tutorialSteps = [
@@ -23,7 +23,7 @@ const tutorialSteps = [
       "Swipe through global outfits. Tap to like, tip, or collect. You’re home.",
     icon: Eye,
     color: "bg-blue-500",
-    mockImage: "/looks/stylish-streetwear-look.png",
+    mockImage: "/outfits/stylish-streetwear-outfit.png",
   },
   {
     id: 2,
@@ -33,21 +33,24 @@ const tutorialSteps = [
       "Your wardrobe lives on Base—owned by you. No popups until you act.",
     icon: Heart,
     color: "bg-pink-500",
-    mockImage: "/looks/elegant-evening-dress.png",
+    mockImage: "/outfits/elegant-evening-dress.png",
   },
   {
     id: 3,
     title: "You’re In",
     subtitle: "Starter pack loaded",
     description:
-      "We preloaded your feed so it’s never empty. Start browsing or share your first look.",
+      "We preloaded your feed so it’s never empty. Start browsing or share your first outfit.",
     icon: Unlock,
     color: "bg-green-500",
-    mockImage: "/looks/street-style-outfit.png",
+    mockImage: "/outfits/street-style-outfit.png",
   },
 ];
 
-export function OnboardingTutorial({ onComplete, onCreateFirstLook }: OnboardingTutorialProps) {
+export function OnboardingTutorial({
+  onComplete,
+  onCreateFirstOutfit,
+}: OnboardingTutorialProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -138,16 +141,17 @@ export function OnboardingTutorial({ onComplete, onCreateFirstLook }: Onboarding
                 {/* Hero (full-bleed) */}
                 <div className="relative h-72 md:h-[420px] bg-gradient-to-br from-muted to-muted/50">
                   <img
-                    src={step.mockImage || "/looks/placeholder.png"}
+                    src={step.mockImage || "/outfits/placeholder.png"}
                     alt={step.title}
                     className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = "/looks/stylish-streetwear-outfit.png";
+                      target.src = "/outfits/stylish-streetwear-outfit.png";
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent" />
-                  <div className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-md animate-in fade-in zoom-in-90"
+                  <div
+                    className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-md animate-in fade-in zoom-in-90"
                     style={{ backdropFilter: "blur(6px)" }}
                   >
                     <StepIcon className="w-5 h-5 text-white drop-shadow" />
@@ -157,11 +161,19 @@ export function OnboardingTutorial({ onComplete, onCreateFirstLook }: Onboarding
                 {/* Content */}
                 <div className="flex-1 p-6 flex flex-col">
                   <div className="text-center mb-6">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-2">{step.title}</h2>
-                    <p className="text-base md:text-lg text-primary font-medium mb-3">{step.subtitle}</p>
-                    <p className="text-muted-foreground leading-relaxed">{step.description}</p>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                      {step.title}
+                    </h2>
+                    <p className="text-base md:text-lg text-primary font-medium mb-3">
+                      {step.subtitle}
+                    </p>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {step.description}
+                    </p>
                     {step.id === 2 && (
-                      <p className="mt-3 text-xs text-muted-foreground">Your wardrobe lives onchain, owned by you.</p>
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        Your wardrobe lives onchain, owned by you.
+                      </p>
                     )}
                   </div>
 
@@ -174,16 +186,28 @@ export function OnboardingTutorial({ onComplete, onCreateFirstLook }: Onboarding
                         </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <Button onClick={onComplete} className="h-12 text-base font-semibold">Start Browsing Outfits</Button>
                         <Button
-                          variant="outline"
-                          onClick={() => (onCreateFirstLook ? onCreateFirstLook() : router.push("/post"))}
+                          onClick={onComplete}
                           className="h-12 text-base font-semibold"
                         >
-                          Share Your First Look
+                          Start Browsing Outfits
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            onCreateFirstOutfit
+                              ? onCreateFirstOutfit()
+                              : router.push("/post")
+                          }
+                          className="h-12 text-base font-semibold"
+                        >
+                          Share Your First Outfit
                         </Button>
                       </div>
-                      <p className="mt-4 text-center text-xs text-muted-foreground">One tap to post. No setup screens. You can tweak settings later.</p>
+                      <p className="mt-4 text-center text-xs text-muted-foreground">
+                        One tap to post. No setup screens. You can tweak
+                        settings later.
+                      </p>
                     </div>
                   ) : (
                     <div className="mt-auto">
@@ -195,7 +219,9 @@ export function OnboardingTutorial({ onComplete, onCreateFirstLook }: Onboarding
                             aria-label={`Go to step ${stepIndex + 1}`}
                             className={cn(
                               "h-1.5 rounded-full transition-all",
-                              stepIndex === currentStep ? "bg-primary w-6" : "bg-muted-foreground/30 w-2",
+                              stepIndex === currentStep
+                                ? "bg-primary w-6"
+                                : "bg-muted-foreground/30 w-2",
                             )}
                           />
                         ))}

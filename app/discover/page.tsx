@@ -5,7 +5,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const URL = process.env.NEXT_PUBLIC_URL;
   return {
     title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-    description: "Your Mini App description here",
+    description: "Discover the latest trends and styles on Outfitly",
     other: {
       "fc:frame": JSON.stringify({
         version: "next",

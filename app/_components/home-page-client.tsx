@@ -3,33 +3,32 @@
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import useSWR from "swr";
 import { BottomNav } from "@/app/_components/bottom-nav";
-import { LookCard } from "@/app/look/[id]/_components/look-card";
-import { LookCardSkeleton } from "@/app/look/[id]/_components/look-card-skeleton";
 import { TipModal } from "@/app/_components/tip-modal";
 import { CollectModal } from "@/app/_components/collect-modal";
 import { OnboardingTutorial } from "@/app/_components/onboarding-tutorial";
 import { DiscoverCreators } from "@/app/discover/_components/discover-creators";
-import { LookFetchPayload } from "@/lib/types";
+import { OutfitFetchPayload } from "@/lib/types";
 import { useUser } from "@/hooks/useUser";
 import Image from "next/image";
 import { useTheme } from "@/contexts/theme-context";
+import { OutfitCardSkeleton } from "@/app/look/[id]/_components/outfit-card-skeleton";
+import { OutfitCard } from "@/app/look/[id]/_components/outfit-card";
 
 /**
- * Fetches looks from the API securely.
- * @returns Array of LookFetchPayload.
+ * Fetches outfits from the API securely.
+ * @returns Array of OutfitFetchPayload.
  */
-const fetcher = async (url: string): Promise<LookFetchPayload[]> => {
+const fetcher = async (url: string): Promise<OutfitFetchPayload[]> => {
   // Security: Always use no-store to avoid leaking sensitive data in cache
   const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load looks");
-  return (await res.json()) as LookFetchPayload[];
+  if (!res.ok) throw new Error("Failed to load outfits");
+  return (await res.json()) as OutfitFetchPayload[];
 };
 
 function HomePageInner() {
   useUser();
-  const [selectedLook, setSelectedLook] = useState<LookFetchPayload | null>(
-    null,
-  );
+  const [selectedOutfit, setSelectedOutfit] =
+    useState<OutfitFetchPayload | null>(null);
   const [showTipModal, setShowTipModal] = useState(false);
   const [showCollectModal, setShowCollectModal] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -47,7 +46,7 @@ function HomePageInner() {
    */
   const checkFirstTimeUser = () => {
     const hasSeenOnboarding = localStorage.getItem(
-      "looks_onboarding_completed",
+      "outfitly_onboarding_completed",
     );
     if (!hasSeenOnboarding) {
       setShowOnboarding(true);
@@ -59,33 +58,33 @@ function HomePageInner() {
     checkFirstTimeUser();
   }, []);
 
-  // Use SWR for fetching looks with auto-refresh every 30 seconds
+  // Use SWR for fetching outfits with auto-refresh every 30 seconds
   const {
-    data: looks = [],
+    data: outfits = [],
 
     isLoading,
-    mutate: mutateLooks,
-  } = useSWR(onboardingChecked ? "/api/looks" : null, fetcher, {
+    mutate: mutateOutfits,
+  } = useSWR(onboardingChecked ? "/api/outfits" : null, fetcher, {
     refreshInterval: 30000, // 30 seconds
     revalidateOnFocus: true, // Security: always revalidate on focus
     shouldRetryOnError: true,
   });
 
   /**
-   * Handles tipping a look.
-   * @param look - The look to tip.
+   * Handles tipping a outfit.
+   * @param outfit - The outfit to tip.
    */
-  const handleTip = (look: LookFetchPayload) => {
-    setSelectedLook(look);
+  const handleTip = (outfit: OutfitFetchPayload) => {
+    setSelectedOutfit(outfit);
     setShowTipModal(true);
   };
 
   /**
-   * Handles collecting a look.
-   * @param look - The look to collect.
+   * Handles collecting a outfit.
+   * @param outfit - The outfit to collect.
    */
-  const handleCollect = (look: LookFetchPayload) => {
-    setSelectedLook(look);
+  const handleCollect = (outfit: OutfitFetchPayload) => {
+    setSelectedOutfit(outfit);
     setShowCollectModal(true);
   };
 
@@ -94,19 +93,19 @@ function HomePageInner() {
    */
   const handleTipComplete = () => {
     // Optimistically update tip count in SWR cache
-    if (selectedLook) {
-      mutateLooks(
-        (prev: LookFetchPayload[] = []) =>
-          prev.map((look) =>
-            look.id === selectedLook.id
-              ? { ...look, tips: look.tips + 1 }
-              : look,
+    if (selectedOutfit) {
+      mutateOutfits(
+        (prev: OutfitFetchPayload[] = []) =>
+          prev.map((outfit) =>
+            outfit.id === selectedOutfit.id
+              ? { ...outfit, tips: outfit.tips + 1 }
+              : outfit,
           ),
         false, // Do not revalidate immediately
       );
     }
     setShowTipModal(false);
-    setSelectedLook(null);
+    setSelectedOutfit(null);
   };
 
   /**
@@ -114,26 +113,26 @@ function HomePageInner() {
    */
   const handleCollectComplete = () => {
     // Optimistically update collection count in SWR cache
-    if (selectedLook) {
-      mutateLooks(
-        (prev: LookFetchPayload[] = []) =>
-          prev.map((look) =>
-            look.id === selectedLook.id
-              ? { ...look, collections: look.collections + 1 }
-              : look,
+    if (selectedOutfit) {
+      mutateOutfits(
+        (prev: OutfitFetchPayload[] = []) =>
+          prev.map((outfit) =>
+            outfit.id === selectedOutfit.id
+              ? { ...outfit, collections: outfit.collections + 1 }
+              : outfit,
           ),
         false, // Do not revalidate immediately
       );
     }
     setShowCollectModal(false);
-    setSelectedLook(null);
+    setSelectedOutfit(null);
   };
 
   /**
    * Handles completion of onboarding.
    */
   const handleOnboardingComplete = () => {
-    localStorage.setItem("looks_onboarding_completed", "true");
+    localStorage.setItem("outfitly_onboarding_completed", "true");
     setShowOnboarding(false);
     // On first-time completion, if context exists, ensure user exists in DB
     // no-op here: user sync handled globally by useUser()
@@ -213,46 +212,46 @@ function HomePageInner() {
           {isLoading
             ? // Loading skeletons
               Array.from({ length: 3 }).map((_, i) => (
-                <LookCardSkeleton key={i} />
+                <OutfitCardSkeleton key={i} />
               ))
-            : looks.map((look) => (
-                <LookCard
-                  key={look.id}
-                  look={look}
-                  onTip={() => handleTip(look)}
-                  onCollect={() => handleCollect(look)}
+            : outfits.map((outfit) => (
+                <OutfitCard
+                  key={outfit.id}
+                  outfit={outfit}
+                  onTip={() => handleTip(outfit)}
+                  onCollect={() => handleCollect(outfit)}
                 />
               ))}
 
-          {!isLoading && looks.length === 0 && (
+          {!isLoading && outfits.length === 0 && (
             <div className="text-center py-12">
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">👗</span>
               </div>
-              <h3 className="font-semibold mb-2">No looks found</h3>
+              <h3 className="font-semibold mb-2">No outfits found</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                No looks available at the moment.
+                No outfits available at the moment.
               </p>
             </div>
           )}
         </main>
 
-        {!isLoading && looks.length > 0 && <DiscoverCreators />}
+        {!isLoading && outfits.length > 0 && <DiscoverCreators />}
       </div>
 
       {/* Modals */}
-      {selectedLook && (
+      {selectedOutfit && (
         <>
           <TipModal
             open={showTipModal}
             onOpenChange={setShowTipModal}
-            look={selectedLook}
+            outfit={selectedOutfit}
             onComplete={handleTipComplete}
           />
           <CollectModal
             open={showCollectModal}
             onOpenChange={setShowCollectModal}
-            look={selectedLook}
+            outfit={selectedOutfit}
             onComplete={handleCollectComplete}
           />
         </>

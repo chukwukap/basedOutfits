@@ -9,7 +9,7 @@ import { MessageCircle } from "lucide-react";
 
 interface Comment {
   id: string;
-  lookId: string;
+  outfitId: string;
   author: {
     name: string;
     avatar: string;
@@ -20,12 +20,12 @@ interface Comment {
 }
 
 interface CommentsSectionProps {
-  lookId: string;
+  outfitId: string;
 }
 
-async function fetchComments(lookId: string): Promise<Comment[]> {
+async function fetchComments(outfitId: string): Promise<Comment[]> {
   const res = await fetch(
-    `/api/comments?lookId=${encodeURIComponent(lookId)}`,
+    `/api/comments?outfitId=${encodeURIComponent(outfitId)}`,
     {
       cache: "no-store",
     },
@@ -34,7 +34,7 @@ async function fetchComments(lookId: string): Promise<Comment[]> {
   return await res.json();
 }
 
-export function CommentsSection({ lookId }: CommentsSectionProps) {
+export function CommentsSection({ outfitId }: CommentsSectionProps) {
   const { context } = useMiniKit();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +44,7 @@ export function CommentsSection({ lookId }: CommentsSectionProps) {
   useEffect(() => {
     const load = async () => {
       setLoading(true);
-      const data = await fetchComments(lookId);
+      const data = await fetchComments(outfitId);
       // Normalize createdAt to string
       const normalized = data.map((c) => ({
         ...c,
@@ -57,7 +57,7 @@ export function CommentsSection({ lookId }: CommentsSectionProps) {
       setLoading(false);
     };
     load();
-  }, [lookId]);
+  }, [outfitId]);
 
   const handleAddComment = async (content: string) => {
     const c =
@@ -68,7 +68,7 @@ export function CommentsSection({ lookId }: CommentsSectionProps) {
     const res = await fetch("/api/comments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lookId, authorId: currentUserId, content }),
+      body: JSON.stringify({ outfitId, authorId: currentUserId, content }),
     });
     if (res.ok) {
       const created = (await res.json()) as Comment;

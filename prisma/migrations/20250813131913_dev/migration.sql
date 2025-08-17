@@ -14,7 +14,7 @@ CREATE TABLE "public"."User" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Look" (
+CREATE TABLE "public"."Outfit" (
     "id" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
     "caption" TEXT,
@@ -27,7 +27,7 @@ CREATE TABLE "public"."Look" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Lookbook" (
+CREATE TABLE "public"."Outfitly" (
     "id" TEXT NOT NULL,
     "ownerId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -129,10 +129,10 @@ CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
 CREATE INDEX "User_username_idx" ON "public"."User"("username");
 
 -- CreateIndex
-CREATE INDEX "Look_authorId_idx" ON "public"."Look"("authorId");
+CREATE INDEX "Look_authorId_idx" ON "public"."Outfit"("authorId");
 
 -- CreateIndex
-CREATE INDEX "Lookbook_ownerId_idx" ON "public"."Lookbook"("ownerId");
+CREATE INDEX "Lookbook_ownerId_idx" ON "public"."Outfitly"("ownerId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "LookbookItem_lookId_lookbookId_key" ON "public"."LookbookItem"("lookId", "lookbookId");
@@ -156,16 +156,16 @@ CREATE INDEX "Tip_receiverId_idx" ON "public"."Tip"("receiverId");
 CREATE INDEX "Notification_userId_idx" ON "public"."Notification"("userId");
 
 -- AddForeignKey
-ALTER TABLE "public"."Look" ADD CONSTRAINT "Look_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."Outfit" ADD CONSTRAINT "Look_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Lookbook" ADD CONSTRAINT "Lookbook_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."Outfitly" ADD CONSTRAINT "Lookbook_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."LookbookItem" ADD CONSTRAINT "LookbookItem_lookId_fkey" FOREIGN KEY ("lookId") REFERENCES "public"."Look"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."LookbookItem" ADD CONSTRAINT "LookbookItem_lookId_fkey" FOREIGN KEY ("lookId") REFERENCES "public"."Outfit"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."LookbookItem" ADD CONSTRAINT "LookbookItem_lookbookId_fkey" FOREIGN KEY ("lookbookId") REFERENCES "public"."Lookbook"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."LookbookItem" ADD CONSTRAINT "LookbookItem_lookbookId_fkey" FOREIGN KEY ("lookbookId") REFERENCES "public"."Outfitly"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."LookbookItem" ADD CONSTRAINT "LookbookItem_addedById_fkey" FOREIGN KEY ("addedById") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -180,13 +180,13 @@ ALTER TABLE "public"."Follow" ADD CONSTRAINT "Follow_followingId_fkey" FOREIGN K
 ALTER TABLE "public"."Like" ADD CONSTRAINT "Like_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Like" ADD CONSTRAINT "Like_lookId_fkey" FOREIGN KEY ("lookId") REFERENCES "public"."Look"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."Like" ADD CONSTRAINT "Like_lookId_fkey" FOREIGN KEY ("lookId") REFERENCES "public"."Outfit"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Comment" ADD CONSTRAINT "Comment_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Comment" ADD CONSTRAINT "Comment_lookId_fkey" FOREIGN KEY ("lookId") REFERENCES "public"."Look"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."Comment" ADD CONSTRAINT "Comment_lookId_fkey" FOREIGN KEY ("lookId") REFERENCES "public"."Outfit"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Tip" ADD CONSTRAINT "Tip_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -195,7 +195,7 @@ ALTER TABLE "public"."Tip" ADD CONSTRAINT "Tip_senderId_fkey" FOREIGN KEY ("send
 ALTER TABLE "public"."Tip" ADD CONSTRAINT "Tip_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Tip" ADD CONSTRAINT "Tip_lookId_fkey" FOREIGN KEY ("lookId") REFERENCES "public"."Look"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."Tip" ADD CONSTRAINT "Tip_lookId_fkey" FOREIGN KEY ("lookId") REFERENCES "public"."Outfit"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

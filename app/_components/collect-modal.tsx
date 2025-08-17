@@ -1,38 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import { AddToLookbookSheet } from "@/app/_components/add-to-lookbook-sheet";
+import { AddToWardrobeSheet } from "@/app/_components/add-to-wardrobe-sheet";
 import { SuccessToast } from "@/app/_components/success-toast";
-import { LookFetchPayload } from "@/lib/types";
+import { OutfitFetchPayload } from "@/lib/types";
 
 interface CollectModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  look: LookFetchPayload;
+  outfit: OutfitFetchPayload;
   onComplete: () => void;
 }
 
 export function CollectModal({
   open,
   onOpenChange,
-  look,
+  outfit,
   onComplete,
 }: CollectModalProps) {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleComplete = (lookbookName: string) => {
-    setSuccessMessage(`Added to "${lookbookName}"!`);
+  const handleComplete = (wardrobeName: string) => {
+    setSuccessMessage(`Added to "${wardrobeName}"!`);
     setShowSuccessToast(true);
     onComplete();
   };
 
   return (
     <>
-      <AddToLookbookSheet
+      <AddToWardrobeSheet
         open={open}
         onOpenChange={onOpenChange}
-        look={look}
+        outfit={outfit}
         onComplete={handleComplete}
       />
 

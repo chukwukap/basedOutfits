@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { UserProfileHeader } from "@/app/profile/_components/user-profile-header";
-import { UserLookbooksGrid } from "@/app/profile/_components/user-lookbooks-grid";
+import { UserWardrobesGrid } from "@/app/profile/_components/user-wardrobes-grid";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
-import { UserProfile, UserLookbook } from "@/lib/types";
+import { UserProfile, UserWardrobe } from "@/lib/types";
 
 async function fetchUserProfile(username: string) {
   const res = await fetch(`/api/users/${encodeURIComponent(username)}`, {
@@ -47,10 +47,10 @@ export default function UserProfilePageClient() {
     }
   };
 
-  const handleFollowLookbook = () => {};
+  const handleFollowWardrobe = () => {};
 
-  const handleLookbookClick = (lookbook: UserLookbook) => {
-    window.location.href = `/lookbooks/${lookbook.id}`;
+  const handleWardrobeClick = (wardrobe: UserWardrobe) => {
+    window.location.href = `/wardrobes/${wardrobe.id}`;
   };
 
   if (loading) {
@@ -111,12 +111,12 @@ export default function UserProfilePageClient() {
       {/* User Profile Header */}
       <UserProfileHeader user={user} onFollowUser={handleFollowUser} />
 
-      {/* Public Lookbooks */}
+      {/* Public Wardrobes */}
       <main className="p-4">
-        <UserLookbooksGrid
-          lookbooks={user.publicLookbooks}
-          onLookbookClick={handleLookbookClick}
-          onFollowLookbook={handleFollowLookbook}
+        <UserWardrobesGrid
+          wardrobes={user.publicWardrobes}
+          onWardrobeClick={handleWardrobeClick}
+          onFollowWardrobe={handleFollowWardrobe}
         />
       </main>
 

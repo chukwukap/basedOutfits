@@ -1,33 +1,33 @@
-# Lookbook — Farcaster Miniapp for Fashion Inspiration
+# Outfitly — Farcaster Miniapp for Fashion Inspiration
 
-**Lookbook** is a highly social Farcaster miniapp for discovering, collecting, and sharing fashion looks.
+**Outfitly** is a highly social Farcaster miniapp for discovering, collecting, and sharing fashion outfits.
 Users can browse outfits, collect their favorites into personal Lookbooks, and track creators whose style they love — all while staying inside the Farcaster ecosystem.
 
 ## ✨ Features
 
-- **Social Look Discovery**
-  - Scroll through an endless feed of user-submitted looks.
+- **Social Outfit Discovery**
+  - Scroll through an endless feed of user-submitted outfits.
   - Filter by category, style, season, or trending status.
   - Mobile-first UI with smooth disappearing headers & bottom nav on scroll (inspired by Twitter).
 
-- **Look Details Page**
-  - Full-screen photo(s) of the look.
+- **Outfit Details Page**
+  - Full-screen photo(s) of the outfit.
   - Detailed outfit breakdown: brand, item type, pricing (optional).
-  - Creator’s profile & other looks.
-  - Collect button (small fee in USDC) to save to your personal Lookbook.
+  - Creator’s profile & other outfits.
+  - Collect button (small fee in USDC) to save to your personal Outfitly.
 
 - **Lookbooks (Boards)**
-  - Organize collected looks into themed boards (e.g., “Streetwear”, “Summer Fits”).
+  - Organize collected outfits into themed boards (e.g., “Streetwear”, “Summer Fits”).
   - Public or private Lookbooks.
   - Share Lookbooks via Farcaster cast.
 
 - **Style-Track System**
   - Contextual follow feature just for fashion content.
-  - Track looks from creators without following all their Farcaster posts.
+  - Track outfits from creators without following all their Farcaster posts.
   - Personal “Style Feed” based on tracked creators.
 
 - **Collect to Closet**
-  - Pay a small USDC fee to collect a look into your closet.
+  - Pay a small USDC fee to collect a outfit into your closet.
   - Closet is viewable only by you (or publicly if toggled).
 
 - **Onboarding Tutorial**
@@ -37,7 +37,7 @@ Users can browse outfits, collect their favorites into personal Lookbooks, and t
 
 - **Tipping Creators**
   - Support your favorite creators with USDC tips.
-  - Tips are displayed on the Look’s detail page.
+  - Tips are displayed on the Outfit’s detail page.
 
 ---
 
@@ -94,11 +94,11 @@ npx prisma studio
 ### Core Entities
 
 - **User** — linked to Farcaster account.
-- **Look** — outfit post with image, description, and details.
-- **Lookbook** — collection of looks.
+- **Outfit** — outfit post with image, description, and details.
+- **Outfitly** — collection of outfits.
 - **StyleFollow** — tracks fashion-only follows.
-- **Collection** — records when a user collects a look into a Lookbook.
-- **Tip** — logs tips given to a creator for a look.
+- **Collection** — records when a user collects a outfit into a Outfitly.
+- **Tip** — logs tips given to a creator for a outfit.
 
 ---
 
@@ -112,21 +112,21 @@ npx prisma studio
    - Scroll feed, filter by category/style/trending.
    - Smooth hide/reveal header & nav on scroll.
 
-3. **Viewing a Look**
-   - Tap to see full details and related looks.
-   - Option to collect into a Lookbook (pay fee).
+3. **Viewing a Outfit**
+   - Tap to see full details and related outfits.
+   - Option to collect into a Outfitly (pay fee).
    - Tip creator or style-track them.
 
-4. **Lookbook Management**
+4. **Outfitly Management**
    - Create themed boards.
-   - Organize collected looks.
+   - Organize collected outfits.
    - Share on Farcaster.
 
 ---
 
 ## 🔮 Roadmap
 
-- [ ] Multi-image looks.
+- [ ] Multi-image outfits.
 - [ ] AI tagging for outfits.
-- [ ] Notifications for new looks from tracked creators.
+- [ ] Notifications for new outfits from tracked creators.
 - [ ] Seasonal/trend-based challenges.

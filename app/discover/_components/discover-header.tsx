@@ -56,7 +56,7 @@ export function DiscoverHeader({
             <Input
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search lookbooks and creators..."
+              placeholder="Search outfits and creators..."
               className="pl-10"
               autoFocus
             />

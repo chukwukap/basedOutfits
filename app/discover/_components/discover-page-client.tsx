@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { DiscoverHeader } from "@/app/discover/_components/discover-header";
-import { TrendingLookbooks } from "@/app/_components/trending-lookbooks";
+import { TrendingWardrobes } from "@/app/_components/trending-wardrobes";
 import { FeaturedCreators } from "@/app/_components/featured-creators";
 
 export default function DiscoverPageClient() {
@@ -22,8 +22,8 @@ export default function DiscoverPageClient() {
 
       {/* Main Content */}
       <main className="p-4 space-y-6">
-        {/* Trending Lookbooks */}
-        <TrendingLookbooks
+        {/* Trending Wardrobes */}
+        <TrendingWardrobes
           searchQuery={searchQuery}
           selectedCategory={selectedCategory}
         />
