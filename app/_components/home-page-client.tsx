@@ -25,7 +25,7 @@ const fetcher = async (url: string): Promise<OutfitFetchPayload[]> => {
   return (await res.json()) as OutfitFetchPayload[];
 };
 
-function HomePageInner() {
+export default function HomePageClient() {
   useUser();
   const [selectedOutfit, setSelectedOutfit] =
     useState<OutfitFetchPayload | null>(null);
@@ -260,8 +260,4 @@ function HomePageInner() {
       <BottomNav scrollDirection={scrollDirection} isScrolled={isScrolled} />
     </div>
   );
-}
-
-export default function HomePageClient() {
-  return <HomePageInner />;
 }
