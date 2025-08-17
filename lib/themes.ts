@@ -55,15 +55,16 @@ export const themes: Theme[] = [
     id: "minimal",
     name: "Minimal",
     colors: {
-      primary: "0 0% 9%",
-      secondary: "0 0% 96%",
+      // Updated to a soft blue-accent minimal palette
+      primary: "221.2 83.2% 53.3%", // blue-500
+      secondary: "221 100% 97%", // very light blue tint
       background: "0 0% 100%",
       foreground: "0 0% 9%",
-      muted: "0 0% 96%",
-      mutedForeground: "0 0% 45%",
-      accent: "0 0% 96%",
-      accentForeground: "0 0% 9%",
-      border: "0 0% 89%",
+      muted: "221 100% 97%",
+      mutedForeground: "221 15% 40%",
+      accent: "221 100% 97%",
+      accentForeground: "221.2 83.2% 53.3%",
+      border: "221 60% 90%",
       card: "0 0% 100%",
       cardForeground: "0 0% 9%",
     },
