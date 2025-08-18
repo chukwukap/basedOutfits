@@ -6,11 +6,23 @@ import { useParams, useRouter } from "next/navigation";
 import { TipModal } from "@/app/_components/tip-modal";
 import { CollectModal } from "@/app/_components/collect-modal";
 import { CommentsSection } from "./comments-section";
-import { ArrowLeft, DollarSign, Heart } from "lucide-react";
+import { ArrowLeft, DollarSign, Heart, Trash } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { ComposeCastButton } from "@/app/_components/compose-cast-button";
 import type { OutfitFetchPayload } from "@/lib/types";
 import { OutfitDetailView } from "./outfit-detail-view";
+import { useUser } from "@/hooks/useUser";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/_components/ui/alert-dialog";
 
 // Local type matching the UI detail view's expected shape
 type DetailedOutfit = {
@@ -18,6 +30,7 @@ type DetailedOutfit = {
   title: string;
   description: string;
   images: string[];
+  authorId?: string;
   author: {
     name: string;
     avatar: string;
@@ -83,6 +96,7 @@ async function fetchOutfitById(id: string): Promise<OutfitApiResponse | null> {
 export default function OutfitDetailPageClient() {
   const params = useParams();
   const router = useRouter();
+  const { db: currentUser } = useUser();
   const [outfit, setOutfit] = useState<DetailedOutfit | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedOutfit, setSelectedOutfit] = useState<DetailedOutfit | null>(
@@ -90,6 +104,7 @@ export default function OutfitDetailPageClient() {
   );
   const [showTipModal, setShowTipModal] = useState(false);
   const [showCollectModal, setShowCollectModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const loadOutfit = async () => {
@@ -102,6 +117,7 @@ export default function OutfitDetailPageClient() {
           title: data.caption,
           description: data.description,
           images: data.imageUrls,
+          authorId: data.authorId,
           author: {
             name: data.author.name,
             avatar: data.author.avatarUrl,
@@ -151,6 +167,31 @@ export default function OutfitDetailPageClient() {
     setSelectedOutfit(null);
   };
 
+  const isOwner = Boolean(outfit?.authorId && currentUser?.id === outfit?.authorId);
+
+  const handleDelete = async () => {
+    if (!outfit || !currentUser?.id) return;
+    try {
+      setDeleting(true);
+      const res = await fetch(`/api/outfits/${outfit.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-author-id": currentUser.id,
+        },
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({} as any));
+        throw new Error(err?.error || "Failed to delete outfit");
+      }
+      router.push("/");
+    } catch (error) {
+      console.error("Delete failed", error);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -197,17 +238,48 @@ export default function OutfitDetailPageClient() {
           <h1 className="text-lg font-semibold truncate flex-1 mx-4">
             {outfit.title}
           </h1>
-          <ComposeCastButton
-            text={
-              outfit.title
-                ? `Check out this outfit: ${outfit.title}`
-                : "Check out this outfit"
-            }
-            size="sm"
-            variant="ghost"
-            className="p-2"
-            label="Share"
-          />
+          <div className="flex items-center gap-1">
+            {isOwner && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="p-2 text-destructive"
+                    disabled={deleting}
+                    aria-label="Delete outfit"
+                  >
+                    <Trash className="w-5 h-5" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete this outfit?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently remove the outfit, its likes and comments, and remove it from any wardrobes. Tips remain for auditability.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} disabled={deleting}>
+                      {deleting ? "Deleting..." : "Delete"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+            <ComposeCastButton
+              text={
+                outfit.title
+                  ? `Check out this outfit: ${outfit.title}`
+                  : "Check out this outfit"
+              }
+              size="sm"
+              variant="ghost"
+              className="p-2"
+              label="Share"
+            />
+          </div>
         </div>
       </header>
 
@@ -258,7 +330,7 @@ export default function OutfitDetailPageClient() {
             <DollarSign className="w-4 h-4 mr-2" />
             Tip
           </Button>
-          ,s
+          {/* Delete button will be conditionally shown in the detail header below for owners */}
           <Button onClick={() => handleCollect(outfit)} className="flex-1">
             <Heart className="w-4 h-4 mr-2" />
             Add
