@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: "Discover, post, and collect outfits.",
     other: {
       "fc:frame": JSON.stringify({
-        version: "next",
+        version: "1",
         imageUrl,
         button: {
           title: `Launch ${appName}`,

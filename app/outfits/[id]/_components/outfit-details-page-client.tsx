@@ -167,7 +167,9 @@ export default function OutfitDetailPageClient() {
     setSelectedOutfit(null);
   };
 
-  const isOwner = Boolean(outfit?.authorId && currentUser?.id === outfit?.authorId);
+  const isOwner = Boolean(
+    outfit?.authorId && currentUser?.id === outfit?.authorId,
+  );
 
   const handleDelete = async () => {
     if (!outfit || !currentUser?.id) return;
@@ -181,7 +183,7 @@ export default function OutfitDetailPageClient() {
         },
       });
       if (!res.ok) {
-        const err = await res.json().catch(() => ({} as any));
+        const err = await res.json().catch(() => ({}) as any);
         throw new Error(err?.error || "Failed to delete outfit");
       }
       router.push("/");
@@ -256,12 +258,19 @@ export default function OutfitDetailPageClient() {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete this outfit?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently remove the outfit, its likes and comments, and remove it from any wardrobes. Tips remain for auditability.
+                      This action cannot be undone. This will permanently remove
+                      the outfit, its likes and comments, and remove it from any
+                      wardrobes. Tips remain for auditability.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} disabled={deleting}>
+                    <AlertDialogCancel disabled={deleting}>
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDelete}
+                      disabled={deleting}
+                    >
                       {deleting ? "Deleting..." : "Delete"}
                     </AlertDialogAction>
                   </AlertDialogFooter>

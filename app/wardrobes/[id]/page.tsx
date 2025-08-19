@@ -18,7 +18,7 @@ export async function generateMetadata(
       description: "View Wardrobe 🔥",
       other: {
         "fc:frame": JSON.stringify({
-          version: "next",
+          version: "1",
           imageUrl: "https://basedoutfits.vercel.app/hero.png",
           button: {
             title: `View Wardrobe 🔥`,
@@ -57,7 +57,7 @@ export async function generateMetadata(
       },
       other: {
         "fc:frame": JSON.stringify({
-          version: "next",
+          version: "1",
           imageUrl: image,
           button: {
             title: `View Wardrobe 🔥`,

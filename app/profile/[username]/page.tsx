@@ -38,7 +38,7 @@ export async function generateMetadata(
       },
       other: {
         "fc:frame": JSON.stringify({
-          version: "next",
+          version: "1",
           imageUrl: image,
           button: {
             title: `View @${user.username}'s profile`,

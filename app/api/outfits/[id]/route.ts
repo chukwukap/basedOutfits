@@ -113,7 +113,10 @@ export async function DELETE(req: Request) {
     // Transactional cleanup to maintain referential integrity
     await prisma.$transaction([
       // Tips: retain records but detach from outfit for auditability
-      prisma.tip.updateMany({ where: { outfitId: id }, data: { outfitId: null } }),
+      prisma.tip.updateMany({
+        where: { outfitId: id },
+        data: { outfitId: null },
+      }),
       prisma.comment.deleteMany({ where: { outfitId: id } }),
       prisma.like.deleteMany({ where: { outfitId: id } }),
       prisma.wardrobeItem.deleteMany({ where: { outfitId: id } }),

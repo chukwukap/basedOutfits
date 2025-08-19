@@ -13,6 +13,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = await params;
+  console.log("id", id);
   if (!id)
     return {
       title: "View Outfit",
@@ -60,7 +61,7 @@ export async function generateMetadata(
       },
       other: {
         "fc:frame": JSON.stringify({
-          version: "next",
+          version: "1",
           imageUrl: image,
           button: {
             title: `View Outfit 🔥`,

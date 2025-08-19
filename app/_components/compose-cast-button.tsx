@@ -24,6 +24,8 @@ export function ComposeCastButton({
 }: ComposeCastButtonProps) {
   const { composeCast } = useComposeCast();
 
+  console.log("embedUrl in cast share button", embedUrl);
+
   const onShare = useCallback(() => {
     const url =
       embedUrl ||

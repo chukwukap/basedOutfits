@@ -18,6 +18,9 @@ export async function GET() {
       payload: process.env.FARCASTER_PAYLOAD,
       signature: process.env.FARCASTER_SIGNATURE,
     },
+    baseBuilder: {
+      allowedAddresses: ["0xd584F8079192E078F0f3237622345E19360384A2"],
+    },
     frame: withValidProperties({
       version: "1",
       name: "Outfitly",
@@ -45,8 +48,6 @@ export async function GET() {
       caseShareUrl: `https://basedoutfits.vercel.app`,
     }),
   };
-
-  console.log(manifest);
 
   return Response.json(manifest);
 }
