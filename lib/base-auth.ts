@@ -44,14 +44,12 @@ export async function signInWithBase(): Promise<boolean> {
         },
       ],
     })) as {
-      accounts: Array<
-        {
-          address: `0x${string}`;
-          capabilities: {
-            signInWithEthereum: { message: string; signature: `0x${string}` };
-          };
-        }
-      >;
+      accounts: Array<{
+        address: `0x${string}`;
+        capabilities: {
+          signInWithEthereum: { message: string; signature: `0x${string}` };
+        };
+      }>;
     };
 
     const { accounts } = resp;
