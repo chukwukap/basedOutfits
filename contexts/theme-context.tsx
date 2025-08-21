@@ -44,8 +44,22 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   // Apply theme CSS variables whenever theme changes
   useEffect(() => {
     const root = document.documentElement;
+    // Sync a simple data attribute for CSS selectors and analytics.
+    // Also toggle Tailwind's `.dark` class so dark-specific tokens in globals.css apply.
+    root.setAttribute("data-theme", currentTheme.id);
+    if (currentTheme.id === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+
+    // Apply CSS variables using kebab-case so Tailwind tokens like
+    // `text-muted-foreground` resolve to `--muted-foreground` correctly.
     Object.entries(currentTheme.colors).forEach(([key, value]) => {
-      root.style.setProperty(`--${key}`, value);
+      const kebabKey = key
+        .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+        .toLowerCase();
+      root.style.setProperty(`--${kebabKey}`, value);
     });
   }, [currentTheme]);
 
