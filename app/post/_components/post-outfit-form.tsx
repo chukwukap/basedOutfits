@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 import { OutfitFetchPayload } from "@/lib/types";
 import Image from "next/image";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { SignInWithBaseButton } from "@/app/_components/sign-in-with-base-button";
+import { signInWithBase } from "@/lib/base-auth";
 import { useUser } from "@/hooks/useUser";
 
 interface PostOutfitFormProps {
@@ -175,10 +177,23 @@ export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
           // non-fatal; server will still try to resolve by fid/username
         }
       }
-      const currentUserId =
+      let currentUserId =
         db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
+      // If still not signed in, trigger Sign in with Base flow just-in-time.
       if (!currentUserId) {
-        throw new Error("You must be signed in to post an outfit.");
+        const ok = await signInWithBase();
+        if (!ok) {
+          throw new Error("You must be signed in to post an outfit.");
+        }
+        // After sign-in, re-sync user data
+        try {
+          await sync();
+        } catch {}
+        currentUserId =
+          db?.id || c?.user?.fid?.toString() || c?.user?.username || "";
+        if (!currentUserId) {
+          throw new Error("Sign-in failed. Please try again.");
+        }
       }
       const res = await fetch("/api/outfits", {
         method: "POST",
@@ -439,6 +454,17 @@ export function PostOutfitForm({ onSuccess }: PostOutfitFormProps) {
           )}
         </Button>
       </div>
+      {/* Optional: Surface an explicit sign-in affordance for discoverability (non-blocking) */}
+      {!db && (
+        <div className="mt-4 flex justify-center">
+          <SignInWithBaseButton
+            colorScheme="dark"
+            onSignedIn={() => {
+              void sync();
+            }}
+          />
+        </div>
+      )}
     </Card>
   );
 }
