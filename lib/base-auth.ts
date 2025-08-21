@@ -10,7 +10,7 @@ import { createBaseAccountSDK } from "@base-org/account";
  */
 export async function signInWithBase(): Promise<boolean> {
   try {
-    const sdk = createBaseAccountSDK();
+    const sdk = createBaseAccountSDK({});
     const provider = sdk.getProvider();
 
     // Prefetch a server nonce to allow reuse protection server-side
@@ -25,11 +25,12 @@ export async function signInWithBase(): Promise<boolean> {
       nonce = null;
     }
     if (!nonce) {
-      nonce = (window.crypto?.randomUUID?.() || Math.random().toString(36).slice(2))
-        .replace(/-/g, "");
+      nonce = (
+        window.crypto?.randomUUID?.() || Math.random().toString(36).slice(2)
+      ).replace(/-/g, "");
     }
 
-    const { accounts } = await provider.request({
+    const resp = (await provider.request({
       method: "wallet_connect",
       params: [
         {
@@ -42,11 +43,25 @@ export async function signInWithBase(): Promise<boolean> {
           },
         },
       ],
-    });
+    })) as {
+      accounts: Array<
+        {
+          address: `0x${string}`;
+          capabilities: {
+            signInWithEthereum: { message: string; signature: `0x${string}` };
+          };
+        }
+      >;
+    };
 
-    const { address } = accounts[0];
-    const { message, signature } = (accounts[0] as any).capabilities
-      .signInWithEthereum as { message: string; signature: `0x${string}` };
+    const { accounts } = resp;
+    const { address } = accounts[0] as { address: `0x${string}` };
+    type SiweCaps = { message: string; signature: `0x${string}` };
+    type AccountWithCaps = {
+      capabilities: { signInWithEthereum: SiweCaps };
+    };
+    const { message, signature } = (accounts[0] as unknown as AccountWithCaps)
+      .capabilities.signInWithEthereum;
 
     const verifyRes = await fetch("/api/auth/verify", {
       method: "POST",
@@ -59,5 +74,3 @@ export async function signInWithBase(): Promise<boolean> {
     return false;
   }
 }
-
-
